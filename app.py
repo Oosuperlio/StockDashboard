@@ -18,6 +18,121 @@ from datetime import datetime
 
 st.set_page_config(page_title="Stock Dashboard", page_icon="📈", layout="wide")
 
+# ── Custom card CSS ──────────────────────────────────────────────────────────
+st.markdown("""
+<style>
+.card {
+    background: #1e2533;
+    border: 1px solid #2d3748;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+}
+.card-header {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #718096;
+    margin-bottom: 8px;
+}
+.card-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #e2e8f0;
+    line-height: 1;
+}
+.card-delta {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 4px;
+}
+.up { color: #48bb78; }
+.down { color: #fc8181; }
+.neutral { color: #a0aec0; }
+.section-card {
+    background: #1a2035;
+    border: 1px solid #252e45;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+}
+.section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e0;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #2d3748;
+    padding-bottom: 8px;
+}
+.metric-pair { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.metric-label { font-size: 12px; color: #718096; }
+.metric-val { font-size: 14px; font-weight: 600; color: #e2e8f0; }
+.news-card {
+    background: #1a2035;
+    border: 1px solid #252e45;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+}
+.news-title { font-size: 13px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+.news-meta { font-size: 11px; color: #4a5568; margin-top: 4px; }
+</style>
+""", unsafe_allow_html=True)
+
+
+# ── Card HTML helpers ────────────────────────────────────────────────────────
+def card(label, value=None, change=None, change_fmt="abs"):
+    """
+    Render a metric card.
+    - label: 小標題
+    - value: 主數值（字串，如 "$38.50"，或 None）
+    - change: 變動數字（float/int，或 None）
+    - change_fmt: "abs" → 顯示具體數字增減 | "pct" → 顯示百分比增減
+    """
+    display_val = value if value is not None else "—"
+    if change is not None and change_fmt == "pct":
+        arrow = "▲" if change > 0 else "▼" if change < 0 else "—"
+        delta_txt = f"{arrow} {abs(change):.2f}%"
+        cls = "up" if change > 0 else "down" if change < 0 else "neutral"
+    elif change is not None:
+        arrow = "▲" if change > 0 else "▼" if change < 0 else "—"
+        delta_txt = f"{arrow} {abs(change):,.2f}"
+        cls = "up" if change > 0 else "down" if change < 0 else "neutral"
+    else:
+        delta_txt = ""
+        cls = "neutral"
+    st.markdown(f"""
+    <div class="card">
+        <div class="card-header">{label}</div>
+        <div class="card-value">{display_val}</div>
+        <div class="card-delta {cls}">{delta_txt}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def section_card(title, content_html):
+    st.markdown(f"""
+    <div class="section-card">
+        <div class="section-title">{title}</div>
+        {content_html}
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def metric_row(label, value):
+    return f'<div class="metric-pair"><span class="metric-label">{label}</span><span class="metric-val">{value}</span></div>'
+
+
+def news_card_html(title, publisher, date, url):
+    return f"""
+    <div class="news-card">
+        <div class="news-title"><a href="{url}" target="_blank" style="color:#e2e8f0;text-decoration:none">{title}</a></div>
+        <div class="news-meta">📰 {publisher} &nbsp;•&nbsp; {date}</div>
+    </div>
+    """
+
+
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"}
 
 # ── Database cache layer ────────────────────────────────────────────────────
@@ -513,23 +628,30 @@ vol = prices[0]["volume"] if prices else None
 # 公司名稱
 company_name = financials.get("company_name", selected_ticker) if financials else selected_ticker
 
-c1, c2, c3, c4 = st.columns(4)
-m4(c1, "最新價格", f"${latest_price:.2f}" if latest_price else "—")
-chg = change or 0
-m4(c2, "漲跌額", f"{'+' if chg >= 0 else ''}{chg:.2f}")
-pct = change_pct or 0
-m4(c3, "漲跌幅", f"{'+' if pct >= 0 else ''}{pct:.2f}%")
-m4(c4, "成交量", f"{vol:,.0f}" if vol else "—")
+# ── ① Header：報價卡片 ──
+st.markdown(f"## 📈 {company_name} ({selected_ticker})")
+def _fmt_abs(v):  return f"{'+' if v >= 0 else ''}{v:,.2f}" if v is not None else None
+def _fmt_pct(v):  return f"{'+' if v >= 0 else ''}{v:.2f}%" if v is not None else None
 
-st.divider()
+r1, r2, r3, r4 = st.columns(4)
+price_val = f"${latest_price:.2f}" if latest_price else "—"
+chg_abs = change if change else None
+chg_pct = change_pct if change_pct else None
+vol_val = f"{vol:,.0f}" if vol else "—"
 
-# ── 主體：三欄佈局 ──
-col_chart, col_mid, col_news = st.columns([3, 2, 2])
+card(r1, "最新價格", price_val)
+card(r2, "漲跌額",    _fmt_abs(chg_abs), chg_abs)
+card(r3, "漲跌幅",   _fmt_pct(chg_pct), chg_pct)
+card(r4, "成交量",   vol_val)
 
-# ─── 左欄：股價圖表 ───
+st.markdown("---")
+
+# ── ② 主體區域 ──
+col_chart, col_side = st.columns([3, 2])
+
+# ─── 左：圖表 ───
 with col_chart:
     if not df_prices.empty:
-        # 過濾天數
         cutoff = pd.Timestamp.now() - pd.Timedelta(days=days_range)
         df_plot = df_prices[df_prices.index >= cutoff]
         t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
@@ -541,12 +663,8 @@ with col_chart:
     else:
         st.error(f"無法獲取 {selected_ticker} 的股票數據")
 
-# ─── 中欄：財務指標 ───
-with col_mid:
-    st.markdown("### 📋 財務指標")
-    # financial_metrics 表（DuckDB）：關鍵估值/盈利能力指標
-    fin = financials or {}
-    # stock.info：完整指標（yfinance 自帶 @st.cache_data 緩存）
+# ─── 右：財務指標 + 新聞 ──
+with col_side:
     info_raw = get_stock_info(selected_ticker)
 
     def _f(key, pct=False, mult=1):
@@ -559,114 +677,73 @@ with col_mid:
             return None
 
     info = {
-        "current_price":     info_raw.get("currentPrice") or info_raw.get("regularMarketPrice"),
-        "market_cap":        info_raw.get("marketCap"),
-        "trailing_pe":       _f("trailingPE"),
+        "trailing_pe":      _f("trailingPE"),
         "forward_pe":       _f("forwardPE"),
-        "price_to_book":     _f("priceToBook"),
-        "peg_ratio":         _f("trailingPegRatio"),
-        "trailing_eps":      _f("trailingEps"),
-        "forward_eps":       _f("forwardEps"),
-        "roe":               _f("returnOnEquity", pct=True),
-        "roa":               _f("returnOnAssets", pct=True),
-        "profit_margin":     _f("profitMargins", pct=True),
-        "operating_margin":  _f("operatingMargins", pct=True),
-        "revenue_growth":    _f("revenueGrowth", pct=True),
-        "earnings_growth":   _f("earningsGrowth", pct=True),
-        "dividend_yield":    _f("dividendYield", pct=True),
-        "dividend_rate":     info_raw.get("dividendRate"),
-        "beta":              info_raw.get("beta"),
-        "total_debt":        info_raw.get("totalDebt"),
-        "total_revenue":     info_raw.get("totalRevenue"),
-        "52w_high":          info_raw.get("fiftyTwoWeekHigh"),
-        "52w_low":           info_raw.get("fiftyTwoWeekLow"),
-        "recommendation":    info_raw.get("recommendationKey"),
-        "analyst_count":     info_raw.get("numberOfAnalystOpinions"),
+        "price_to_book":    _f("priceToBook"),
+        "peg_ratio":        _f("trailingPegRatio"),
+        "roe":              _f("returnOnEquity", pct=True),
+        "roa":              _f("returnOnAssets", pct=True),
+        "profit_margin":    _f("profitMargins", pct=True),
+        "operating_margin": _f("operatingMargins", pct=True),
+        "revenue_growth":   _f("revenueGrowth", pct=True),
+        "earnings_growth":  _f("earningsGrowth", pct=True),
+        "forward_eps":      _f("forwardEps"),
+        "dividend_yield":   _f("dividendYield", pct=True),
+        "recommendation":   info_raw.get("recommendationKey"),
+        "analyst_count":    info_raw.get("numberOfAnalystOpinions"),
+        "52w_high":         info_raw.get("fiftyTwoWeekHigh"),
+        "52w_low":          info_raw.get("fiftyTwoWeekLow"),
         "target_mean_price": info_raw.get("targetMeanPrice"),
-        "company_name":      info_raw.get("longName") or info_raw.get("shortName", selected_ticker),
     }
 
-    # 估值
-    st.markdown("**估值**")
-    vc1, vc2 = st.columns(2)
-    m4(vc1, "P/E (Trailing)", f"{info['trailing_pe']:.2f}" if info.get("trailing_pe") else "—")
-    m4(vc2, "P/E (Forward)", f"{info['forward_pe']:.2f}" if info.get("forward_pe") else "—")
-    vc3, vc4 = st.columns(2)
-    m4(vc3, "P/B", f"{info['price_to_book']:.2f}" if info.get("price_to_book") else "—")
-    m4(vc4, "PEG", f"{info['peg_ratio']:.2f}" if info.get("peg_ratio") else "—")
+    def fp(v): return f"{v:.2f}" if v is not None else "—"
+    def pp(v): return f"{v:.2f}%" if v is not None else "—"
 
-    # 盈利能力
-    st.markdown("**盈利能力**")
-    rc1, rc2 = st.columns(2)
-    m4(rc1, "ROE", fmt_pct(info.get("roe")))
-    m4(rc2, "ROA", fmt_pct(info.get("roa")))
-    rc3, rc4 = st.columns(2)
-    m4(rc3, "Profit Margin", fmt_pct(info.get("profit_margin")))
-    m4(rc4, "Op. Margin", fmt_pct(info.get("operating_margin")))
+    # 估值 card
+    section_card("📊 估值", metric_row("P/E (Trailing)", fp(info["trailing_pe"])) +
+                              metric_row("P/E (Forward)", fp(info["forward_pe"])) +
+                              metric_row("P/B", fp(info["price_to_book"])) +
+                              metric_row("PEG", fp(info["peg_ratio"])))
 
-    # 增長 & 股息
-    st.markdown("**增長 & 股息**")
-    gc1, gc2 = st.columns(2)
-    m4(gc1, "Revenue Growth", fmt_pct(info.get("revenue_growth")))
-    m4(gc2, "Earnings Growth", fmt_pct(info.get("earnings_growth")))
-    gc3, gc4 = st.columns(2)
-    m4(gc3, "Forward EPS", f"{info['forward_eps']:.2f}" if info.get("forward_eps") else "—")
-    m4(gc4, "Dividend Yield", fmt_pct(info.get("dividend_yield")))
+    # 盈利能力 card
+    section_card("💰 盈利能力", metric_row("ROE", pp(info["roe"])) +
+                                  metric_row("ROA", pp(info["roa"])) +
+                                  metric_row("Profit Margin", pp(info["profit_margin"])) +
+                                  metric_row("Op. Margin", pp(info["operating_margin"])))
 
-    # 分析師觀點
+    # 增長 & 股息 card
+    section_card("📈 增長 & 股息", metric_row("Revenue Growth", pp(info["revenue_growth"])) +
+                                      metric_row("Earnings Growth", pp(info["earnings_growth"])) +
+                                      metric_row("Forward EPS", fp(info["forward_eps"])) +
+                                      metric_row("Dividend Yield", pp(info["dividend_yield"])))
+
+    # 分析師觀點 card
     rec = info.get("recommendation")
     count = info.get("analyst_count")
     high = info.get("52w_high")
     low = info.get("52w_low")
     target = info.get("target_mean_price")
-    if any([rec, count, high, low, target]):
-        st.markdown("**分析師觀點**")
-        sc1, sc2 = st.columns(2)
-        m4(sc1, "評級", rec.title() if rec else "—")
-        m4(sc2, "分析師數量", str(count) if count else "—")
-        sc3, sc4 = st.columns(2)
-        m4(sc3, "52W High", f"${high:.2f}" if high else "—")
-        m4(sc4, "52W Low", f"${low:.2f}" if low else "—")
-        if target:
-            sc5, sc6 = st.columns(2)
-            m4(sc5, "目標價", f"${target:.2f}" if target else "—")
+    analyst_html = metric_row("評級", rec.title() if rec else "—") + \
+                   metric_row("分析師數量", str(count) if count else "—") + \
+                   metric_row("52W High", f"${fp(high)}" if high else "—") + \
+                   metric_row("52W Low", f"${fp(low)}" if low else "—") + \
+                   metric_row("目標價", f"${fp(target)}" if target else "—")
+    section_card("🎯 分析師觀點", analyst_html)
 
-    # 近 4 期季度數據（來自 yfinance，yfinance 自帶 cache）
-    quarters_data = _get_quarterly_data(selected_ticker)
-    if quarters_data:
-        st.markdown("**近 4 季度**")
-        rows = []
-        for q_date, m in quarters_data.items():
-            rev_chg = m["rev_qoq"][1] if m.get("rev_qoq") else "—"
-            ni_chg  = m["ni_qoq"][1] if m.get("ni_qoq") else "—"
-            eps_chg = m["eps_qoq"][1] if m.get("eps_qoq") else "—"
-            rows.append({
-                "季度": pd.to_datetime(q_date).strftime("%Y-%m-%d"),
-                "總收入": fmt_hkd(m.get("revenue")),
-                "QoQ": rev_chg,
-                "淨利潤": fmt_hkd(m.get("net_income")),
-                "QoQ": ni_chg,
-                "EPS": f"{m.get('eps', 0):.2f}" if m.get("eps") else "—",
-                "ROE": fmt_pct(m.get("roe")),
-                "經營現金流": fmt_hkd(m.get("operating_cf")),
-            })
-        df_m = pd.DataFrame(rows)
-        st.dataframe(df_m, width="stretch", hide_index=True)
-    else:
-        st.caption("季度財務數據暫不可用")
+st.markdown("---")
 
-# ─── 右欄：最新消息 ───
-with col_news:
-    st.markdown("### 📰 最新消息")
-    news = get_stock_news(selected_ticker)
-    if news:
-        for item in news:
-            with st.container():
-                st.markdown(f"**{item['date']}**  {item['title']}")
-                st.caption(f"📰 {item['publisher']}")
-                st.divider()
-    else:
-        st.info("暫無最新消息")
+# ── ③ 最新消息（橫跨全寬）──
+st.markdown("### 📰 最新消息")
+news = get_stock_news(selected_ticker)
+if news:
+    # 2-column news layout
+    n_cols = st.columns(2)
+    half = (len(news) + 1) // 2
+    for i, item in enumerate(news):
+        col = n_cols[i % 2]
+        with col:
+            st.markdown(news_card_html(item["title"], item["publisher"], item["date"], item["url"]), unsafe_allow_html=True)
+else:
+    st.info("暫無最新消息")
 
-st.divider()
 st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 股票代碼: {selected_ticker}")
