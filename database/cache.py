@@ -146,8 +146,12 @@ def get_price_history(symbol: str, days: int = 90,
     # Detect currency from symbol suffix
     currency = "HKD" if symbol.endswith(".HK") else "USD"
 
-    # Write each day to DuckDB
+    # Write each day to DuckDB — skip rows with NaN OHLC (DECIMAL can't store NaN)
     for idx, row in hist.iterrows():
+        # Skip incomplete/NaN rows
+        if (pd.isna(row["Open"]) or pd.isna(row["High"]) or
+            pd.isna(row["Low"])  or pd.isna(row["Close"])):
+            continue
         trade_date = idx.date() if hasattr(idx, "date") else idx
         if isinstance(trade_date, str):
             from datetime import datetime as dt
