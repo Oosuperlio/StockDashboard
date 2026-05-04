@@ -16,6 +16,24 @@ import plotly.graph_objects as go
 import requests
 from datetime import datetime
 
+# HKEX holiday calendar
+try:
+    import holidays
+    HKEX_HOLIDAYS = holidays.HongKong()
+except Exception:
+    import warnings
+    warnings.warn("holidays library not available, using empty holiday set")
+    HKEX_HOLIDAYS = set()
+
+def is_hkex_trading_day(date) -> bool:
+    """Return True if date is a HKEX trading day (weekday + not a holiday)."""
+    from datetime import date as _date
+    if isinstance(date, pd.Timestamp):
+        date = date.date()
+    if date.weekday() >= 5:  # Saturday=5, Sunday=6
+        return False
+    return date not in HKEX_HOLIDAYS
+
 st.set_page_config(page_title="Stock Dashboard", page_icon="📈", layout="wide")
 
 # ── Custom card CSS ──────────────────────────────────────────────────────────
@@ -490,10 +508,11 @@ def _info_metrics(info: dict) -> dict:
 # ─────────────────────────────────────────────
 
 def plot_candlestick(df, ticker, company_name=""):
-    # 過濾：只保留有完整 OHLC 數據的行（非空、非 NaN）
+    # 過濾：只保留完整 OHLC + HKEX 交易日（非週末、非假期）
     df = df.dropna(subset=["open", "high", "low", "close"])
-    # 確保 index 是 datetime 並排序
     df = df.sort_index()
+    trading_mask = df.index.map(is_hkex_trading_day)
+    df = df[trading_mask]
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
     fig = go.Figure(data=[go.Candlestick(
         x=df.index, open=df["open"], high=df["high"],
@@ -511,6 +530,8 @@ def plot_candlestick(df, ticker, company_name=""):
 def plot_line(df, ticker, company_name=""):
     df = df.dropna(subset=["close"])
     df = df.sort_index()
+    trading_mask = df.index.map(is_hkex_trading_day)
+    df = df[trading_mask]
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
     fig = go.Figure([go.Scatter(
         x=df.index, y=df["close"], mode="lines", name="收盤價",
@@ -525,9 +546,11 @@ def plot_line(df, ticker, company_name=""):
 
 
 def plot_volume(df, ticker):
-    # 過濾：只保留有 volume 數據的行
+    # 過濾：只保留有 volume 數據的行 + HKEX 交易日
     df = df.dropna(subset=["volume", "close", "open"]).copy()
     df = df.sort_index()
+    trading_mask = df.index.map(is_hkex_trading_day)
+    df = df[trading_mask]
     colors = ["green" if row["close"] >= row["open"] else "red" for _, row in df.iterrows()]
     fig = go.Figure(data=[go.Bar(
         x=df.index, y=df["volume"],
