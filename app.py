@@ -81,7 +81,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── Card HTML helpers ────────────────────────────────────────────────────────
 def card(label, value=None, change=None, change_fmt="abs"):
     """
     Render a metric card.
@@ -91,14 +90,21 @@ def card(label, value=None, change=None, change_fmt="abs"):
     - change_fmt: "abs" → 顯示具體數字增減 | "pct" → 顯示百分比增減
     """
     display_val = value if value is not None else "—"
-    if change is not None and change_fmt == "pct":
-        arrow = "▲" if change > 0 else "▼" if change < 0 else "—"
-        delta_txt = f"{arrow} {abs(change):.2f}%"
-        cls = "up" if change > 0 else "down" if change < 0 else "neutral"
-    elif change is not None:
-        arrow = "▲" if change > 0 else "▼" if change < 0 else "—"
-        delta_txt = f"{arrow} {abs(change):,.2f}"
-        cls = "up" if change > 0 else "down" if change < 0 else "neutral"
+
+    # Defensive: force change to numeric (prevents TypeError if string slips through)
+    try:
+        change_num = float(change) if change is not None else None
+    except (ValueError, TypeError):
+        change_num = None
+
+    if change_num is not None and change_fmt == "pct":
+        arrow = "▲" if change_num > 0 else "▼" if change_num < 0 else "—"
+        delta_txt = f"{arrow} {abs(change_num):.2f}%"
+        cls = "up" if change_num > 0 else "down" if change_num < 0 else "neutral"
+    elif change_num is not None:
+        arrow = "▲" if change_num > 0 else "▼" if change_num < 0 else "—"
+        delta_txt = f"{arrow} {abs(change_num):,.2f}"
+        cls = "up" if change_num > 0 else "down" if change_num < 0 else "neutral"
     else:
         delta_txt = ""
         cls = "neutral"
