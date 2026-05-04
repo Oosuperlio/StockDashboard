@@ -659,6 +659,16 @@ prices = data["prices"]
 financials = data["financials"]
 news_items = data["news"]
 
+# ── 市場診斷提示（協助確認假期過濾是否生效）──
+_mkt = get_market_from_ticker(selected_ticker)
+if _mkt == "HK":
+    _sample_hol = list(HKEX_HOLIDAYS)[:3]
+    _hol_label = f"香港 [HKEX] | 假期例：{_sample_hol}"
+else:
+    _sample_hol = list(US_HOLIDAYS)[:3]
+    _hol_label = f"美國 [NYSE/NASDAQ] | 假期例：{_sample_hol}"
+st.caption(f"🔍 市場：{_hol_label} | 過濾模式：is_market_trading_day")
+
 # 從股價歷史重構 DataFrame（給圖表用）
 if prices:
     df_prices = pd.DataFrame(prices)
