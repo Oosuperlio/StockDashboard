@@ -16,23 +16,37 @@ import plotly.graph_objects as go
 import requests
 from datetime import datetime
 
-# HKEX holiday calendar
+# Holiday calendars
 try:
     import holidays
     HKEX_HOLIDAYS = holidays.HongKong()
+    US_HOLIDAYS    = holidays.US()
 except Exception:
     import warnings
     warnings.warn("holidays library not available, using empty holiday set")
     HKEX_HOLIDAYS = set()
+    US_HOLIDAYS    = set()
 
-def is_hkex_trading_day(date) -> bool:
-    """Return True if date is a HKEX trading day (weekday + not a holiday)."""
-    from datetime import date as _date
+def get_market_from_ticker(ticker: str) -> str:
+    """Detect market from ticker suffix: HK (.HK), US (default)."""
+    t = ticker.upper()
+    if t.endswith(".HK"):
+        return "HK"
+    # Covers .SS (Shanghai), .SH (Shanghai), .BJ (Beijing), etc. → treat as non-trading for now
+    return "US"
+
+def is_market_trading_day(ticker: str, date) -> bool:
+    """Return True if date is a trading day for the given ticker's market."""
     if isinstance(date, pd.Timestamp):
         date = date.date()
+    # Weekend
     if date.weekday() >= 5:  # Saturday=5, Sunday=6
         return False
-    return date not in HKEX_HOLIDAYS
+    market = get_market_from_ticker(ticker)
+    if market == "HK":
+        return date not in HKEX_HOLIDAYS
+    else:  # US
+        return date not in US_HOLIDAYS
 
 st.set_page_config(page_title="Stock Dashboard", page_icon="📈", layout="wide")
 
@@ -508,10 +522,10 @@ def _info_metrics(info: dict) -> dict:
 # ─────────────────────────────────────────────
 
 def plot_candlestick(df, ticker, company_name=""):
-    # 過濾：只保留完整 OHLC + HKEX 交易日（非週末、非假期）
+    # 過濾：只保留完整 OHLC + 該市場交易日（非週末、非假期）
     df = df.dropna(subset=["open", "high", "low", "close"])
     df = df.sort_index()
-    trading_mask = df.index.map(is_hkex_trading_day)
+    trading_mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
     df = df[trading_mask]
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
     fig = go.Figure(data=[go.Candlestick(
@@ -530,7 +544,7 @@ def plot_candlestick(df, ticker, company_name=""):
 def plot_line(df, ticker, company_name=""):
     df = df.dropna(subset=["close"])
     df = df.sort_index()
-    trading_mask = df.index.map(is_hkex_trading_day)
+    trading_mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
     df = df[trading_mask]
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
     fig = go.Figure([go.Scatter(
@@ -546,10 +560,10 @@ def plot_line(df, ticker, company_name=""):
 
 
 def plot_volume(df, ticker):
-    # 過濾：只保留有 volume 數據的行 + HKEX 交易日
+    # 過濾：只保留有 volume 數據的行 + 該市場交易日
     df = df.dropna(subset=["volume", "close", "open"]).copy()
     df = df.sort_index()
-    trading_mask = df.index.map(is_hkex_trading_day)
+    trading_mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
     df = df[trading_mask]
     colors = ["green" if row["close"] >= row["open"] else "red" for _, row in df.iterrows()]
     fig = go.Figure(data=[go.Bar(
