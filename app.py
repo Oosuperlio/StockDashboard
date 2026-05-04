@@ -81,40 +81,42 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-def card(label, value=None, change=None, change_fmt="abs"):
+def card(col, label, value=None, change=None, change_fmt="abs"):
     """
-    Render a metric card.
+    Render a metric card inside a Streamlit column.
+    - col: Streamlit column container (from st.columns())
     - label: 小標題
     - value: 主數值（字串，如 "$38.50"，或 None）
     - change: 變動數字（float/int，或 None）
     - change_fmt: "abs" → 顯示具體數字增減 | "pct" → 顯示百分比增減
     """
-    display_val = value if value is not None else "—"
+    with col:
+        display_val = value if value is not None else "—"
 
-    # Defensive: force change to numeric (prevents TypeError if string slips through)
-    try:
-        change_num = float(change) if change is not None else None
-    except (ValueError, TypeError):
-        change_num = None
+        # Defensive: force change to numeric (prevents TypeError if string slips through)
+        try:
+            change_num = float(change) if change is not None else None
+        except (ValueError, TypeError):
+            change_num = None
 
-    if change_num is not None and change_fmt == "pct":
-        arrow = "▲" if change_num > 0 else "▼" if change_num < 0 else "—"
-        delta_txt = f"{arrow} {abs(change_num):.2f}%"
-        cls = "up" if change_num > 0 else "down" if change_num < 0 else "neutral"
-    elif change_num is not None:
-        arrow = "▲" if change_num > 0 else "▼" if change_num < 0 else "—"
-        delta_txt = f"{arrow} {abs(change_num):,.2f}"
-        cls = "up" if change_num > 0 else "down" if change_num < 0 else "neutral"
-    else:
-        delta_txt = ""
-        cls = "neutral"
-    st.markdown(f"""
-    <div class="card">
-        <div class="card-header">{label}</div>
-        <div class="card-value">{display_val}</div>
-        <div class="card-delta {cls}">{delta_txt}</div>
-    </div>
-    """, unsafe_allow_html=True)
+        if change_num is not None and change_fmt == "pct":
+            arrow = "▲" if change_num > 0 else "▼" if change_num < 0 else "—"
+            delta_txt = f"{arrow} {abs(change_num):.2f}%"
+            cls = "up" if change_num > 0 else "down" if change_num < 0 else "neutral"
+        elif change_num is not None:
+            arrow = "▲" if change_num > 0 else "▼" if change_num < 0 else "—"
+            delta_txt = f"{arrow} {abs(change_num):,.2f}"
+            cls = "up" if change_num > 0 else "down" if change_num < 0 else "neutral"
+        else:
+            delta_txt = ""
+            cls = "neutral"
+        st.markdown(f"""
+        <div class="card">
+            <div class="card-header">{label}</div>
+            <div class="card-value">{display_val}</div>
+            <div class="card-delta {cls}">{delta_txt}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 def section_card(title, content_html):
