@@ -490,13 +490,18 @@ def _info_metrics(info: dict) -> dict:
 # ─────────────────────────────────────────────
 
 def plot_candlestick(df, ticker, company_name=""):
+    # 過濾：只保留有完整 OHLC 數據的行（非空、非 NaN）
+    df = df.dropna(subset=["open", "high", "low", "close"])
+    # 確保 index 是 datetime 並排序
+    df = df.sort_index()
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
     fig = go.Figure(data=[go.Candlestick(
         x=df.index, open=df["open"], high=df["high"],
-        low=df["low"], close=df["close"], name="OHLC"
+        low=df["low"], close=df["close"], name="OHLC",
+        xhoverformat="%Y-%m-%d"
     )])
     fig.update_layout(
-        title=title, yaxis_title="港幣 / 美元 (HKD/USD)",
+        title=title, yaxis_title="HKD / USD",
         xaxis_title="日期", template="plotly_dark",
         xaxis_rangeslider_visible=False, height=460,
     )
@@ -504,32 +509,37 @@ def plot_candlestick(df, ticker, company_name=""):
 
 
 def plot_line(df, ticker, company_name=""):
+    df = df.dropna(subset=["close"])
+    df = df.sort_index()
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
     fig = go.Figure([go.Scatter(
         x=df.index, y=df["close"], mode="lines", name="收盤價",
         line=dict(color="#00d4ff", width=2)
     )])
     fig.update_layout(
-        title=title, yaxis_title="港幣 / 美元 (HKD/USD)",
+        title=title, yaxis_title="HKD / USD",
         xaxis_title="日期", template="plotly_dark", height=360,
+        xaxis_rangeslider_visible=False,
     )
     return fig
 
 
 def plot_volume(df, ticker):
+    # 過濾：只保留有 volume 數據的行
+    df = df.dropna(subset=["volume", "close", "open"]).copy()
+    df = df.sort_index()
+    colors = ["green" if row["close"] >= row["open"] else "red" for _, row in df.iterrows()]
     fig = go.Figure(data=[go.Bar(
-        x=df.index,
-        y=df["volume"],
-        marker_color=["green" if df["close"].iloc[i] >= df["open"].iloc[i] else "red" for i in range(len(df))],
-        name="成交量"
+        x=df.index, y=df["volume"],
+        marker_color=colors, name="成交量",
+        xhoverformat="%Y-%m-%d"
     )])
     fig.update_layout(
-        title=f"{ticker} 成交量",
-        yaxis_title="成交量", xaxis_title="日期",
+        title=f"{ticker} 成交量", yaxis_title="成交量", xaxis_title="日期",
         template="plotly_dark", height=200,
+        xaxis_rangeslider_visible=False,
     )
     return fig
-
 
 def fmt_hkd(val):
     if val is None:
