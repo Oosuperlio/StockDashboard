@@ -811,4 +811,28 @@ if news:
 else:
     st.info("暫無最新消息")
 
+# ── 🔧 除錯區：直接讀 DuckDB 原始數據 ─────────────────────────────
+with st.expander("🔧 除錯：DuckDB 原始數據（3968.HK）"):
+    import sys
+    sys.path.insert(0, '/app')
+    from database import duckdb_client as _db
+    _rows = _db.get_price_range("3968.HK", 365)
+    if _rows:
+        _df = pd.DataFrame(_rows)
+        _df["Date"] = pd.to_datetime(_df["trade_date"])
+        _df.set_index("Date", inplace=True)
+        _df.sort_index(inplace=True)
+        st.write(f"**總行數：** {len(_df)} ｜ **日期範圍：** {_df.index.min().date()} ~ {_df.index.max().date()}")
+        _gap_dates = ["2026-04-25","2026-04-26","2026-04-18","2026-04-19","2026-02-17","2026-02-18","2026-02-19","2026-02-20"]
+        for _d in _gap_dates:
+            _ts = pd.Timestamp(_d)
+            if _ts in _df.index:
+                st.write(f"  ✅ {_d}: close={_df.loc[_ts,'close']}")
+            else:
+                st.write(f"  ❌ {_d}: **不在 DB 中**")
+        st.write("**最近 10 筆：**")
+        st.dataframe(_df.tail(10))
+    else:
+        st.warning("DuckDB 沒有 3968.HK 的數據！")
+
 st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 股票代碼: {selected_ticker}")
