@@ -32,21 +32,7 @@ def get_market_from_ticker(ticker: str) -> str:
     t = ticker.upper()
     if t.endswith(".HK"):
         return "HK"
-    # Covers .SS (Shanghai), .SH (Shanghai), .BJ (Beijing), etc. → treat as non-trading for now
     return "US"
-
-def is_market_trading_day(ticker: str, date) -> bool:
-    """Return True if date is a trading day for the given ticker's market."""
-    if isinstance(date, pd.Timestamp):
-        date = date.date()
-    # Weekend
-    if date.weekday() >= 5:  # Saturday=5, Sunday=6
-        return False
-    market = get_market_from_ticker(ticker)
-    if market == "HK":
-        return date not in HKEX_HOLIDAYS
-    else:  # US
-        return date not in US_HOLIDAYS
 
 st.set_page_config(page_title="Stock Dashboard", page_icon="📈", layout="wide")
 
@@ -521,13 +507,37 @@ def _info_metrics(info: dict) -> dict:
 # 圖表函數
 # ─────────────────────────────────────────────
 
+def _build_rangebreaks(ticker: str, df: pd.DataFrame) -> list:
+    """
+    Build Plotly rangebreaks list to hide non-trading days (weekends + market holidays).
+    This compresses gaps visually WITHOUT removing data points.
+    """
+    market = get_market_from_ticker(ticker)
+    holidays_set = HKEX_HOLIDAYS if market == "HK" else US_HOLIDAYS
+
+    breaks = []
+    # Always hide weekends
+    breaks.append(dict(bounds=[5, 7], pattern="day of week"))
+
+    # Hide known market holidays
+    holiday_dates = [
+        d for d in df.index
+        if d.date() in holidays_set
+    ]
+    for d in holiday_dates:
+        breaks.append(dict(bounds=[d, d], pattern="day of week"))
+
+    return breaks
+
 def plot_candlestick(df, ticker, company_name=""):
-    # 過濾：只保留完整 OHLC + 該市場交易日（非週末、非假期）
-    df = df.dropna(subset=["open", "high", "low", "close"])
+    """Candlestick chart with non-trading days collapsed via rangebreaks."""
+    df = df.dropna(subset=["open", "high", "low", "close"]).copy()
     df = df.sort_index()
-    trading_mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
-    df = df[trading_mask]
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
+
+    # Build rangebreaks for non-trading days
+    breaks = _build_rangebreaks(ticker, df)
+
     fig = go.Figure(data=[go.Candlestick(
         x=df.index, open=df["open"], high=df["high"],
         low=df["low"], close=df["close"], name="OHLC",
@@ -537,16 +547,17 @@ def plot_candlestick(df, ticker, company_name=""):
         title=title, yaxis_title="HKD / USD",
         xaxis_title="日期", template="plotly_dark",
         xaxis_rangeslider_visible=False, height=460,
+        xaxis=dict(rangebreaks=breaks),
     )
     return fig
 
 
 def plot_line(df, ticker, company_name=""):
-    df = df.dropna(subset=["close"])
+    """Line chart with non-trading days collapsed via rangebreaks."""
+    df = df.dropna(subset=["close"]).copy()
     df = df.sort_index()
-    trading_mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
-    df = df[trading_mask]
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
+    breaks = _build_rangebreaks(ticker, df)
     fig = go.Figure([go.Scatter(
         x=df.index, y=df["close"], mode="lines", name="收盤價",
         line=dict(color="#00d4ff", width=2)
@@ -555,16 +566,16 @@ def plot_line(df, ticker, company_name=""):
         title=title, yaxis_title="HKD / USD",
         xaxis_title="日期", template="plotly_dark", height=360,
         xaxis_rangeslider_visible=False,
+        xaxis=dict(rangebreaks=breaks),
     )
     return fig
 
 
 def plot_volume(df, ticker):
-    # 過濾：只保留有 volume 數據的行 + 該市場交易日
+    """Volume bar chart with non-trading days collapsed via rangebreaks."""
     df = df.dropna(subset=["volume", "close", "open"]).copy()
     df = df.sort_index()
-    trading_mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
-    df = df[trading_mask]
+    breaks = _build_rangebreaks(ticker, df)
     colors = ["green" if row["close"] >= row["open"] else "red" for _, row in df.iterrows()]
     fig = go.Figure(data=[go.Bar(
         x=df.index, y=df["volume"],
@@ -575,6 +586,7 @@ def plot_volume(df, ticker):
         title=f"{ticker} 成交量", yaxis_title="成交量", xaxis_title="日期",
         template="plotly_dark", height=200,
         xaxis_rangeslider_visible=False,
+        xaxis=dict(rangebreaks=breaks),
     )
     return fig
 
@@ -799,7 +811,7 @@ st.markdown("---")
 
 # ── ③ 最新消息（橫跨全寬）──
 st.markdown("### 📰 最新消息")
-news = get_stock_news(selected_ticker)
+news = news_items
 if news:
     # 2-column news layout
     n_cols = st.columns(2)
@@ -807,32 +819,8 @@ if news:
     for i, item in enumerate(news):
         col = n_cols[i % 2]
         with col:
-            st.markdown(news_card_html(item["title"], item["publisher"], item["date"], item["url"]), unsafe_allow_html=True)
+            st.markdown(news_card_html(item["title"], item["source"], item["pub_date"], item["link"]), unsafe_allow_html=True)
 else:
     st.info("暫無最新消息")
-
-# ── 🔧 除錯區：直接讀 DuckDB 原始數據 ─────────────────────────────
-with st.expander("🔧 除錯：DuckDB 原始數據（3968.HK）"):
-    import sys
-    sys.path.insert(0, '/app')
-    from database import duckdb_client as _db
-    _rows = _db.get_price_range("3968.HK", 365)
-    if _rows:
-        _df = pd.DataFrame(_rows)
-        _df["Date"] = pd.to_datetime(_df["trade_date"])
-        _df.set_index("Date", inplace=True)
-        _df.sort_index(inplace=True)
-        st.write(f"**總行數：** {len(_df)} ｜ **日期範圍：** {_df.index.min().date()} ~ {_df.index.max().date()}")
-        _gap_dates = ["2026-04-25","2026-04-26","2026-04-18","2026-04-19","2026-02-17","2026-02-18","2026-02-19","2026-02-20"]
-        for _d in _gap_dates:
-            _ts = pd.Timestamp(_d)
-            if _ts in _df.index:
-                st.write(f"  ✅ {_d}: close={_df.loc[_ts,'close']}")
-            else:
-                st.write(f"  ❌ {_d}: **不在 DB 中**")
-        st.write("**最近 10 筆：**")
-        st.dataframe(_df.tail(10))
-    else:
-        st.warning("DuckDB 沒有 3968.HK 的數據！")
 
 st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 股票代碼: {selected_ticker}")
