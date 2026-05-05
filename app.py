@@ -545,6 +545,7 @@ def _make_date_axis_config(dates, n_ticks: int = 12) -> dict:
         ticktext=tick_texts,
         showgrid=True,
         gridcolor='rgba(255,255,255,0.05)',
+        rangeslider=dict(visible=False),
     )
 
 
