@@ -4,6 +4,7 @@ Provides a unified interface for app.py to get stock data.
 """
 
 import yfinance as yf
+import pandas as pd
 import feedparser
 import re
 from datetime import date, datetime, timedelta
