@@ -529,64 +529,89 @@ def _build_rangebreaks(ticker: str, df: pd.DataFrame) -> list:
 
     return breaks
 
+
+def _make_date_axis_config(dates, n_ticks: int = 12) -> dict:
+    """
+    Return a Plotly xaxis config using integer positions (no gaps) with real dates as tick labels.
+    dates: list/Series of datetime objects (same length as data).
+    """
+    n = len(dates)
+    step = max(1, n // n_ticks)
+    tick_vals = list(range(0, n, step))
+    tick_texts = [dates[i].strftime('%Y-%m-%d') for i in tick_vals]
+    return dict(
+        tickmode='array',
+        tickvals=tick_vals,
+        ticktext=tick_texts,
+        showgrid=True,
+        gridcolor='rgba(255,255,255,0.05)',
+    )
+
+
 def plot_candlestick(df, ticker, company_name=""):
-    """Candlestick chart with non-trading days collapsed via rangebreaks."""
+    """Candlestick chart: integer x-axis (no gaps) with date labels."""
     df = df.dropna(subset=["open", "high", "low", "close"]).copy()
     df = df.sort_index()
+    # 保存日期用於 hover 和 x 軸標籤（reset_index 前做）
+    dates = df.index.tolist()
+    df = df.reset_index(drop=True)   # ← 整數索引，消滅所有空隙
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
 
-    # Build rangebreaks for non-trading days
-    breaks = _build_rangebreaks(ticker, df)
-
     fig = go.Figure(data=[go.Candlestick(
-        x=df.index, open=df["open"], high=df["high"],
-        low=df["low"], close=df["close"], name="OHLC",
-        xhoverformat="%Y-%m-%d"
+        x=list(range(len(df))),       # ← 整數坐標，點與點之間等距
+        open=df["open"], high=df["high"], low=df["low"], close=df["close"],
+        name="OHLC", xhoverformat="%Y-%m-%d",
+        text=dates, hovertemplate='%{text}<br>O: %{customdata[0]:.2f} H: %{customdata[1]:.2f} L: %{customdata[2]:.2f} C: %{customdata[3]:.2f}<extra></extra>',
+        customdata=df[["open","high","low","close"]].values,
     )])
+    xaxis_cfg = _make_date_axis_config(dates)
+    xaxis_cfg['rangeslider']['visible'] = False
     fig.update_layout(
         title=title, yaxis_title="HKD / USD",
         xaxis_title="日期", template="plotly_dark",
-        xaxis_rangeslider_visible=False, height=460,
-        xaxis=dict(rangebreaks=breaks),
+        height=460, xaxis=xaxis_cfg,
     )
     return fig
 
 
 def plot_line(df, ticker, company_name=""):
-    """Line chart with non-trading days collapsed via rangebreaks."""
+    """Line chart: integer x-axis (no gaps) with date labels."""
     df = df.dropna(subset=["close"]).copy()
     df = df.sort_index()
+    dates = df.index.tolist()
+    df = df.reset_index(drop=True)
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
-    breaks = _build_rangebreaks(ticker, df)
+    xaxis_cfg = _make_date_axis_config(dates)
     fig = go.Figure([go.Scatter(
-        x=df.index, y=df["close"], mode="lines", name="收盤價",
-        line=dict(color="#00d4ff", width=2)
+        x=list(range(len(df))), y=df["close"], mode="lines", name="收盤價",
+        line=dict(color="#00d4ff", width=2),
+        text=dates, hovertemplate='%{text}<br>$%{y:.2f}<extra></extra>',
     )])
     fig.update_layout(
         title=title, yaxis_title="HKD / USD",
         xaxis_title="日期", template="plotly_dark", height=360,
-        xaxis_rangeslider_visible=False,
-        xaxis=dict(rangebreaks=breaks),
+        xaxis=xaxis_cfg,
     )
     return fig
 
 
 def plot_volume(df, ticker):
-    """Volume bar chart with non-trading days collapsed via rangebreaks."""
+    """Volume bar chart: integer x-axis (no gaps) with date labels."""
     df = df.dropna(subset=["volume", "close", "open"]).copy()
     df = df.sort_index()
-    breaks = _build_rangebreaks(ticker, df)
+    dates = df.index.tolist()
+    df = df.reset_index(drop=True)
+    xaxis_cfg = _make_date_axis_config(dates)
     colors = ["green" if row["close"] >= row["open"] else "red" for _, row in df.iterrows()]
     fig = go.Figure(data=[go.Bar(
-        x=df.index, y=df["volume"],
+        x=list(range(len(df))), y=df["volume"],
         marker_color=colors, name="成交量",
-        xhoverformat="%Y-%m-%d"
+        text=dates, hovertemplate='%{text}<br>Vol: %{y:,}<extra></extra>',
     )])
     fig.update_layout(
         title=f"{ticker} 成交量", yaxis_title="成交量", xaxis_title="日期",
         template="plotly_dark", height=200,
-        xaxis_rangeslider_visible=False,
-        xaxis=dict(rangebreaks=breaks),
+        xaxis=xaxis_cfg,
     )
     return fig
 
