@@ -223,13 +223,22 @@ def detect_morning_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     if body1 < 0.001 or body2 < 0.001 or body3 < 0.001:
         return None
     # r1 長陰，r3 長陽，r2 是星形
-    if not (_is_bearish(r1) and _is_bullish(r3)):
+    # r1 必须是阴线（第一根下跌）
+    if not _is_bearish(r1):
         return None
-    # r2 實體在 r1 的價格範圍內（不完全覆蓋，獨立星形）
-    in_range = (min(_to_f(r1["open"]), _to_f(r1["close"])) <= max(_to_f(r2["open"]), _to_f(r2["close"])) <= max(_to_f(r1["open"]), _to_f(r1["close"])))
-    # r3 收盤深入 r1 實體
+    # r3 必须是阳线（第三根上涨）
+    if not _is_bullish(r3):
+        return None
+    # r2 是星形（实体小）
+    if body2 >= body1 * 0.5:
+        return None
+    # r3 实体要够大（至少是 r1 的一半）
+    if body3 < body1 * 0.5:
+        return None
+    # r3 收盘要深入 r1 实体内部（至少 50%）
     deep = _to_f(r3["close"]) > _to_f(r1["open"]) - 0.5 * body1
-    if _is_bearish(r1) and body1 > 1.5 * body2 and body3 > 1.5 * body2 and deep:
+    if not deep:
+        return None
         return Pattern(
             name="Morning Star",
             indices=[idx - 2, idx - 1, idx],
@@ -252,18 +261,29 @@ def detect_evening_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     body3 = _body_size(r3)
     if body1 < 0.001 or body2 < 0.001 or body3 < 0.001:
         return None
-    if not (_is_bullish(r1) and _is_bearish(r3)):
+    # r1 必须是阳线（第一根上涨）
+    if not _is_bullish(r1):
         return None
-    in_range = (min(_to_f(r1["open"]), _to_f(r1["close"])) <= max(_to_f(r2["open"]), _to_f(r2["close"])) <= max(_to_f(r1["open"]), _to_f(r1["close"])))
+    # r3 必须是阴线（第三根下跌）
+    if not _is_bearish(r3):
+        return None
+    # r2 是星形（实体小）
+    if body2 >= body1 * 0.5:
+        return None
+    # r3 实体要够大（至少是 r1 的一半）
+    if body3 < body1 * 0.5:
+        return None
+    # r3 收盘要深入 r1 实体内部（至少 50%）
     deep = _to_f(r3["close"]) < _to_f(r1["open"]) + 0.5 * body1
-    if _is_bullish(r1) and body1 > 1.5 * body2 and body3 > 1.5 * body2 and deep:
-        return Pattern(
-            name="Evening Star",
-            indices=[idx - 2, idx - 1, idx],
-            direction="bearish",
-            confidence=0.8,
-            metadata={"meaning": "黃昏之星 — 上升頂部三根K線反轉", "idx": idx}
-        )
+    if not deep:
+        return None
+    return Pattern(
+        name="Evening Star",
+        indices=[idx - 2, idx - 1, idx],
+        direction="bearish",
+        confidence=0.8,
+        metadata={"meaning": "黃昏之星 — 上升頂部三根K線反轉", "idx": idx}
+    )
     return None
 
 
@@ -626,15 +646,16 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
     results: List[Pattern] = []
 
     # ① 燭線形態（逐根掃描）
+    # 順序重要：精確的單根形態優先於組合形態，避免被 engulfing 搶走 index
     for idx in range(2, len(df)):
         for detector in [
-            lambda i: detect_doji(df, i),
-            lambda i: detect_hammer(df, i),
-            lambda i: detect_shooting_star(df, i),
-            lambda i: detect_engulfing(df, i),
-            lambda i: detect_harami(df, i),
-            lambda i: detect_morning_star(df, i),
-            lambda i: detect_evening_star(df, i),
+            lambda i: detect_doji(df, i),          # 單根，精確
+            lambda i: detect_hammer(df, i),         # 單根，精確
+            lambda i: detect_shooting_star(df, i),  # 單根，精確
+            lambda i: detect_morning_star(df, i),   # 三根
+            lambda i: detect_evening_star(df, i),   # 三根
+            lambda i: detect_engulfing(df, i),      # 兩根，放在後面
+            lambda i: detect_harami(df, i),         # 兩根，內含線
         ]:
             p = detector(idx)
             if p:
