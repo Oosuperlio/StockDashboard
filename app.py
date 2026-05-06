@@ -788,7 +788,16 @@ with col_chart:
         df_plot = df_prices[df_prices.index >= cutoff]
         # 形態識別
         patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
-        print(f"[DEBUG] {selected_ticker} {days_range}d → {len(patterns)} patterns: {[p.name for p in patterns]}")
+        # 詳細日誌：用於診斷形態偵測是否正確
+        recent = df_plot.tail(5)
+        print(f"[DEBUG] {selected_ticker} {days_range}d")
+        print(f"[DEBUG] Recent OHLC dates: {[str(d.date()) for d in recent.index]}")
+        for i, row in recent.iterrows():
+            body = abs(float(row['close']) - float(row['open']))
+            rng = float(row['high']) - float(row['low'])
+            ratio = body / rng if rng else 0
+            print(f"[DEBUG]   {str(i.date())} O={float(row['open']):.2f} C={float(row['close']):.2f} H={float(row['high']):.2f} L={float(row['low']):.2f} body/r={ratio:.3f}")
+        print(f"[DEBUG] Patterns: {[p.name for p in patterns]}")
         t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
         with t1:
             fig_candle = plot_candlestick(df_plot, selected_ticker, company_name, patterns)
