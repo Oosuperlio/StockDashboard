@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import List, Optional
 import pandas as pd
 from pattern_detector import Pattern, detect_all_patterns, get_latest_patterns
+from pattern_annotator import PATTERN_NAMES_CN
 
 
 # ─────────────────────────────────────────────
@@ -158,9 +159,11 @@ def predict(df: pd.DataFrame, lookback: int = 30) -> Prediction:
     bearish_found = [p.name for p in patterns if p.name in BEARISH_PATTERNS]
 
     if bullish_found:
-        details.append(f"✅ 看漲形態：{', '.join(set(bullish_found))}")
+        names_cn = [PATTERN_NAMES_CN.get(n, n) for n in bullish_found]
+        details.append(f"✅ 看漲形態：{', '.join(set(names_cn))}")
     if bearish_found:
-        details.append(f"🔴 看跌形態：{', '.join(set(bearish_found))}")
+        names_cn = [PATTERN_NAMES_CN.get(n, n) for n in bearish_found]
+        details.append(f"🔴 看跌形態：{', '.join(set(names_cn))}")
 
     # 動量理由
     if momentum == "strong_bullish":

@@ -48,6 +48,33 @@ PREFIX = {
     "neutral": "◆",
 }
 
+# 形態中文名稱
+PATTERN_NAMES_CN = {
+    "Doji":                    "十字星",
+    "Hammer":                  "錘子",
+    "Shooting Star":           "流星",
+    "Bullish Engulfing":       "看漲吞噬",
+    "Bearish Engulfing":       "看跌吞噬",
+    "Morning Star":            "早晨之星",
+    "Evening Star":            "黃昏之星",
+    "Bullish Harami":          "看漲內含線",
+    "Bearish Harami":          "看跌內含線",
+    "Head & Shoulders":        "頭肩頂",
+    "Inverse H&S":             "倒頭肩底",
+    "Double Top":              "雙頂",
+    "Double Bottom":           "雙底",
+    "Ascending Triangle":      "上升三角形",
+    "Descending Triangle":     "下降三角形",
+    "Symmetrical Triangle":    "對稱三角形",
+    "Bull Flag":               "牛市旗形",
+    "Bear Flag":               "熊市旗形",
+    "Support":                 "支撐位",
+    "Resistance":              "壓力位",
+    "MA Bullish Alignment":    "均線多頭排列",
+    "MA Bearish Alignment":    "均線空頭排列",
+    "Volume + Price Breakout": "放量突破",
+    "Volume + Price Breakdown": "放量破底",
+}
 
 def get_color(pattern: Pattern) -> str:
     return PATTERN_COLORS.get(pattern.name, "#888888")
@@ -79,8 +106,8 @@ def add_pattern_markers(fig: go.Figure, df, patterns: list, dates: list) -> go.F
         candle_mid = fig.data[0].x[mid_idx] if mid_idx < len(fig.data[0].x) else mid_idx
         high_val = df["high"].iloc[mid_idx] if mid_idx < len(df) else df["high"].iloc[-1]
 
-        # 標籤文字
-        label_text = f"{prefix} {p.name}"
+        # 標籤文字（中文）
+        label_text = f"{prefix} {PATTERN_NAMES_CN.get(p.name, p.name)}"
 
         # 添加標記（倒三角 ▼ 置於 K 線上方）
         fig.add_trace(go.Scatter(
@@ -97,7 +124,7 @@ def add_pattern_markers(fig: go.Figure, df, patterns: list, dates: list) -> go.F
             textposition="top center",
             textfont=dict(size=9, color=color),
             hoverinfo="text",
-            hovertext=f"{p.name}<br>{p.metadata.get('meaning', '')}<br>Confidence: {p.confidence:.0%}",
+            hovertext=f"{PATTERN_NAMES_CN.get(p.name, p.name)}<br>{p.metadata.get('meaning', '')}<br>信心: {p.confidence:.0%}",
             showlegend=False,
         ))
 
@@ -126,11 +153,11 @@ def add_pattern_markers(fig: go.Figure, df, patterns: list, dates: list) -> go.F
             x=[x_start],
             y=[level],
             mode="text",
-            text=[f"{prefix} {p.name}: {level:.2f}"],
+            text=[f"{PATTERN_NAMES_CN.get(p.name, p.name)}: {level:.2f}"],
             textposition="top right",
             textfont=dict(size=9, color=line_color),
             hoverinfo="text",
-            hovertext=f"{p.name} @ {level}<br>{p.metadata.get('meaning', '')}",
+            hovertext=f"{PATTERN_NAMES_CN.get(p.name, p.name)} @ {level}<br>{p.metadata.get('meaning', '')}",
             showlegend=False,
         ))
 
@@ -218,5 +245,5 @@ def build_pattern_legend(patterns: list) -> str:
     lines = []
     for p in patterns[:15]:  # 最多顯示15個
         prefix = "🟢" if p.direction == "bullish" else ("🔴" if p.direction == "bearish" else "🟡")
-        lines.append(f"{prefix} **{p.name}** — {p.metadata.get('meaning', '')}")
+        lines.append(f"{prefix} **{PATTERN_NAMES_CN.get(p.name, p.name)}** — {p.metadata.get('meaning', '')}")
     return "\n".join(lines)
