@@ -797,7 +797,7 @@ with col_chart:
             rng = float(row['high']) - float(row['low'])
             ratio = body / rng if rng else 0
             msg += "[DEBUG]   " + str(i.date()) + " O=" + str(round(float(row['open']),2)) + " C=" + str(round(float(row['close']),2)) + " H=" + str(round(float(row['high']),2)) + " L=" + str(round(float(row['low']),2)) + " body/r=" + str(round(ratio,3)) + "\n"
-        msg += "[DEBUG] Patterns: " + str([p.name for p in patterns]) + "\n"
+        msg += "[DEBUG] Patterns: " + str([(p.name, p.metadata.get("idx"), p.indices) for p in patterns]) + "\n"
         sys.stderr.write(msg)
         t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
         with t1:
