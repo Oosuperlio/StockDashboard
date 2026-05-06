@@ -835,17 +835,33 @@ with col_side:
 
 st.markdown("---")
 
-# ── ③ 最新消息（橫跨全寬）──
+# ── ③ 最新消息（橫跨全寬）—— 最多 7 天，分頁顯示 ──
 st.markdown("### 📰 最新消息")
-news = news_items
+
+# Session state for pagination
+INITIAL_NEWS = 10
+MORE_NEWS = 10
+if "news_count" not in st.session_state:
+    st.session_state.news_count = INITIAL_NEWS
+
+# Filter to last 7 days
+cutoff_7d = pd.Timestamp.now() - pd.Timedelta(days=7)
+news = [n for n in news_items if pd.to_datetime(n["pub_date"], errors="coerce") >= cutoff_7d]
+
 if news:
+    total = len(news)
+    shown = st.session_state.news_count
+
     # 2-column news layout
     n_cols = st.columns(2)
-    half = (len(news) + 1) // 2
-    for i, item in enumerate(news):
+    for i, item in enumerate(news[:shown]):
         col = n_cols[i % 2]
         with col:
             st.markdown(news_card_html(item["title"], item["source"], item["pub_date"], item["link"]), unsafe_allow_html=True)
+
+    # More button
+    if shown < total:
+        st.button(f"🔽 更多消息 （已顯示 {shown}/{total}）", on_click=lambda: st.session_state.update(news_count=st.session_state.news_count + MORE_NEWS))
 else:
     st.info("暫無最新消息")
 
