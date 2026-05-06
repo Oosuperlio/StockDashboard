@@ -107,6 +107,10 @@ def predict(df: pd.DataFrame, lookback: int = 30) -> Prediction:
         )
 
     patterns = get_latest_patterns(df, lookback=lookback)
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in df.columns:
+            df = df.copy()
+            df[col] = df[col].astype(float)
     last_close = df["close"].iloc[-1]
     atr = estimate_ATR(df)
 

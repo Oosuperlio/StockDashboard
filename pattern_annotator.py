@@ -57,6 +57,11 @@ def add_pattern_markers(fig: go.Figure, df, patterns: list, dates: list) -> go.F
     """
     將形態標記疊加到現有的 candlestick figure 上
     """
+    # Convert all numeric columns to float to avoid Decimal vs float errors
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in df.columns:
+            df = df.copy()
+            df[col] = df[col].astype(float)
     n = len(df)
     idx_to_x = lambda i: i  # 整數坐標系
 
