@@ -93,6 +93,7 @@ def add_pattern_markers(fig: go.Figure, df, patterns: list, dates: list) -> go.F
     idx_to_x = lambda i: i  # 整數坐標系
 
     # ── 1. 收集形勢標記（散點）──
+    import sys
     for p in patterns:
         color = get_color(p)
         prefix = PREFIX.get(p.direction, "◆")
@@ -108,6 +109,10 @@ def add_pattern_markers(fig: go.Figure, df, patterns: list, dates: list) -> go.F
 
         # 標籤文字（中文）
         label_text = f"{prefix} {PATTERN_NAMES_CN.get(p.name, p.name)}"
+
+        # DEBUG: 記錄每個標記放到哪個座標
+        date_at_idx = dates[mid_idx] if mid_idx < len(dates) else dates[-1]
+        sys.stderr.write(f"[ANNOTATOR DEBUG] pattern={p.name} mid_idx={mid_idx} x={candle_mid} date={date_at_idx} label={label_text}\n")
 
         # 添加標記（倒三角 ▼ 置於 K 線上方）
         fig.add_trace(go.Scatter(
