@@ -239,14 +239,13 @@ def detect_morning_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     deep = _to_f(r3["close"]) > _to_f(r1["open"]) - 0.5 * body1
     if not deep:
         return None
-        return Pattern(
-            name="Morning Star",
-            indices=[idx - 2, idx - 1, idx],
-            direction="bullish",
-            confidence=0.8,
-            metadata={"meaning": "早晨之星 — 下跌底部三根K線反轉", "idx": idx}
-        )
-    return None
+    return Pattern(
+        name="Morning Star",
+        indices=[idx - 2, idx - 1, idx],
+        direction="bullish",
+        confidence=0.8,
+        metadata={"meaning": "早晨之星 — 下跌底部三根K線反轉", "idx": idx}
+    )
 
 
 def detect_evening_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
@@ -649,13 +648,13 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
     # 順序重要：精確的單根形態優先於組合形態，避免被 engulfing 搶走 index
     for idx in range(2, len(df)):
         for detector in [
-            lambda i: detect_doji(df, i),          # 單根，精確
-            lambda i: detect_hammer(df, i),         # 單根，精確
-            lambda i: detect_shooting_star(df, i),  # 單根，精確
-            lambda i: detect_morning_star(df, i),   # 三根
-            lambda i: detect_evening_star(df, i),   # 三根
-            lambda i: detect_engulfing(df, i),      # 兩根，放在後面
-            lambda i: detect_harami(df, i),         # 兩根，內含線
+            lambda i, _df=df, _d0=detect_doji:    _d0(_df, i),
+            lambda i, _df=df, _d0=detect_hammer:   _d0(_df, i),
+            lambda i, _df=df, _d0=detect_shooting_star: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_morning_star:  _d0(_df, i),
+            lambda i, _df=df, _d0=detect_evening_star:  _d0(_df, i),
+            lambda i, _df=df, _d0=detect_engulfing:    _d0(_df, i),
+            lambda i, _df=df, _d0=detect_harami:        _d0(_df, i),
         ]:
             p = detector(idx)
             if p:
