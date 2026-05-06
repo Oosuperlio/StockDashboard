@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy app and database modules
 COPY app.py .
 COPY database/ ./database/
+COPY pattern_detector.py .
+COPY pattern_annotator.py .
+COPY predictor.py .
 
 # Set port
 ENV PORT=8000

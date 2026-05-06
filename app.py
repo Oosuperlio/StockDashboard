@@ -146,6 +146,27 @@ def section_card(title, content_html):
     """, unsafe_allow_html=True)
 
 
+# ── Prediction box CSS ──────────────────────────────────────────────
+st.markdown("""
+<style>
+.prediction-box {
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.prediction-box.bullish { background: linear-gradient(135deg, #0a2e1a, #0d3d22); border: 1px solid #00FF7F; }
+.prediction-box.bearish { background: linear-gradient(135deg, #2e0a0a, #3d0d0d); border: 1px solid #FF4444; }
+.prediction-box.neutral { background: linear-gradient(135deg, #1a1a0a, #2d2d0d); border: 1px solid #FFD700; }
+.pred-header { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #e2e8f0; }
+.pred-meta { display: flex; gap: 20px; margin-bottom: 10px; font-size: 13px; color: #a0aec0; }
+.pred-meta b { color: #e2e8f0; }
+.pred-details, .pred-warnings { margin: 0; padding-left: 18px; font-size: 12px; color: #a0aec0; line-height: 1.8; }
+.pred-warnings { color: #f39c12; }
+</style>
+""", unsafe_allow_html=True)
+
+
 def metric_row(label, value):
     return f'<div class="metric-pair"><span class="metric-label">{label}</span><span class="metric-val">{value}</span></div>'
 
@@ -169,6 +190,10 @@ from database.cache import (
     get_top_searched,
     suggest_symbols as _suggest_symbols,
 )
+
+from pattern_detector import detect_all_patterns, get_latest_patterns
+from pattern_annotator import add_pattern_markers, build_pattern_legend
+from predictor import predict, format_prediction_html
 
 
 # ─────────────────────────────────────────────
@@ -549,8 +574,10 @@ def _make_date_axis_config(dates, n_ticks: int = 12) -> dict:
     )
 
 
-def plot_candlestick(df, ticker, company_name=""):
-    """Candlestick chart: integer x-axis (no gaps) with date labels."""
+def plot_candlestick(df, ticker, company_name="", patterns=None):
+    """Candlestick chart: integer x-axis (no gaps) with date labels + pattern markers."""
+    if patterns is None:
+        patterns = []
     df = df.dropna(subset=["open", "high", "low", "close"]).copy()
     df = df.sort_index()
     # 保存日期用於 hover 和 x 軸標籤（reset_index 前做）
@@ -572,6 +599,8 @@ def plot_candlestick(df, ticker, company_name=""):
         xaxis_title="日期", template="plotly_dark",
         height=460, xaxis=xaxis_cfg,
     )
+    # 疊加形態標記
+    fig = add_pattern_markers(fig, df, patterns, dates)
     return fig
 
 
@@ -757,12 +786,25 @@ with col_chart:
     if not df_prices.empty:
         cutoff = pd.Timestamp.now() - pd.Timedelta(days=days_range)
         df_plot = df_prices[df_prices.index >= cutoff]
+        # 形態識別
+        patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
         t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
         with t1:
-            st.plotly_chart(plot_candlestick(df_plot, selected_ticker, company_name), width="stretch")
+            fig_candle = plot_candlestick(df_plot, selected_ticker, company_name, patterns)
+            st.plotly_chart(fig_candle, width="stretch")
         with t2:
             st.plotly_chart(plot_line(df_plot, selected_ticker, company_name), width="stretch")
         st.plotly_chart(plot_volume(df_plot, selected_ticker), width="stretch")
+
+        # 形態圖例
+        legend = build_pattern_legend(patterns)
+        if patterns:
+            st.markdown(f"**📐 形態標記說明**\n\n{legend}", unsafe_allow_html=True)
+
+        # 走勢預判
+        pred = predict(df_plot)
+        st.markdown("### 🎯 走勢預判")
+        st.markdown(format_prediction_html(pred), unsafe_allow_html=True)
     else:
         st.error(f"無法獲取 {selected_ticker} 的股票數據")
 
