@@ -784,9 +784,11 @@ with col_side:
         "forward_pe":       _f("forwardPE"),
         "price_to_book":    _f("priceToBook"),
         "peg_ratio":        _f("trailingPegRatio"),
-        "gross_profit":     _f("grossProfit"),
-        "operating_income": _f("operatingIncome"),
-        "ebitda":           _f("ebitda"),
+        "gross_profit":     _f("grossProfits"),
+        "total_revenue":    _f("totalRevenue"),
+        "net_income":       _f("netIncomeToCommon"),
+        "operating_margin": _f("operatingMargins", pct=True),
+        "profit_margin":    _f("profitMargins", pct=True),
         "revenue_growth":   _f("revenueGrowth", pct=True),
         "earnings_growth":  _f("earningsGrowth", pct=True),
         "forward_eps":      _f("forwardEps"),
@@ -815,8 +817,10 @@ with col_side:
 
     # 盈利能力 card
     section_card("💰 盈利能力", metric_row("Gross Profit", fm(info["gross_profit"])) +
-                                  metric_row("Operating Income", fm(info["operating_income"])) +
-                                  metric_row("EBITDA", fm(info["ebitda"])))
+                                  metric_row("Net Income", fm(info["net_income"])) +
+                                  metric_row("Total Revenue", fm(info["total_revenue"])) +
+                                  metric_row("Op. Margin", pp(info["operating_margin"])) +
+                                  metric_row("Profit Margin", pp(info["profit_margin"])))
 
     # 增長 & 股息 card
     section_card("📈 增長 & 股息", metric_row("Revenue Growth", pp(info["revenue_growth"])) +
