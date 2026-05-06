@@ -790,9 +790,9 @@ with col_chart:
         patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
         # 詳細日誌：寫到 stderr（Railway 一定捕獲）
         import sys
-        recent = df_plot.tail(5)
-        msg = "[DEBUG] " + selected_ticker + " " + str(days_range) + "d | " + str([str(d.date()) for d in recent.index]) + "\n"
-        for i, row in recent.iterrows():
+        all_rows = df_plot
+        msg = "[DEBUG] " + selected_ticker + " " + str(days_range) + "d total=" + str(len(all_rows)) + " rows\n"
+        for i, row in all_rows.iterrows():
             body = abs(float(row['close']) - float(row['open']))
             rng = float(row['high']) - float(row['low'])
             ratio = body / rng if rng else 0
