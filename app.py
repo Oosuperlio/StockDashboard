@@ -788,6 +788,7 @@ with col_chart:
         df_plot = df_prices[df_prices.index >= cutoff]
         # 形態識別
         patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
+        print(f"[DEBUG] {selected_ticker} {days_range}d → {len(patterns)} patterns: {[p.name for p in patterns]}")
         t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
         with t1:
             fig_candle = plot_candlestick(df_plot, selected_ticker, company_name, patterns)
