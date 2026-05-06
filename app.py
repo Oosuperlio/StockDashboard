@@ -788,16 +788,17 @@ with col_chart:
         df_plot = df_prices[df_prices.index >= cutoff]
         # 形態識別
         patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
-        # 詳細日誌：用於診斷形態偵測是否正確
+        # 詳細日誌：寫到 stderr（Railway 一定捕獲）
+        import sys
         recent = df_plot.tail(5)
-        print(f"[DEBUG] {selected_ticker} {days_range}d")
-        print(f"[DEBUG] Recent OHLC dates: {[str(d.date()) for d in recent.index]}")
+        msg = "[DEBUG] " + selected_ticker + " " + str(days_range) + "d | " + str([str(d.date()) for d in recent.index]) + "\n"
         for i, row in recent.iterrows():
             body = abs(float(row['close']) - float(row['open']))
             rng = float(row['high']) - float(row['low'])
             ratio = body / rng if rng else 0
-            print(f"[DEBUG]   {str(i.date())} O={float(row['open']):.2f} C={float(row['close']):.2f} H={float(row['high']):.2f} L={float(row['low']):.2f} body/r={ratio:.3f}")
-        print(f"[DEBUG] Patterns: {[p.name for p in patterns]}")
+            msg += "[DEBUG]   " + str(i.date()) + " O=" + str(round(float(row['open']),2)) + " C=" + str(round(float(row['close']),2)) + " H=" + str(round(float(row['high']),2)) + " L=" + str(round(float(row['low']),2)) + " body/r=" + str(round(ratio,3)) + "\n"
+        msg += "[DEBUG] Patterns: " + str([p.name for p in patterns]) + "\n"
+        sys.stderr.write(msg)
         t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
         with t1:
             fig_candle = plot_candlestick(df_plot, selected_ticker, company_name, patterns)
