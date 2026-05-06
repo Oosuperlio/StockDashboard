@@ -43,28 +43,36 @@ class Pattern:
 # 輔助工具
 # ─────────────────────────────────────────────
 
+def _to_f(v) -> float:
+    """Convert Decimal/float/int to float safely."""
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def _body_size(row) -> float:
-    return abs(row["close"] - row["open"])
+    return abs(_to_f(row["close"]) - _to_f(row["open"]))
 
 
 def _upper_shadow(row) -> float:
-    return row["high"] - max(row["open"], row["close"])
+    return _to_f(row["high"]) - max(_to_f(row["open"]), _to_f(row["close"]))
 
 
 def _lower_shadow(row) -> float:
-    return min(row["open"], row["close"]) - row["low"]
+    return min(_to_f(row["open"]), _to_f(row["close"])) - _to_f(row["low"])
 
 
 def _is_bullish(row) -> bool:
-    return row["close"] > row["open"]
+    return _to_f(row["close"]) > _to_f(row["open"])
 
 
 def _is_bearish(row) -> bool:
-    return row["close"] < row["open"]
+    return _to_f(row["close"]) < _to_f(row["open"])
 
 
 def _range(row) -> float:
-    return row["high"] - row["low"]
+    return _to_f(row["high"]) - _to_f(row["low"])
 
 
 def _avg_range(df, n=20) -> float:
@@ -171,10 +179,10 @@ def detect_engulfing(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
 
     # 看漲吞噬：陰包陽
     if _is_bearish(prev) and _is_bullish(curr):
-        if curr["open"] < prev["close"] and curr["close"] > prev["open"]:
+        if _to_f(curr["open"]) < _to_f(prev["close"]) and _to_f(curr["close"]) > _to_f(prev["open"]):
             if idx >= 5:
                 lookback = df.iloc[idx - 5:idx - 1]
-                if lookback["close"].iloc[-1] < lookback["close"].iloc[0]:
+                if _to_f(lookback["close"].iloc[-1]) < _to_f(lookback["close"].iloc[0]):
                     return Pattern(
                         name="Bullish Engulfing",
                         indices=[idx - 1, idx],
@@ -185,10 +193,10 @@ def detect_engulfing(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
 
     # 看跌吞噬：陽包陰
     if _is_bullish(prev) and _is_bearish(curr):
-        if curr["open"] > prev["close"] and curr["close"] < prev["open"]:
+        if _to_f(curr["open"]) > _to_f(prev["close"]) and _to_f(curr["close"]) < _to_f(prev["open"]):
             if idx >= 5:
                 lookback = df.iloc[idx - 5:idx - 1]
-                if lookback["close"].iloc[-1] > lookback["close"].iloc[0]:
+                if _to_f(lookback["close"].iloc[-1]) > _to_f(lookback["close"].iloc[0]):
                     return Pattern(
                         name="Bearish Engulfing",
                         indices=[idx - 1, idx],
@@ -218,9 +226,9 @@ def detect_morning_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     if not (_is_bearish(r1) and _is_bullish(r3)):
         return None
     # r2 實體在 r1 的價格範圍內（不完全覆蓋，獨立星形）
-    in_range = (min(r1["open"], r1["close"]) <= max(r2["open"], r2["close"]) <= max(r1["open"], r1["close"]))
+    in_range = (min(_to_f(r1["open"]), _to_f(r1["close"])) <= max(_to_f(r2["open"]), _to_f(r2["close"])) <= max(_to_f(r1["open"]), _to_f(r1["close"])))
     # r3 收盤深入 r1 實體
-    deep = r3["close"] > r1["open"] - 0.5 * body1
+    deep = _to_f(r3["close"]) > _to_f(r1["open"]) - 0.5 * body1
     if _is_bearish(r1) and body1 > 1.5 * body2 and body3 > 1.5 * body2 and deep:
         return Pattern(
             name="Morning Star",
@@ -246,8 +254,8 @@ def detect_evening_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
         return None
     if not (_is_bullish(r1) and _is_bearish(r3)):
         return None
-    in_range = (min(r1["open"], r1["close"]) <= max(r2["open"], r2["close"]) <= max(r1["open"], r1["close"]))
-    deep = r3["close"] < r1["open"] + 0.5 * body1
+    in_range = (min(_to_f(r1["open"]), _to_f(r1["close"])) <= max(_to_f(r2["open"]), _to_f(r2["close"])) <= max(_to_f(r1["open"]), _to_f(r1["close"])))
+    deep = _to_f(r3["close"]) < _to_f(r1["open"]) + 0.5 * body1
     if _is_bullish(r1) and body1 > 1.5 * body2 and body3 > 1.5 * body2 and deep:
         return Pattern(
             name="Evening Star",
@@ -271,8 +279,8 @@ def detect_harami(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     if body1 < 0.001 or body2 < 0.001:
         return None
     # r2 的實體完全在 r1 內
-    if (min(r2["open"], r2["close"]) > min(r1["open"], r1["close"]) and
-        max(r2["open"], r2["close"]) < max(r1["open"], r1["close"])):
+    if (min(_to_f(r2["open"]), _to_f(r2["close"])) > min(_to_f(r1["open"]), _to_f(r1["close"])) and
+        max(_to_f(r2["open"]), _to_f(r2["close"])) < max(_to_f(r1["open"]), _to_f(r1["close"]))):
         direction = "bullish" if _is_bearish(r1) else "bearish" if _is_bullish(r1) else "neutral"
         name = "Bullish Harami" if direction == "bullish" else "Bearish Harami"
         return Pattern(
