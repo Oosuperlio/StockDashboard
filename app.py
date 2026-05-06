@@ -784,10 +784,9 @@ with col_side:
         "forward_pe":       _f("forwardPE"),
         "price_to_book":    _f("priceToBook"),
         "peg_ratio":        _f("trailingPegRatio"),
-        "roe":              _f("returnOnEquity", pct=True),
-        "roa":              _f("returnOnAssets", pct=True),
-        "profit_margin":    _f("profitMargins", pct=True),
-        "operating_margin": _f("operatingMargins", pct=True),
+        "gross_profit":     _f("grossProfit"),
+        "operating_income": _f("operatingIncome"),
+        "ebitda":           _f("ebitda"),
         "revenue_growth":   _f("revenueGrowth", pct=True),
         "earnings_growth":  _f("earningsGrowth", pct=True),
         "forward_eps":      _f("forwardEps"),
@@ -801,6 +800,12 @@ with col_side:
 
     def fp(v): return f"{v:.2f}" if v is not None else "—"
     def pp(v): return f"{v:.2f}%" if v is not None else "—"
+    def fm(v):  # format absolute money (billions/millions)
+        if v is None: return "—"
+        if abs(v) >= 1e9: return f"{v/1e9:.2f}B"
+        if abs(v) >= 1e6: return f"{v/1e6:.2f}M"
+        if abs(v) >= 1e3: return f"{v/1e3:.2f}K"
+        return f"{v:.2f}"
 
     # 估值 card
     section_card("📊 估值", metric_row("P/E (Trailing)", fp(info["trailing_pe"])) +
@@ -809,10 +814,9 @@ with col_side:
                               metric_row("PEG", fp(info["peg_ratio"])))
 
     # 盈利能力 card
-    section_card("💰 盈利能力", metric_row("ROE", pp(info["roe"])) +
-                                  metric_row("ROA", pp(info["roa"])) +
-                                  metric_row("Profit Margin", pp(info["profit_margin"])) +
-                                  metric_row("Op. Margin", pp(info["operating_margin"])))
+    section_card("💰 盈利能力", metric_row("Gross Profit", fm(info["gross_profit"])) +
+                                  metric_row("Operating Income", fm(info["operating_income"])) +
+                                  metric_row("EBITDA", fm(info["ebitda"])))
 
     # 增長 & 股息 card
     section_card("📈 增長 & 股息", metric_row("Revenue Growth", pp(info["revenue_growth"])) +
