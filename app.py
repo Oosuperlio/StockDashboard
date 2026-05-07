@@ -720,6 +720,16 @@ if not selected_ticker:
 
 days_range = st.sidebar.slider("顯示天數", 30, 365, 90)
 
+refresh_key = f"refresh_{selected_ticker}"
+col1, col2 = st.sidebar.columns([1, 1])
+with col1:
+    st.write("")
+with col2:
+    if st.button("🔄 刷新數據", key=refresh_key):
+        st.cache_data.clear()
+        data = load_stock_data(selected_ticker, force_refresh=True)
+        st.rerun()
+
 # ── 實時報價 + 財務數據 + 新聞（全部來自 DB 緩存）──
 data = load_stock_data(selected_ticker, force_refresh=False)
 prices = data["prices"]
