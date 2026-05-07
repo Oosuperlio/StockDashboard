@@ -97,11 +97,16 @@ def detect_doji(df: pd.DataFrame, idx: int, threshold: float = 0.1) -> Optional[
     upper = _upper_shadow(row)
     lower = _lower_shadow(row)
     if body / r < threshold and upper > 0 and lower > 0:
+        # Tiny-body Doji gets boosted confidence so it survives deduplication
+        # (body/r < 0.05 means almost-perfect Doji, not just low-confidence)
+        conf = round(body / r, 2)
+        if conf < 0.05:
+            conf = 0.85
         return Pattern(
             name="Doji",
             indices=[idx],
             direction="neutral",
-            confidence=round(body / r, 2),
+            confidence=conf,
             metadata={"meaning": "十字星 — 多空拉鋸，可能反轉或持續", "idx": idx}
         )
     return None
@@ -678,9 +683,24 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
     results.extend(detect_volume_breakout(df))
 
     # 去重（同一 index 只留最高置信度）
+    # Special case: Doji always wins at its own index (it is the most
+    # precisely defined single-candle pattern; we don't want it suppressed
+    # by a less precise Hammer or Engulfing that shares the same idx)
     seen: dict = {}
+    doji_at: dict = {}  # idx → Doji pattern
+
+    # First pass: collect all Doji at each index
+    for p in results:
+        if p.name == "Doji":
+            for idx in p.indices:
+                if idx not in doji_at or p.confidence > doji_at[idx].confidence:
+                    doji_at[idx] = p
+
+    # Second pass: sorted by confidence, but Doji blocks other patterns
     for p in sorted(results, key=lambda x: -x.confidence):
         for idx in p.indices:
+            if idx in doji_at and p.name != "Doji":
+                continue  # skip: a Doji occupies this index
             if idx not in seen:
                 seen[idx] = p
                 break
