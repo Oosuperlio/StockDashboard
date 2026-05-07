@@ -34,6 +34,28 @@ def get_market_from_ticker(ticker: str) -> str:
         return "HK"
     return "US"
 
+
+def is_market_trading_day(ticker: str, date: pd.Timestamp) -> bool:
+    """Return True if date is a valid trading day (not weekend, not holiday)."""
+    market = get_market_from_ticker(ticker)
+    holidays = HKEX_HOLIDAYS if market == "HK" else US_HOLIDAYS
+    # Normalize to date without timezone for holiday lookup
+    d = date.normalize().date() if hasattr(date, 'date') else date.date()
+    # Weekend check
+    if d.weekday() >= 5:  # Saturday=5, Sunday=6
+        return False
+    # Holiday check
+    if holidays and d in holidays:
+        return False
+    return True
+
+
+def filter_trading_days(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+    """Drop rows that are not trading days (weekends/holidays) BEFORE pattern detection.
+    This ensures pattern indices and chart indices stay in sync."""
+    mask = df.index.map(lambda d: is_market_trading_day(ticker, d))
+    return df[mask]
+
 st.set_page_config(page_title="Stock Dashboard", page_icon="📈", layout="wide")
 
 # ── Custom card CSS ──────────────────────────────────────────────────────────
@@ -796,7 +818,9 @@ with col_chart:
     if not df_prices.empty:
         cutoff = pd.Timestamp.now() - pd.Timedelta(days=days_range)
         df_plot = df_prices[df_prices.index >= cutoff]
-        # 形態識別
+        # ★ 關鍵修覆：先過濾非交易日，確保形態檢測和圖表使用同一乾淨的 DataFrame
+        df_plot = filter_trading_days(df_plot, selected_ticker)
+        # 形態識別（df_plot 已過濾，形態索引和 dropna+reset_index 後的圖表完全對齊）
         patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
         # 詳細日誌：寫到 stderr（Railway 一定捕獲）
         import sys
