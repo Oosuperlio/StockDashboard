@@ -116,6 +116,19 @@ def is_price_stale(symbol: str, max_age_days: int = 1) -> bool:
     return (date.today() - latest) > timedelta(days=max_age_days)
 
 
+def delete_price_range(symbol: str, days: int) -> None:
+    """Delete all price records for a symbol within the lookback window."""
+    conn = _get_prices_conn()
+    try:
+        conn.execute("""
+            DELETE FROM stock_prices
+            WHERE symbol = ?
+              AND trade_date >= CURRENT_DATE - INTERVAL '1 day' * ?;
+        """, [symbol.upper(), days])
+    finally:
+        conn.close()
+
+
 # ─── Financial Metrics Operations ────────────────────────────────────────────
 
 def upsert_financial(symbol: str, metric_date: date, metrics: Dict[str, Any]) -> None:

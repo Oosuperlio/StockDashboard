@@ -124,6 +124,37 @@ def get_news(symbol: str, force_refresh: bool = False) -> List[Dict]:
     return sq.get_news(symbol)
 
 
+def _gap_fill_from_yfinance(symbol: str, hist: pd.DataFrame, currency: str) -> int:
+    """
+    Compare hist (yfinance) dates against current DuckDB cache.
+    Insert any dates present in yfinance but missing from DuckDB.
+    Returns number of gaps filled.
+    """
+    cached_dates = {row["trade_date"] for row in db.get_price_range(symbol, 999)}
+    # hist index is Timestamp; normalize to date objects
+    yfinance_dates = {
+        (idx.date() if hasattr(idx, "date") else idx) for idx in hist.index
+    }
+    missing = yfinance_dates - cached_dates
+    filled = 0
+    for idx, row in hist.iterrows():
+        trade_date = idx.date() if hasattr(idx, "date") else idx
+        if isinstance(trade_date, str):
+            from datetime import datetime as dt
+            trade_date = dt.fromisoformat(trade_date).date()
+        if trade_date in missing:
+            if not (pd.isna(row["Open"]) or pd.isna(row["High"]) or
+                    pd.isna(row["Low"])  or pd.isna(row["Close"])):
+                db.upsert_price(
+                    symbol, trade_date,
+                    float(row["Open"]), float(row["High"]),
+                    float(row["Low"]),  float(row["Close"]),
+                    int(row["Volume"]), currency,
+                )
+                filled += 1
+    return filled
+
+
 # ─── Price History ─────────────────────────────────────────────────────────────
 
 def get_price_history(symbol: str, days: int = 90,
@@ -131,25 +162,39 @@ def get_price_history(symbol: str, days: int = 90,
     """
     Get price history: from DuckDB if fresh, otherwise fetch + cache.
     Returns list of OHLCV dicts, newest-first.
+
+    Data integrity: always uses yfinance as authoritative source.
+    On force_refresh, wipes stale cache and rebuilds from yfinance to
+    eliminate any gaps introduced by previous Tencent-sourced caches.
     """
     symbol = symbol.upper()
-    if not force_refresh and not db.is_price_stale(symbol, MAX_PRICE_AGE_DAYS):
-        return db.get_price_range(symbol, days)
+    stale  = db.is_price_stale(symbol, MAX_PRICE_AGE_DAYS)
 
-    # Fetch from Yahoo Finance
+    # ── Force refresh: nuke stale cache, rebuild from yfinance ──────────────
+    if force_refresh and stale:
+        db.delete_price_range(symbol, days)
+
+    if not force_refresh and not stale:
+        cached = db.get_price_range(symbol, days)
+        # Cross-source sanity check: if cached rows < 80% of expected
+        # trading days, force a rebuild from yfinance directly.
+        expected_min = int(days * 0.80)
+        if len(cached) >= expected_min:
+            return cached
+        # Less than 80% → cache is too sparse, wipe and refetch
+        db.delete_price_range(symbol, days)
+
+    # ── Fetch from yfinance (authoritative source) ─────────────────────────
     ticker = yf.Ticker(symbol)
     hist = ticker.history(period=f"{days}d", auto_adjust=True)
     if hist.empty:
-        # No API data AND no DB data → return empty
         cached = db.get_price_range(symbol, days)
         return cached if cached else []
 
-    # Detect currency from symbol suffix
     currency = "HKD" if symbol.endswith(".HK") else "USD"
 
-    # Write each day to DuckDB — skip rows with NaN OHLC (DECIMAL can't store NaN)
+    written = 0
     for idx, row in hist.iterrows():
-        # Skip incomplete/NaN rows
         if (pd.isna(row["Open"]) or pd.isna(row["High"]) or
             pd.isna(row["Low"])  or pd.isna(row["Close"])):
             continue
@@ -158,17 +203,24 @@ def get_price_history(symbol: str, days: int = 90,
             from datetime import datetime as dt
             trade_date = dt.fromisoformat(trade_date).date()
         db.upsert_price(
-            symbol    = symbol,
+            symbol     = symbol,
             trade_date = trade_date,
-            open_     = float(row["Open"]),
-            high      = float(row["High"]),
-            low       = float(row["Low"]),
-            close     = float(row["Close"]),
-            volume    = int(row["Volume"]),
-            currency  = currency,
+            open_      = float(row["Open"]),
+            high       = float(row["High"]),
+            low        = float(row["Low"]),
+            close      = float(row["Close"]),
+            volume     = int(row["Volume"]),
+            currency   = currency,
         )
+        written += 1
 
-    return db.get_price_range(symbol, days)
+    # ── Gap-fill: detect missing dates and backfill from yfinance ─────────
+    filled = _gap_fill_from_yfinance(symbol, hist, currency)
+    if filled:
+        pass  # gap-fill results are already in DuckDB
+
+    result = db.get_price_range(symbol, days)
+    return result
 
 
 # ─── Financial Metrics ─────────────────────────────────────────────────────────
