@@ -818,9 +818,12 @@ with col_chart:
     if not df_prices.empty:
         cutoff = pd.Timestamp.now() - pd.Timedelta(days=days_range)
         df_plot = df_prices[df_prices.index >= cutoff]
-        # ★ 關鍵修覆：先過濾非交易日，確保形態檢測和圖表使用同一乾淨的 DataFrame
+        # ★ 確保排序一致：yfinance 不保證返回有序數據，必須先 sort
+        df_plot = df_plot.sort_index()
+        # ★ 先 dropna 再過濾非交易日，確保形態檢測和圖表使用完全一致的乾淨數據
+        df_plot = df_plot.dropna(subset=["open", "high", "low", "close"])
         df_plot = filter_trading_days(df_plot, selected_ticker)
-        # 形態識別（df_plot 已過濾，形態索引和 dropna+reset_index 後的圖表完全對齊）
+        # 形態識別（df_plot 已完全乾淨，形態索引和 dropna+reset_index 後的圖表完全對齊）
         patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
         # 詳細日誌：寫到 stderr（Railway 一定捕獲）
         import sys

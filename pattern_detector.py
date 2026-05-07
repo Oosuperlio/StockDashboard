@@ -234,8 +234,11 @@ def detect_morning_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     # r3 必须是阳线（第三根上涨）
     if not _is_bullish(r3):
         return None
-    # r2 是星形（实体小）
+    # r2 是星形（小實體：body2 < body1*0.5 且 body/r < 25%）
     if body2 >= body1 * 0.5:
+        return None
+    r2_range = _to_f(r2["high"]) - _to_f(r2["low"])
+    if r2_range > 0 and body2 / r2_range >= 0.25:
         return None
     # r3 实体要够大（至少是 r1 的一半）
     if body3 < body1 * 0.5:
@@ -271,8 +274,11 @@ def detect_evening_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     # r3 必须是阴线（第三根下跌）
     if not _is_bearish(r3):
         return None
-    # r2 是星形（实体小）
+    # r2 是星形（小實體：body2 < body1*0.5 且 body/r < 25%）
     if body2 >= body1 * 0.5:
+        return None
+    r2_range = _to_f(r2["high"]) - _to_f(r2["low"])
+    if r2_range > 0 and body2 / r2_range >= 0.25:
         return None
     # r3 实体要够大（至少是 r1 的一半）
     if body3 < body1 * 0.5:
@@ -305,7 +311,9 @@ def detect_harami(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     # r2 的實體完全在 r1 內
     if (min(_to_f(r2["open"]), _to_f(r2["close"])) > min(_to_f(r1["open"]), _to_f(r1["close"])) and
         max(_to_f(r2["open"]), _to_f(r2["close"])) < max(_to_f(r1["open"]), _to_f(r1["close"]))):
-        direction = "bullish" if _is_bearish(r1) else "bearish" if _is_bullish(r1) else "neutral"
+        # Harami: direction 由 r2（內含的那根）決定
+        # r2 陽線覆蓋 r1 → bullish reversal；r2 陰線覆蓋 r1 → bearish reversal
+        direction = "bullish" if _is_bullish(r2) else "bearish" if _is_bearish(r2) else "neutral"
         name = "Bullish Harami" if direction == "bullish" else "Bearish Harami"
         return Pattern(
             name=name,
