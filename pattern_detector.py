@@ -126,6 +126,10 @@ def detect_hammer(df: pd.DataFrame, idx: int, lookback_trend: int = 10) -> Optio
     # 必須下影線足夠長
     if lower < 2 * body:
         return None
+    # 錘子上影線必須極短（< 下影線的 1/3）；否則是流星倒轉
+    upper = _upper_shadow(row)
+    if upper >= lower / 3:
+        return None
     # 確認前面是下跌趨勢
     if idx < lookback_trend:
         return None
@@ -258,6 +262,13 @@ def detect_morning_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     deep = _to_f(r3["close"]) > _to_f(r1["open"]) - 0.5 * body1
     if not deep:
         return None
+    # 趨勢確認：早晨之星前需為下降趨勢（前 4 根收盤價遞減）
+    if idx >= 6:
+        lookback = df.iloc[idx - 6:idx - 2]
+        first_close = _to_f(lookback["close"].iloc[0])
+        last_close = _to_f(lookback["close"].iloc[-1])
+        if not (last_close < first_close):
+            return None  # 前 4 根不在下降，不符合早晨之星背景
     return Pattern(
         name="Morning Star",
         indices=[idx - 2, idx - 1, idx],
@@ -298,6 +309,13 @@ def detect_evening_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     deep = _to_f(r3["close"]) < _to_f(r1["open"]) + 0.5 * body1
     if not deep:
         return None
+    # 趨勢確認：黃昏之星前需為上升趨勢（前 4 根收盤價遞增）
+    if idx >= 6:
+        lookback = df.iloc[idx - 6:idx - 2]
+        first_close = _to_f(lookback["close"].iloc[0])
+        last_close = _to_f(lookback["close"].iloc[-1])
+        if not (last_close > first_close):
+            return None  # 前 4 根不在上升，不符合黃昏之星背景
     return Pattern(
         name="Evening Star",
         indices=[idx - 2, idx - 1, idx],
@@ -305,7 +323,6 @@ def detect_evening_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
         confidence=0.8,
         metadata={"meaning": "黃昏之星 — 上升頂部三根K線反轉", "idx": idx}
     )
-    return None
 
 
 def detect_harami(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
