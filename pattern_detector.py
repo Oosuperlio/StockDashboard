@@ -159,12 +159,17 @@ def detect_shooting_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
         return None
     lookback = df.iloc[idx - 10:idx]
     if lookback["close"].iloc[-1] >= lookback["close"].iloc[0]:
+        upper_ratio = round(upper / body, 1) if body >= 0.001 else 0.0
         return Pattern(
             name="Shooting Star",
             indices=[idx],
             direction="bearish",
             confidence=round(min(upper / body / 3, 1.0), 2),
-            metadata={"meaning": "流星 — 上升頂部反轉信號", "idx": idx}
+            metadata={
+                "meaning": "流星 — 上升頂部反轉信號",
+                "idx": idx,
+                "upper_shadow_ratio": upper_ratio,
+            }
         )
     return None
 
@@ -691,24 +696,45 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
     results.extend(detect_volume_breakout(df))
 
     # 去重（同一 index 只留最高置信度）
-    # Special case: Doji always wins at its own index (it is the most
-    # precisely defined single-candle pattern; we don't want it suppressed
-    # by a less precise Hammer or Engulfing that shares the same idx)
+    # Special case: when Doji and Shooting Star share the same index, Shooting Star
+    # wins if upper shadow is disproportionately large (> 5x body), because a massive
+    # upper shadow means the candle is structurally a流星, not a十字星.
+    # Doji wins only when it is a "pure" Doji (no single shadow dominating).
     seen: dict = {}
-    doji_at: dict = {}  # idx → Doji pattern
+    multi_at: dict = {}  # idx → list of non-Doji patterns at this index
 
-    # First pass: collect all Doji at each index
+    # Pass 1: separate Doji from everything else
+    doji_at: dict = {}   # idx → Doji pattern
     for p in results:
         if p.name == "Doji":
             for idx in p.indices:
                 if idx not in doji_at or p.confidence > doji_at[idx].confidence:
                     doji_at[idx] = p
+        else:
+            for idx in p.indices:
+                if idx not in multi_at:
+                    multi_at[idx] = []
+                multi_at[idx].append(p)
 
-    # Second pass: sorted by confidence, but Doji blocks other patterns
+    # Pass 2: resolve conflicts — prefer the more specific pattern
+    # (iterate over a snapshot of keys since we may delete from doji_at)
+    for idx in list(doji_at.keys()):
+        if idx in multi_at:
+            doji = doji_at[idx]
+            for p in multi_at[idx]:
+                # Shooting Star / Inverted Hammer with huge upper shadow beats Doji
+                if p.name in ("Shooting Star", "Inverted Hammer"):
+                    # Extract upper shadow ratio from metadata if available
+                    upper_ratio = p.metadata.get("upper_shadow_ratio", 0) if p.metadata else 0
+                    if upper_ratio > 5:
+                        del doji_at[idx]  # demote Doji — Shooting Star wins
+                        break
+
+    # Pass 3: build final list, Doji blocks less-confident peers at same index
     for p in sorted(results, key=lambda x: -x.confidence):
         for idx in p.indices:
             if idx in doji_at and p.name != "Doji":
-                continue  # skip: a Doji occupies this index
+                continue  # skip: a (pure) Doji occupies this index
             if idx not in seen:
                 seen[idx] = p
                 break
