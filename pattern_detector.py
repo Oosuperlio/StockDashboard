@@ -319,7 +319,10 @@ def detect_harami(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     body2 = _body_size(r2)
     if body1 < 0.001 or body2 < 0.001:
         return None
-    # r2 的實體完全在 r1 內
+    # Harami 要求 r2 實體明顯小於 r1（< r1 的 50%），否則只是普通包含關係
+    if body2 >= body1 * 0.5:
+        return None
+    # r2 的實體完全在 r1 實體範圍內（只看實體，不看影線）
     if (min(_to_f(r2["open"]), _to_f(r2["close"])) > min(_to_f(r1["open"]), _to_f(r1["close"])) and
         max(_to_f(r2["open"]), _to_f(r2["close"])) < max(_to_f(r1["open"]), _to_f(r1["close"]))):
         # Harami: direction 由 r2（內含的那根）決定
