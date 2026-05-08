@@ -329,12 +329,23 @@ def detect_harami(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
         # r2 陽線覆蓋 r1 → bullish reversal；r2 陰線覆蓋 r1 → bearish reversal
         direction = "bullish" if _is_bullish(r2) else "bearish" if _is_bearish(r2) else "neutral"
         name = "Bullish Harami" if direction == "bullish" else "Bearish Harami"
+
+        # 趨勢確認：Bullish Harami 需要前 4 根為下降；Bearish Harami 需要前 4 根為上升
+        if idx >= 5:
+            lookback = df.iloc[idx - 5:idx - 1]
+            last_close = _to_f(lookback["close"].iloc[-1])
+            first_close = _to_f(lookback["close"].iloc[0])
+            if direction == "bullish" and not (last_close < first_close):
+                return None  # 前 4 根不在下降，不符合看漲反轉背景
+            if direction == "bearish" and not (last_close > first_close):
+                return None  # 前 4 根不在上升，不符合看跌反轉背景
+
         return Pattern(
             name=name,
             indices=[idx - 1, idx],
             direction=direction,
             confidence=0.65,
-            metadata={"meaning": f"{name} — 第二根被第一根完全包含", "idx": idx}
+            metadata={"meaning": f"{name} — 見底/見頂反轉信號", "idx": idx}
         )
     return None
 
