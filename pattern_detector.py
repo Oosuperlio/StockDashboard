@@ -151,15 +151,20 @@ def detect_shooting_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
         return None
     body = _body_size(row)
     upper = _upper_shadow(row)
+    lower = _lower_shadow(row)
     if body < 0.001:
         return None
     if upper < 2 * body:
+        return None
+    # 流星下影線必須極短（< 上影線的 1/3）；否則是吊頸錘或其他形態
+    if lower >= upper / 3:
         return None
     if idx < 10:
         return None
     lookback = df.iloc[idx - 10:idx]
     if lookback["close"].iloc[-1] >= lookback["close"].iloc[0]:
         upper_ratio = round(upper / body, 1) if body >= 0.001 else 0.0
+        lower_ratio = round(lower / upper, 1) if upper > 0 else 0.0
         return Pattern(
             name="Shooting Star",
             indices=[idx],
@@ -169,6 +174,7 @@ def detect_shooting_star(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
                 "meaning": "流星 — 上升頂部反轉信號",
                 "idx": idx,
                 "upper_shadow_ratio": upper_ratio,
+                "lower_shadow_ratio": lower_ratio,
             }
         )
     return None
