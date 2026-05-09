@@ -107,7 +107,7 @@ def predict(df: pd.DataFrame, lookback: int = 30) -> Prediction:
             details=[], warnings=["K 線數據少於 10 根"]
         )
 
-    patterns = get_latest_patterns(df, lookback=lookback)
+    patterns = get_latest_patterns(df, lookback=5)  # 只分析最近5個交易日
     for col in ["open", "high", "low", "close", "volume"]:
         if col in df.columns:
             df = df.copy()

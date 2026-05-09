@@ -844,11 +844,6 @@ with col_chart:
             st.plotly_chart(plot_line(df_plot, selected_ticker, company_name), width="stretch")
         st.plotly_chart(plot_volume(df_plot, selected_ticker), width="stretch")
 
-        # 形態圖例
-        legend = build_pattern_legend(patterns)
-        if patterns:
-            st.markdown(f"**📐 形態標記說明**\n\n{legend}", unsafe_allow_html=True)
-
         # 走勢預判
         pred = predict(df_plot)
         st.markdown("### 🎯 走勢預判")
