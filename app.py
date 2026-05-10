@@ -824,10 +824,11 @@ with col_chart:
         df_plot = df_plot.dropna(subset=["open", "high", "low", "close"])
         df_plot = filter_trading_days(df_plot, selected_ticker)
         # 形態識別（df_plot 已完全乾淨，形態索引和 dropna+reset_index 後的圖表完全對齊）
-        patterns = get_latest_patterns(df_plot, lookback=min(days_range, 60))
+        # lookback 設為 days_range（無上限 cap），確保整個可視範圍內的形態都能被檢測
+        patterns = get_latest_patterns(df_plot, lookback=days_range)
         # 詳細日誌：寫到 stderr（Railway 一定捕獲）
         import sys
-        all_rows = df_plot
+        all_rows = df_plot.sort_index()  # 确保日志顺序与实际一致
         msg = "[DEBUG] " + selected_ticker + " " + str(days_range) + "d total=" + str(len(all_rows)) + " rows\n"
         for i, row in all_rows.iterrows():
             body = abs(float(row['close']) - float(row['open']))
