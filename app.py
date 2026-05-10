@@ -753,7 +753,7 @@ with col2:
         st.rerun()
 
 # ── 實時報價 + 財務數據 + 新聞（全部來自 DB 緩存）──
-data = load_stock_data(selected_ticker, force_refresh=False)
+data = load_stock_data(selected_ticker, days=days_range, force_refresh=False)
 prices = data["prices"]
 financials = data["financials"]
 news_items = data["news"]

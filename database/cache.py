@@ -299,6 +299,7 @@ def get_top_searched(limit: int = 10) -> List[Dict]:
 # ─── All-in-one loader ─────────────────────────────────────────────────────────
 
 def load_stock_data(symbol: str,
+                    days: int = 90,
                     force_refresh: bool = False) -> Dict[str, Any]:
     """
     Load all cached data for a symbol: prices, financials, news.
@@ -308,7 +309,7 @@ def load_stock_data(symbol: str,
     symbol = symbol.upper()
     return {
         "symbol":     symbol,
-        "prices":     get_price_history(symbol, force_refresh=force_refresh),
+        "prices":     get_price_history(symbol, days=days, force_refresh=force_refresh),
         "financials": get_financial_metrics(symbol, force_refresh=force_refresh),
         "news":       get_news(symbol, force_refresh=force_refresh),
     }
