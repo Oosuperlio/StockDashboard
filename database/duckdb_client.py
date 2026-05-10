@@ -65,8 +65,8 @@ def upsert_price(symbol: str, trade_date: date, open_: float, high: float,
     conn = _get_prices_conn()
     try:
         conn.execute("""
-            INSERT INTO stock_prices (trade_date, symbol, open, high, low, close, volume, currency)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO stock_prices (trade_date, symbol, open, high, low, close, volume, currency, fetched_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             ON CONFLICT(symbol, trade_date) DO UPDATE SET
                 open = excluded.open,
                 high = excluded.high,

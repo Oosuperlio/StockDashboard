@@ -180,8 +180,17 @@ def get_price_history(symbol: str, days: int = 90,
         # trading days, force a rebuild from yfinance directly.
         expected_min = int(days * 0.80)
         if len(cached) >= expected_min:
-            return cached
-        # Less than 80% → cache is too sparse, wipe and refetch
+            # Also verify the cached data actually covers the requested date range.
+            # DuckDB query uses trade_date >= CURRENT_DATE - days, but if the cache
+            # was populated with a shorter lookback (e.g. 90d) the rows will pass
+            # the count check but miss the earliest dates needed for 365d.
+            from datetime import date, timedelta
+            min_required = date.today() - timedelta(days=days)
+            # cached is ordered newest-first; last element = oldest date
+            oldest_cached = cached[-1]["trade_date"] if cached else None
+            if oldest_cached and oldest_cached <= min_required:
+                return cached
+        # Cache miss: either too few rows OR date range too narrow → wipe and refetch
         db.delete_price_range(symbol, days)
 
     # ── Fetch from yfinance (authoritative source) ─────────────────────────

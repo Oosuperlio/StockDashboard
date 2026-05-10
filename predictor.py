@@ -33,6 +33,85 @@ NEUTRAL_PATTERNS = {
 }
 
 # ─────────────────────────────────────────────
+# 市場環境偵測（ADX + 均線斜率）
+# ─────────────────────────────────────────────
+
+def compute_adx(df: pd.DataFrame, n: int = 14) -> tuple:
+    """計算 ADX、+DI、-DI"""
+    high = df["high"].astype(float)
+    low  = df["low"].astype(float)
+    close = df["close"].astype(float)
+
+    tr = pd.concat([
+        high - low,
+        abs(high - close.shift(1)),
+        abs(low  - close.shift(1))
+    ], axis=1).max(axis=1)
+
+    atr = tr.rolling(n, min_periods=1).mean()
+
+    plus_dm  = high.diff()
+    minus_dm = -low.diff()
+    plus_dm[plus_dm  < 0]  = 0
+    minus_dm[minus_dm < 0] = 0
+
+    plus_di  = 100 * (plus_dm.rolling(n, min_periods=1).mean() / atr)
+    minus_di = 100 * (minus_dm.rolling(n, min_periods=1).mean() / atr)
+
+    dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di + 1e-10)
+    adx = dx.rolling(n, min_periods=1).mean()
+
+    return adx, plus_di, minus_di
+
+
+def detect_regime(df: pd.DataFrame, lookback: int = 20) -> str:
+    """
+    市場環境偵測：返回 'uptrend' | 'downtrend' | 'consolidation'
+    - ADX < 20：無趨勢（震盪）
+    - ADX >= 20 + 均線上升：多頭趨勢
+    - ADX >= 20 + 均線下降：空頭趨勢
+    """
+    if len(df) < lookback + 14:
+        return "consolidation"
+
+    adx, plus_di, minus_di = compute_adx(df)
+    adx_val  = float(adx.iloc[-1])
+    di_spread = float(plus_di.iloc[-1] - minus_di.iloc[-1])
+
+    # 震盪市場
+    if adx_val < 20:
+        return "consolidation"
+
+    # 有趨勢市場：基於均線斜率
+    ma = df["close"].astype(float).rolling(20, min_periods=1).mean()
+    slope = float(ma.iloc[-1] - ma.iloc[-lookback]) / lookback
+
+    if slope > 0.02 and di_spread >= 0:
+        return "uptrend"
+    elif slope < -0.02 and di_spread <= 0:
+        return "downtrend"
+    elif slope > 0:
+        return "uptrend"
+    else:
+        return "downtrend"
+
+
+# ─────────────────────────────────────────────
+# 環境權重矩陣
+# ─────────────────────────────────────────────
+REGIME_BULL_WEIGHT = {
+    "uptrend":       1.0,   # 順趨勢，信號正常
+    "downtrend":     0.7,   # 逆勢，看漲形態可靠性降低
+    "consolidation":  0.5,   # 盤整，所有形態可靠性降低
+}
+REGIME_BEAR_WEIGHT = {
+    "uptrend":       0.7,   # 逆勢，看跌形態可靠性降低
+    "downtrend":     1.0,   # 順趨勢，信號正常
+    "consolidation":  0.6,   # 盤整內假突破多，看跌形態相對好
+}
+
+
+# ─────────────────────────────────────────────
 # 輸出結構
 # ─────────────────────────────────────────────
 
@@ -54,19 +133,64 @@ class Prediction:
 
 def score_patterns(patterns: List[Pattern]) -> tuple[float, float, float]:
     """
-    根據形態計算多空分數
-    返回 (bull_score, bear_score, neutral_score)，範圍大約 -10 ~ +10
+    根據形態計算多空分數（已改進）
+    - 矛盾形態互相抵消後再評分
+    - 返回 (bull_score, bear_score, net_score)
     """
+    # ── 矛盾形態對：出現時雙方完全抵消 ──────────────────────────────
+    CONTRADICTIONS = {
+        "Morning Star":        "Evening Star",
+        "Evening Star":       "Morning Star",
+        "Hammer":             "Shooting Star",
+        "Shooting Star":      "Hammer",
+        "Bullish Engulfing":  "Bearish Engulfing",
+        "Bearish Engulfing":  "Bullish Engulfing",
+        "Bullish Harami":     "Bearish Harami",
+        "Bearish Harami":     "Bullish Harami",
+        "Double Bottom":       "Double Top",
+        "Double Top":         "Double Bottom",
+        "Inverse H&S":         "Head & Shoulders",
+        "Head & Shoulders":   "Inverse H&S",
+        "Support":            "Resistance",
+        "Resistance":         "Support",
+        "Ascending Triangle":  "Descending Triangle",
+        "Descending Triangle": "Ascending Triangle",
+        "Bull Flag":           "Bear Flag",
+        "Bear Flag":           "Bull Flag",
+    }
+
+    # 第一步：兩兩抵消（只保留淨形態）
+    net_patterns = []
+    used = set()
+    for p in patterns:
+        if id(p) in used:
+            continue
+        contr = CONTRADICTIONS.get(p.name)
+        counterpart = None
+        for other in patterns:
+            if id(other) in used or id(other) == id(p):
+                continue
+            if other.name == contr:
+                counterpart = other
+                break
+        if counterpart is not None:
+            used.add(id(p))
+            used.add(id(counterpart))
+        else:
+            net_patterns.append(p)
+
+    # 第二步：計算淨分數
     bull = 0.0
     bear = 0.0
-    for p in patterns:
-        w = p.confidence * 2.0  # 權重：置信度 × 形態強度
+    for p in net_patterns:
+        w = p.confidence * 2.0
         if p.name in BULLISH_PATTERNS:
             bull += w
         elif p.name in BEARISH_PATTERNS:
             bear += w
         else:
             bull += w * 0.3  # 中性形態輕微加分
+
     return bull, bear, bull - bear
 
 
@@ -117,21 +241,33 @@ def predict(df: pd.DataFrame, lookback: int = 30) -> Prediction:
 
     bull_score, bear_score, net_score = score_patterns(patterns)
     momentum = detect_momentum(df)
+    regime = detect_regime(df)  # 市場環境
 
-    # ── 方向判斷 ──
-    if net_score >= 3.0:
+    # ── 環境加成：根據市場環境動態調整 net_score ───────────────────────
+    # 只在非中性時加成，中性維持不變
+    if net_score > 0:
+        regime_multiplier = REGIME_BULL_WEIGHT[regime]
+    elif net_score < 0:
+        regime_multiplier = REGIME_BEAR_WEIGHT[regime]
+    else:
+        regime_multiplier = 1.0
+
+    adj_net_score = net_score * regime_multiplier
+
+    # ── 方向判斷（使用調整後的分數） ────────────────────────────────
+    if adj_net_score >= 3.0:
         direction = "bullish"
-    elif net_score <= -3.0:
+    elif adj_net_score <= -3.0:
         direction = "bearish"
-    elif net_score >= 1.5 and momentum.startswith("strong_bullish"):
+    elif adj_net_score >= 1.5 and momentum.startswith("strong_bullish"):
         direction = "bullish"
-    elif net_score <= -1.5 and momentum.startswith("strong_bearish"):
+    elif adj_net_score <= -1.5 and momentum.startswith("strong_bearish"):
         direction = "bearish"
     else:
         direction = "neutral"
 
-    # ── 信心值 ──
-    confidence = min(abs(net_score) / 10 + (len(patterns) * 0.05), 0.95)
+    # ── 信心值（形態數量最多計3個，防止過度堆疊） ──
+    confidence = min(abs(net_score) / 10 + min(len(patterns), 3) * 0.05, 0.95)
 
     # ── 目標價 & 止損 ──
     if direction == "bullish":
@@ -194,6 +330,12 @@ def predict(df: pd.DataFrame, lookback: int = 30) -> Prediction:
         warnings.append("⚠️ 形態看漲但短期動量偏空，注意逆勢風險")
     if direction == "bearish" and momentum in ("strong_bullish", "bullish"):
         warnings.append("⚠️ 形態看跌但短期動量偏多，注意逆勢風險")
+    if regime == "consolidation":
+        warnings.append(f"⚠️ 市場處於震盪區間，形態信號可靠性降低（ADX<20）")
+    if regime == "downtrend" and direction == "bullish":
+        warnings.append("⚠️ 市場處於下降趨勢，逆勢做多風險較高")
+    if regime == "uptrend" and direction == "bearish":
+        warnings.append("⚠️ 市場處於上升趨勢，逆勢做空風險較高")
 
     # ── 總結句 ──
     if direction == "bullish":
