@@ -596,24 +596,44 @@ def _make_date_axis_config(dates, n_ticks: int = 12) -> dict:
     )
 
 
-def plot_candlestick(df, ticker, company_name="", patterns=None):
-    """Candlestick chart: integer x-axis (no gaps) with date labels + pattern markers."""
+def plot_candlestick(df, ticker, company_name="", patterns=None, show_bb=True):
+    """Candlestick chart: integer x-axis (no gaps) with date labels + pattern markers + optional BB bands."""
     if patterns is None:
         patterns = []
     df = df.dropna(subset=["open", "high", "low", "close"]).copy()
     df = df.sort_index()
-    # 保存日期用於 hover 和 x 軸標籤（reset_index 前做）
     dates = df.index.tolist()
-    df = df.reset_index(drop=True)   # ← 整數索引，消滅所有空隙
+    df = df.reset_index(drop=True)
     title = f"{ticker}" + (f" — {company_name}" if company_name else "")
 
     fig = go.Figure(data=[go.Candlestick(
-        x=list(range(len(df))),       # ← 整數坐標，點與點之間等距
+        x=list(range(len(df))),
         open=df["open"], high=df["high"], low=df["low"], close=df["close"],
         name="OHLC", xhoverformat="%Y-%m-%d",
         text=dates, hovertemplate='%{text}<br>O: %{customdata[0]:.2f} H: %{customdata[1]:.2f} L: %{customdata[2]:.2f} C: %{customdata[3]:.2f}<extra></extra>',
         customdata=df[["open","high","low","close"]].values,
     )])
+
+    # Bollinger Bands
+    if show_bb and "bb_upper" in df.columns and "bb_lower" in df.columns and "bb_middle" in df.columns:
+        idx = list(range(len(df)))
+        fig.add_trace(go.Scatter(
+            x=idx, y=df["bb_upper"], name="BB Upper",
+            line=dict(color="rgba(130,90,200,0.6)", width=1, dash="dot"),
+            text=dates, hovertemplate='%{text}<br>BB Upper: %{y:.2f}<extra></extra>',
+        ))
+        fig.add_trace(go.Scatter(
+            x=idx, y=df["bb_middle"], name="BB Middle",
+            line=dict(color="rgba(130,90,200,0.4)", width=0.8, dash="dash"),
+            text=dates, hovertemplate='%{text}<br>BB Middle: %{y:.2f}<extra></extra>',
+        ))
+        fig.add_trace(go.Scatter(
+            x=idx, y=df["bb_lower"], name="BB Lower",
+            line=dict(color="rgba(130,90,200,0.6)", width=1, dash="dot"),
+            text=dates, hovertemplate='%{text}<br>BB Lower: %{y:.2f}<extra></extra>',
+            fill='tonexty', fillcolor='rgba(130,90,200,0.05)',
+        ))
+
     xaxis_cfg = _make_date_axis_config(dates)
     xaxis_cfg['rangeslider']['visible'] = False
     fig.update_layout(
@@ -621,7 +641,6 @@ def plot_candlestick(df, ticker, company_name="", patterns=None):
         xaxis_title="日期", template="plotly_dark",
         height=460, xaxis=xaxis_cfg,
     )
-    # 疊加形態標記
     fig = add_pattern_markers(fig, df, patterns, dates)
     return fig
 
@@ -666,6 +685,133 @@ def plot_volume(df, ticker):
         xaxis=xaxis_cfg,
     )
     return fig
+
+def plot_rsi(df, ticker):
+    """RSI(14) subplot: oscillator with overbought/oversold zones."""
+    if "rsi_14" not in df.columns:
+        return go.Figure()
+    df = df.dropna(subset=["rsi_14"]).copy()
+    df = df.sort_index()
+    dates = df.index.tolist()
+    df = df.reset_index(drop=True)
+    idx = list(range(len(df)))
+    rsi = df["rsi_14"]
+
+    colors = ["#48bb78" if v < 30 else "#fc8181" if v > 70 else "#a0aec0" for v in rsi]
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=idx, y=rsi, name="RSI(14)",
+        line=dict(color="#00d4ff", width=1.5),
+        text=dates, hovertemplate='%{text}<br>RSI: %{y:.1f}<extra></extra>',
+    ))
+    # Overbought zone
+    fig.add_hrect(y0=70, y1=100, fillcolor="rgba(252,129,129,0.12)", line_width=0,
+                  annotation_text="Overbought", annotation_position="top right",
+                  annotation_font_color="#fc8181")
+    # Oversold zone
+    fig.add_hrect(y0=0, y1=30, fillcolor="rgba(72,187,120,0.12)", line_width=0,
+                  annotation_text="Oversold", annotation_position="bottom right",
+                  annotation_font_color="#48bb78")
+    # 50 line
+    fig.add_hline(y=50, line=dict(color="rgba(160,174,192,0.3)", width=0.8, dash="dash"))
+    fig.add_hline(y=30, line=dict(color="rgba(72,187,120,0.4)", width=0.8, dash="dot"))
+    fig.add_hline(y=70, line=dict(color="rgba(252,129,129,0.4)", width=0.8, dash="dot"))
+
+    fig.update_layout(
+        title=f"{ticker} RSI(14)", yaxis_title="RSI",
+        xaxis_title="日期", template="plotly_dark", height=220,
+        xaxis=_make_date_axis_config(dates),
+        yaxis=dict(range=[0, 100]),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    return fig
+
+
+def plot_macd(df, ticker):
+    """MACD subplot: MACD line, signal line, and histogram."""
+    if "macd" not in df.columns or "macd_signal" not in df.columns:
+        return go.Figure()
+    df = df.dropna(subset=["macd", "macd_signal"]).copy()
+    df = df.sort_index()
+    dates = df.index.tolist()
+    df = df.reset_index(drop=True)
+    idx = list(range(len(df)))
+
+    hist_colors = ["#48bb78" if v >= 0 else "#fc8181" for v in df["macd_histogram"]]
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=idx, y=df["macd_histogram"], name="Histogram",
+        marker_color=hist_colors, opacity=0.7,
+        text=dates, hovertemplate='%{text}<br>Hist: %{y:.4f}<extra></extra>',
+    ))
+    fig.add_trace(go.Scatter(
+        x=idx, y=df["macd"], name="MACD",
+        line=dict(color="#00d4ff", width=1.5),
+        text=dates, hovertemplate='%{text}<br>MACD: %{y:.4f}<extra></extra>',
+    ))
+    fig.add_trace(go.Scatter(
+        x=idx, y=df["macd_signal"], name="Signal",
+        line=dict(color="#f6e05e", width=1.2),
+        text=dates, hovertemplate='%{text}<br>Signal: %{y:.4f}<extra></extra>',
+    ))
+    fig.add_hline(y=0, line=dict(color="rgba(160,174,192,0.4)", width=0.8))
+
+    fig.update_layout(
+        title=f"{ticker} MACD (12,26,9)", yaxis_title="MACD",
+        xaxis_title="日期", template="plotly_dark", height=220,
+        xaxis=_make_date_axis_config(dates),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    return fig
+
+
+def plot_kdj(df, ticker):
+    """KDJ subplot: K, D, J lines with overbought/oversold zones."""
+    if "kdj_k" not in df.columns or "kdj_d" not in df.columns or "kdj_j" not in df.columns:
+        return go.Figure()
+    df = df.dropna(subset=["kdj_k", "kdj_d", "kdj_j"]).copy()
+    df = df.sort_index()
+    dates = df.index.tolist()
+    df = df.reset_index(drop=True)
+    idx = list(range(len(df)))
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=idx, y=df["kdj_k"], name="K",
+        line=dict(color="#00d4ff", width=1.5),
+        text=dates, hovertemplate='%{text}<br>K: %{y:.1f}<extra></extra>',
+    ))
+    fig.add_trace(go.Scatter(
+        x=idx, y=df["kdj_d"], name="D",
+        line=dict(color="#f6e05e", width=1.2),
+        text=dates, hovertemplate='%{text}<br>D: %{y:.1f}<extra></extra>',
+    ))
+    fig.add_trace(go.Scatter(
+        x=idx, y=df["kdj_j"], name="J",
+        line=dict(color="#ed64a6", width=1.0, dash="dot"),
+        text=dates, hovertemplate='%{text}<br>J: %{y:.1f}<extra></extra>',
+    ))
+    # Overbought zone
+    fig.add_hrect(y0=80, y1=100, fillcolor="rgba(252,129,129,0.10)", line_width=0,
+                  annotation_text="Overbought", annotation_position="top right",
+                  annotation_font_color="#fc8181")
+    # Oversold zone
+    fig.add_hrect(y0=0, y1=20, fillcolor="rgba(72,187,120,0.10)", line_width=0,
+                  annotation_text="Oversold", annotation_position="bottom right",
+                  annotation_font_color="#48bb78")
+    fig.add_hline(y=80, line=dict(color="rgba(252,129,129,0.4)", width=0.8, dash="dot"))
+    fig.add_hline(y=20, line=dict(color="rgba(72,187,120,0.4)", width=0.8, dash="dot"))
+
+    fig.update_layout(
+        title=f"{ticker} KDJ(9)", yaxis_title="KDJ",
+        xaxis_title="日期", template="plotly_dark", height=220,
+        xaxis=_make_date_axis_config(dates),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    return fig
+
 
 def fmt_hkd(val):
     if val is None:
@@ -778,6 +924,9 @@ if prices:
             "open": "open", "high": "high", "low": "low",
             "close": "close", "volume": "volume"
         }, inplace=True)
+    # 計算技術指標
+    from indicator_calculator import calculate_all_indicators
+    df_prices = calculate_all_indicators(df_prices)
     latest_price = prices[0]["close"] if prices else None
     prev_close = prices[1]["close"] if len(prices) > 1 else None
 else:
@@ -837,11 +986,18 @@ with col_chart:
             msg += "[DEBUG]   " + str(i.date()) + " O=" + str(round(float(row['open']),2)) + " C=" + str(round(float(row['close']),2)) + " H=" + str(round(float(row['high']),2)) + " L=" + str(round(float(row['low']),2)) + " body/r=" + str(round(ratio,3)) + "\n"
         msg += "[DEBUG] Patterns: " + str([(p.name, p.metadata.get("idx"), p.indices) for p in patterns]) + "\n"
         sys.stderr.write(msg)
-        t1, t2 = st.tabs(["📊 蠟燭圖", "📈 折線圖"])
-        with t1:
-            fig_candle = plot_candlestick(df_plot, selected_ticker, company_name, patterns)
+        tab_bb, tab_rsi, tab_macd, tab_kdj, tab_line = st.tabs(
+            ["📊 蠟燭圖+BB", "📉 RSI", "📊 MACD", "📊 KDJ", "📈 折線圖"])
+        with tab_bb:
+            fig_candle = plot_candlestick(df_plot, selected_ticker, company_name, patterns, show_bb=True)
             st.plotly_chart(fig_candle, width="stretch")
-        with t2:
+        with tab_rsi:
+            st.plotly_chart(plot_rsi(df_plot, selected_ticker), width="stretch")
+        with tab_macd:
+            st.plotly_chart(plot_macd(df_plot, selected_ticker), width="stretch")
+        with tab_kdj:
+            st.plotly_chart(plot_kdj(df_plot, selected_ticker), width="stretch")
+        with tab_line:
             st.plotly_chart(plot_line(df_plot, selected_ticker, company_name), width="stretch")
         st.plotly_chart(plot_volume(df_plot, selected_ticker), width="stretch")
 
