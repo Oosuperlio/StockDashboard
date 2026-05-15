@@ -17,6 +17,15 @@ COPY database/ ./database/
 COPY pattern_detector.py .
 COPY pattern_annotator.py .
 COPY predictor.py .
+COPY indicator_calculator.py .
+COPY indicator_signals.py .
+COPY signal_scanner.py .
+COPY optimize_exits_by_sector.py .
+
+# Copy data files (CSV results for Sector Monitor)
+COPY backtest_sector_subsector_results.csv .
+COPY backtest_sector_improvement.csv .
+COPY optimal_exits_by_sector.csv .
 
 # Set port
 ENV PORT=8000
