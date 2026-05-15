@@ -146,6 +146,11 @@ def calculate_all_indicators(df: pd.DataFrame) -> pd.DataFrame:
     """
     result = df.copy()
 
+    # 確保所有價格欄位為 float（SQLite 可能返回 decimal.Decimal）
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in result.columns:
+            result[col] = pd.to_numeric(result[col], errors="coerce").astype(float)
+
     # RSI
     result['rsi_14'] = calculate_rsi(df['close'], period=14)
 
