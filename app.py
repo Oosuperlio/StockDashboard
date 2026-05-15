@@ -938,6 +938,115 @@ MORE_NEWS = 10
 if "news_count" not in st.session_state:
     st.session_state.news_count = INITIAL_NEWS
 
+# ─────────────────────────────────────────────────────────
+# SECTOR MONITOR TAB
+# ─────────────────────────────────────────────────────────
+st.markdown("---")
+st.markdown("## 🏭 Sector Monitor")
+
+try:
+    sector_df = pd.read_csv('backtest_sector_subsector_results.csv')
+    improvement_df = pd.read_csv('backtest_sector_improvement.csv')
+    exits_df = None
+    try:
+        exits_df = pd.read_csv('optimal_exits_by_sector.csv')
+    except FileNotFoundError:
+        pass
+
+    # ── Sector 勝率排行 ──
+    sector_stats = sector_df[
+        (sector_df['direction'] == 'bullish') &
+        (sector_df['has_pattern'] == True)
+    ].groupby('sector').agg(
+        avg_win_rate=('win_rate', 'mean'),
+        max_win_rate=('win_rate', 'max'),
+        total_signals=('count', 'sum'),
+        n_combinations=('count', 'count')
+    ).sort_values('avg_win_rate', ascending=False)
+
+    st.markdown("#### 📊 Sector 勝率排行（形態確認組合平均）")
+    sector_stats['avg_win_rate_pct'] = sector_stats['avg_win_rate'] * 100
+    sector_stats['max_win_rate_pct'] = sector_stats['max_win_rate'] * 100
+    sector_display = sector_stats.reset_index()[
+        ['sector', 'avg_win_rate_pct', 'max_win_rate_pct', 'total_signals', 'n_combinations']
+    ].rename(columns={
+        'sector': 'Sector',
+        'avg_win_rate_pct': '平均勝率%',
+        'max_win_rate_pct': '最高勝率%',
+        'total_signals': '總信號數',
+        'n_combinations': '組合數'
+    })
+    st.dataframe(
+        sector_display.style.background_gradient(
+            cmap='Greens', subset=['平均勝率%']
+        ).format({'平均勝率%': '{:.1f}%', '最高勝率%': '{:.1f}%'}, precision=1),
+        use_container_width=True, hide_index=True
+    )
+
+    # ── 最佳 (Sector × Signal × Pattern) 組合 ──
+    st.markdown("#### 🎯 最佳 Signal × Pattern 組合（形態加成效果）")
+    imp = improvement_df[
+        (improvement_df['direction'] == 'bullish') &
+        (improvement_df['combined_count'] >= 10)
+    ].sort_values('improvement', ascending=False).head(15)
+    imp['improvement_pct'] = imp['improvement'] * 100
+    imp_display = imp[['sector', 'signal', 'pattern', 'combined_win_rate',
+                       'indicator_win_rate', 'improvement_pct', 'combined_count']].copy()
+    imp_display['combined_win_rate_pct'] = imp_display['combined_win_rate'] * 100
+    imp_display['indicator_win_rate_pct'] = imp_display['indicator_win_rate'] * 100
+    imp_display = imp_display.rename(columns={
+        'sector': 'Sector',
+        'signal': 'Signal',
+        'pattern': 'Pattern',
+        'combined_win_rate_pct': '組合勝率%',
+        'indicator_win_rate_pct': '指標勝率%',
+        'improvement_pct': '形態加成',
+        'combined_count': '樣本數'
+    })
+    st.dataframe(
+        imp_display[['Sector', 'Signal', 'Pattern', '組合勝率%', '指標勝率%', '形態加成', '樣本數']]
+        .style.background_gradient(cmap='RdYlGn', subset=['形態加成'])
+        .format({'組合勝率%': '{:.1f}%', '指標勝率%': '{:.1f}%', '形態加成': '{:+.1f}%'}, precision=1),
+        use_container_width=True, hide_index=True
+    )
+
+    # ── 止盈止損建議 ──
+    if exits_df is not None and len(exits_df) > 0:
+        st.markdown("#### 🛡️ 最佳止盈止損（分行業）")
+        exits_df = exits_df.sort_values('expected_return', ascending=False)
+        exits_display = exits_df[['sector', 'signal', 'tp', 'sl', 'expected_return',
+                                    'win_rate', 'n_trades']].copy()
+        exits_display['tp_pct'] = (exits_display['tp'] * 100).round(0).astype(int)
+        exits_display['sl_pct'] = (exits_display['sl'] * 100).round(1)
+        exits_display['exp_ret_pct'] = exits_display['expected_return'] * 100
+        exits_display['win_rate_pct'] = exits_display['win_rate'] * 100
+        exits_display = exits_display.rename(columns={
+            'sector': 'Sector',
+            'signal': 'Signal',
+            'tp_pct': '止盈%',
+            'sl_pct': '止損%',
+            'exp_ret_pct': '期望回報%',
+            'win_rate_pct': '勝率%',
+            'n_trades': '樣本'
+        })
+        st.dataframe(
+            exits_display[['Sector', 'Signal', '止盈%', '止損%', '期望回報%', '勝率%', '樣本']]
+            .style.background_gradient(cmap='Blues', subset=['期望回報%'])
+            .format({'止盈%': '{:.0f}%', '止損%': '{:.1f}%', '期望回報%': '{:+.2f}%', '勝率%': '{:.1f}%'}, precision=1),
+            use_container_width=True, hide_index=True
+        )
+    else:
+        st.caption("💡 止盈止損數據尚未生成（需運行 optimize_exits_by_sector.py）")
+
+except FileNotFoundError as e:
+    st.warning(f"⚠️ 缺少數據文件：{e}。請先運行 backtest_sector_subsector.py")
+except Exception as e:
+    st.error(f"載入失敗：{e}")
+
+# ─────────────────────────────────────────────────────────
+# NEWS SECTION
+# ─────────────────────────────────────────────────────────
+
 # Filter to last 7 days
 cutoff_7d = pd.Timestamp.now() - pd.Timedelta(days=7)
 news = [n for n in news_items if pd.to_datetime(n["pub_date"], errors="coerce") >= cutoff_7d]

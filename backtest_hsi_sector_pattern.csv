@@ -1,0 +1,63 @@
+sector,pattern,direction,count,successes,win_rate
+Properties,Support,bullish,14,11,78.57142857142857
+Properties,Evening Star,bearish,30,21,70.0
+Finance,Morning Star,bullish,28,18,64.28571428571429
+Finance,Evening Star,bearish,18,11,61.111111111111114
+Finance,Resistance,bearish,15,9,60.0
+Finance,Support,bullish,15,9,60.0
+Commerce & Industry,Bear Flag,bearish,10,6,60.0
+Commerce & Industry,Morning Star,bullish,122,70,57.377049180327866
+Commerce & Industry,Bullish Engulfing,bullish,96,55,57.291666666666664
+Unknown,Resistance,bearish,65,37,56.92307692307692
+Unknown,Bullish Engulfing,bullish,96,54,56.25
+Unknown,Morning Star,bullish,168,89,52.976190476190474
+Properties,Bullish Harami,bullish,46,24,52.17391304347826
+Commerce & Industry,Resistance,bearish,43,22,51.162790697674424
+Commerce & Industry,Bearish Engulfing,bearish,222,111,50.0
+Commerce & Industry,Support,bullish,46,23,50.0
+Properties,Resistance,bearish,14,7,50.0
+Finance,Bullish Engulfing,bullish,8,4,50.0
+Unknown,Bearish Engulfing,bearish,231,112,48.484848484848484
+Unknown,Support,bullish,70,32,45.714285714285715
+Unknown,Bullish Harami,bullish,244,107,43.85245901639344
+Unknown,Evening Star,bearish,99,43,43.43434343434344
+Commerce & Industry,Evening Star,bearish,135,57,42.22222222222222
+Unknown,Bear Flag,bearish,24,10,41.66666666666667
+Finance,Bullish Harami,bullish,34,14,41.17647058823529
+Properties,Bull Flag,bullish,10,4,40.0
+Properties,Bearish Engulfing,bearish,54,21,38.88888888888889
+Finance,Bearish Engulfing,bearish,36,14,38.88888888888889
+Utilities,Hammer,bullish,8,3,37.5
+Properties,Shooting Star,bearish,80,30,37.5
+Properties,Morning Star,bullish,35,13,37.142857142857146
+Commerce & Industry,Bullish Harami,bullish,187,66,35.294117647058826
+Unknown,Doji,neutral,778,270,34.70437017994858
+Unknown,Hammer,bullish,78,26,33.33333333333333
+Unknown,Shooting Star,bearish,260,86,33.07692307692307
+Commerce & Industry,Shooting Star,bearish,216,71,32.870370370370374
+Commerce & Industry,Hammer,bullish,49,16,32.6530612244898
+Finance,Shooting Star,bearish,81,25,30.864197530864196
+Utilities,Support,bullish,10,3,30.0
+Properties,Doji,neutral,121,35,28.92561983471074
+Finance,Hammer,bullish,7,2,28.57142857142857
+Unknown,Bull Flag,bullish,14,4,28.57142857142857
+Commerce & Industry,Doji,neutral,533,148,27.76735459662289
+Unknown,Bearish Harami,bearish,489,127,25.971370143149286
+Commerce & Industry,Bull Flag,bullish,8,2,25.0
+Utilities,Bearish Engulfing,bearish,28,7,25.0
+Utilities,Morning Star,bullish,12,3,25.0
+Commerce & Industry,Bearish Harami,bearish,468,112,23.931623931623932
+Properties,Bullish Engulfing,bullish,26,6,23.076923076923077
+Properties,Bearish Harami,bearish,178,40,22.47191011235955
+Finance,Bearish Harami,bearish,148,32,21.62162162162162
+Finance,Doji,neutral,89,18,20.224719101123593
+Utilities,Doji,neutral,59,10,16.94915254237288
+Utilities,Bullish Harami,bullish,24,4,16.666666666666664
+Properties,Hammer,bullish,6,1,16.666666666666664
+Unknown,Descending Triangle,bearish,6,1,16.666666666666664
+Utilities,Resistance,bearish,7,1,14.285714285714285
+Utilities,Evening Star,bearish,15,2,13.333333333333334
+Commerce & Industry,Symmetrical Triangle,neutral,8,1,12.5
+Utilities,Shooting Star,bearish,24,2,8.333333333333332
+Utilities,Bearish Harami,bearish,94,6,6.382978723404255
+Unknown,Symmetrical Triangle,neutral,6,0,0.0
