@@ -151,37 +151,42 @@ def calculate_all_indicators(df: pd.DataFrame) -> pd.DataFrame:
         if col in result.columns:
             result[col] = pd.to_numeric(result[col], errors="coerce").astype(float)
 
+    # 確保所有價格欄位為 float（SQLite 可能返回 decimal.Decimal）
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in result.columns:
+            result[col] = pd.to_numeric(result[col], errors="coerce").astype(float)
+
     # RSI
-    result['rsi_14'] = calculate_rsi(df['close'], period=14)
+    result['rsi_14'] = calculate_rsi(result['close'], period=14)
 
     # MACD
-    macd = calculate_macd(df['close'])
+    macd = calculate_macd(result['close'])
     result['macd'] = macd['macd']
     result['macd_signal'] = macd['signal']
     result['macd_histogram'] = macd['histogram']
 
-    # KDJ
-    kdj = calculate_kdj(df['high'], df['low'], df['close'])
+    # KDJ — 使用已轉換的 result 欄位
+    kdj = calculate_kdj(result['high'], result['low'], result['close'])
     result['kdj_k'] = kdj['k']
     result['kdj_d'] = kdj['d']
     result['kdj_j'] = kdj['j']
 
     # EMA
-    result['ema_20'] = calculate_ema(df['close'], 20)
-    result['ema_50'] = calculate_ema(df['close'], 50)
-    result['ema_200'] = calculate_ema(df['close'], 200)
+    result['ema_20'] = calculate_ema(result['close'], 20)
+    result['ema_50'] = calculate_ema(result['close'], 50)
+    result['ema_200'] = calculate_ema(result['close'], 200)
 
     # SMA
-    result['sma_20'] = calculate_sma(df['close'], 20)
-    result['sma_50'] = calculate_sma(df['close'], 50)
+    result['sma_20'] = calculate_sma(result['close'], 20)
+    result['sma_50'] = calculate_sma(result['close'], 50)
 
     # Bollinger Bands
-    bb = calculate_bollinger_bands(df['close'])
+    bb = calculate_bollinger_bands(result['close'])
     result['bb_upper'] = bb['upper']
     result['bb_middle'] = bb['middle']
     result['bb_lower'] = bb['lower']
 
     # ATR
-    result['atr_14'] = calculate_atr(df['high'], df['low'], df['close'])
+    result['atr_14'] = calculate_atr(result['high'], result['low'], result['close'])
 
     return result
