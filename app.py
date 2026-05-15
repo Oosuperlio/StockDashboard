@@ -314,6 +314,31 @@ def format_suggestion(q: dict) -> str:
 
 @st.cache_data(ttl=300)
 def get_stock_data(ticker: str, days: int = 90) -> pd.DataFrame:
+    """
+    讀取 K 線數據：優先從本地 DuckDB，Yahoo Finance 為後備。
+    DuckDB 策略：
+      - 平日：當日收盤後 08:30 / 20:30 UTC 更新，覆蓋約 16.5 小時前的數據
+      - 若 DB 完全空白或行數不足，自動降級至 Yahoo Finance 即時拉取
+    """
+    # ── 優先：從 DuckDB 讀取 ──────────────────────────────────────────
+    try:
+        from database.duckdb_client import get_price_range
+        rows = get_price_range(ticker, days=days)
+        if rows and len(rows) >= days * 0.7:   # 起碼有 7 成數據
+            df = pd.DataFrame(rows)
+            df = df.rename(columns={
+                "trade_date": "Date",
+                "open": "Open", "high": "High",
+                "low": "Low",  "close": "Close", "volume": "Volume"
+            })
+            df["Date"] = pd.to_datetime(df["Date"])
+            df = df.set_index("Date").sort_index()
+            # 確保走勢方向正確（newest first）
+            return df.iloc[::-1][["Open", "High", "Low", "Close", "Volume"]]
+    except Exception:
+        pass
+
+    # ── 後備：Yahoo Finance 即時拉取 ────────────────────────────────
     try:
         df = yf.Ticker(ticker).history(period=f"{days}d", auto_adjust=True)
         if df.empty:
