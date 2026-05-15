@@ -12,6 +12,7 @@ from typing import Optional, List, Dict, Any, Tuple
 
 from . import duckdb_client as db
 from . import sqlite_client as sq
+from .hk_data_source import fetch_historical_hk as tencent_historical
 
 # ─── Config ────────────────────────────────────────────────────────────────────
 
@@ -193,9 +194,48 @@ def get_price_history(symbol: str, days: int = 90,
         # Cache miss: either too few rows OR date range too narrow → wipe and refetch
         db.delete_price_range(symbol, days)
 
-    # ── Fetch from yfinance (authoritative source) ─────────────────────────
+    # ── Fetch from yfinance (authoritative for US; fallback to Tencent for HK) ─
     ticker = yf.Ticker(symbol)
     hist = ticker.history(period=f"{days}d", auto_adjust=True)
+
+    # HK stocks: if yfinance returns empty (rate-limited / misidentified as delisted),
+    # fall back to Tencent Finance historical K-line data.
+    is_hk = symbol.endswith(".HK")
+    if is_hk and (hist.empty or len(hist) < days * 0.5):
+        tencent_rows = tencent_historical(symbol.replace(".HK", ""), days=days)
+        if tencent_rows and len(tencent_rows) >= days * 0.5:
+            # Write Tencent rows to DuckDB and return them
+            for row in tencent_rows:
+                if row["close"] and not pd.isna(row["close"]):
+                    db.upsert_price(
+                        symbol     = symbol,
+                        trade_date = row["trade_date"],
+                        open_      = row["open"],
+                        high       = row["high"],
+                        low        = row["low"],
+                        close      = row["close"],
+                        volume     = row["volume"],
+                        currency   = "HKD",
+                    )
+            result = db.get_price_range(symbol, days)
+            return result
+        elif tencent_rows:
+            # Partial data better than none — write and return what we have
+            for row in tencent_rows:
+                if row["close"] and not pd.isna(row["close"]):
+                    db.upsert_price(
+                        symbol     = symbol,
+                        trade_date = row["trade_date"],
+                        open_      = row["open"],
+                        high       = row["high"],
+                        low        = row["low"],
+                        close      = row["close"],
+                        volume     = row["volume"],
+                        currency   = "HKD",
+                    )
+            result = db.get_price_range(symbol, days)
+            return result
+
     if hist.empty:
         cached = db.get_price_range(symbol, days)
         return cached if cached else []
