@@ -28,13 +28,14 @@ import yfinance as yf
 import requests
 import pandas as pd
 import duckdb
+from database.hk_data_source import fetch_historical_hk
 
 # ── Yahoo Finance v8 REST API ────────────────────────────────────
 def _yahoo_v8(ticker: str, days: int = 7) -> Optional[pd.DataFrame]:
     """Yahoo Finance v8 REST API — bypasses yfinance封装层"""
     # 轉換含 . 的 ticker（如 BRK.B → BRK-B）避免 API 500 錯誤
     api_ticker = ticker.replace(".", "-")
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{api_ticker}"
+    url = f"https://query2.finance.yahoo.com/v8/finance/chart/{api_ticker}"
     params = {"interval": "1d", "range": f"{days}d"}
     headers = {"User-Agent": "Mozilla/5.0"}
     try:
@@ -138,6 +139,15 @@ def all_tickers() -> list[str]:
     return sorted(set(tickers))
 
 # ── 下載函式 ──────────────────────────────────────────────────────
+def _is_hk(ticker: str) -> bool:
+    return ticker.upper().endswith(".HK")
+
+def _hk_code(ticker: str) -> str:
+    """從 '0700.HK' → '00700', '3968.HK' → '03698'"""
+    code = ticker.replace(".HK", "").upper()
+    # 補零到5位
+    return code.zfill(5)
+
 def fetch_latest(ticker: str, lookback: int = 7) -> Optional[pd.DataFrame]:
     """
     下載近 lookback 天的數據，自動過濾重複。
@@ -163,6 +173,9 @@ def fetch_latest(ticker: str, lookback: int = 7) -> Optional[pd.DataFrame]:
         ticker_obj = yf.Ticker(ticker)
         hist = ticker_obj.history(period=f"{lookback}d", auto_adjust=True)
         if hist.empty:
+            # HK 股：yfinance 失敗，嘗試騰訊財經
+            if _is_hk(ticker):
+                return _fetch_hk_from_tencent(ticker, lookback)
             return None
         hist = hist.reset_index()
         hist.columns = [c.lower() if isinstance(c, str) else c for c in hist.columns]
@@ -176,8 +189,35 @@ def fetch_latest(ticker: str, lookback: int = 7) -> Optional[pd.DataFrame]:
         hist["volume"] = hist["volume"].fillna(0).astype("int64")
         return hist[["trade_date", "symbol", "open", "high", "low", "close", "volume", "currency"]]
     except Exception as e:
+        # HK 股：最後嘗試騰訊財經
+        if _is_hk(ticker):
+            return _fetch_hk_from_tencent(ticker, lookback)
         log.warning(f"[{ticker}] fetch error: {e}")
         return None
+
+
+def _fetch_hk_from_tencent(ticker: str, days: int = 30) -> Optional[pd.DataFrame]:
+    """
+    騰訊財經 fallback：彌補 Yahoo v8 + yfinance 對 HK 股全線失敗的問題。
+    days 設 30 確保至少涵蓋近3個交易日（平時夠用，daily_update 只補增量）。
+    """
+    code = _hk_code(ticker)
+    records = fetch_historical_hk(code, days=days)
+    if not records:
+        return None
+    df = pd.DataFrame(records)
+    # 轉成與 fetch_latest 統一格式
+    df = df.rename(columns={"symbol": "symbol"})
+    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
+    # 過濾未來/無效日期，確保 close > 0
+    df = df[df["close"] > 0].copy()
+    if df.empty:
+        return None
+    # 補上 currency（HKD）
+    df["currency"] = "HKD"
+    # 去除 source 列（僅內部用）
+    cols = ["trade_date", "symbol", "open", "high", "low", "close", "volume", "currency"]
+    return df[cols]
 
 
 # ── 每日下載主邏輯 ────────────────────────────────────────────────
