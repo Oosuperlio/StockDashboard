@@ -45,6 +45,13 @@ THRESHOLD = 0.02
 MIN_SIGNALS = 10
 MIN_PATTERN_CONFIDENCE = 0.5
 
+# ─────────────────────────────────────────────
+# 成交量確認因子（因子①）
+# ─────────────────────────────────────────────
+VOL_MA_PERIOD = 20           # 成交量均線週期
+VOL_SPIKE_TODAY = 1.5        # 形態出現日：成交量 > MA 的倍數
+VOL_SPIKE_NEXT = 1.2          # 形態次日：成交量 > MA 的倍數（確認不是脈衝）
+
 # 強指標信號（高信心度，勝率較好）
 BULLISH_INDICATORS = {
     ('RSI', 'RSI 超賣區域 (30)'),
@@ -95,13 +102,18 @@ class PatternIndex:
 
 def build_pattern_index(df: pd.DataFrame) -> Tuple[
     dict,  # idx → list of bullish PatternIndex
-    dict   # idx → list of bearish PatternIndex
+    dict,  # idx → list of bearish PatternIndex
+    pd.DataFrame  # df with vol_ma20 added
 ]:
     """
     預先計算形態並建立索引
-    返回: (bullish_index, bearish_index)
+    返回: (bullish_index, bearish_index, df_with_vol_ma)
     其中 index[idx] = [PatternIndex, ...] 包含該位置的看漲/看跌形態
     """
+    # ── 計算成交量均線（因子①）────────────────────
+    df = df.copy()
+    df['vol_ma20'] = df['volume'].rolling(VOL_MA_PERIOD, min_periods=10).mean()
+
     bullish_index: dict = defaultdict(list)
     bearish_index: dict = defaultdict(list)
 
@@ -144,7 +156,7 @@ def build_pattern_index(df: pd.DataFrame) -> Tuple[
         except Exception:
             pass
 
-    return bullish_index, bearish_index
+    return bullish_index, bearish_index, df
 
 
 # ─────────────────────────────────────────────
@@ -195,6 +207,7 @@ class CombinedSignal:
     pattern: str
     pattern_confidence: float
     confidence: float
+    volume_confirmed: bool = False  # 因子①
     metadata: dict = field(default_factory=dict)
 
 
@@ -204,8 +217,25 @@ def detect_combined_signals_at_idx(
     bullish_index: dict,
     bearish_index: dict
 ) -> List[CombinedSignal]:
-    """檢測指定 K 線的複合信號"""
+    """檢測指定 K 線的複合信號（含成交量確認過濾）"""
     signals = []
+
+    # ── 因子①：成交量確認過濾 ──────────────────────
+    # 需要 idx+1 有次日數據才能做兩日確認
+    vol_today_ok = False
+    vol_next_ok = False
+    if idx + 1 < len(df):
+        vol_today = df['volume'].iloc[idx]
+        vol_ma = df['vol_ma20'].iloc[idx]
+        vol_next = df['volume'].iloc[idx + 1]
+        vol_ma_next = df['vol_ma20'].iloc[idx + 1]
+        if vol_ma > 0:
+            vol_today_ok = vol_today >= vol_ma * VOL_SPIKE_TODAY
+        if vol_ma_next > 0:
+            vol_next_ok = vol_next >= vol_ma_next * VOL_SPIKE_NEXT
+
+    # 必須同時滿足：形態日放量 AND 次日跟進放量
+    vol_confirmed = vol_today_ok and vol_next_ok
 
     # 1. 收集指標信號
     all_ind_signals = []
@@ -244,7 +274,7 @@ def detect_combined_signals_at_idx(
                     matched_pattern = pi.pattern.name
                     matched_confidence = pi.pattern.confidence
 
-        # 構建信號
+        # 構建信號（全部保留，不因成交量不足而過濾）
         if matched_pattern:
             conf = min(1.0, ind_sig.confidence * 1.2 + matched_confidence * 0.3)
             signals.append(CombinedSignal(
@@ -254,6 +284,7 @@ def detect_combined_signals_at_idx(
                 pattern=matched_pattern,
                 pattern_confidence=matched_confidence,
                 confidence=conf,
+                volume_confirmed=vol_confirmed,  # 因子①：成交量是否確認
                 metadata={'pattern_confidence': matched_confidence}
             ))
         else:
@@ -265,6 +296,7 @@ def detect_combined_signals_at_idx(
                 pattern='None',
                 pattern_confidence=0.0,
                 confidence=ind_sig.confidence * 0.9,
+                volume_confirmed=vol_confirmed,  # 因子①
                 metadata={}
             ))
 
@@ -305,8 +337,8 @@ def backtest_stock(symbol: str) -> Tuple[List[dict], List[dict]]:
     # 計算指標
     df = calculate_all_indicators(df)
 
-    # 預先計算形態索引
-    bullish_index, bearish_index = build_pattern_index(df)
+    # 預先計算形態索引（返回 df 含 vol_ma20）
+    bullish_index, bearish_index, df = build_pattern_index(df)
 
     combined_results = []
     indicator_only_results = []
@@ -328,6 +360,7 @@ def backtest_stock(symbol: str) -> Tuple[List[dict], List[dict]]:
                 'confidence': sig.confidence,
                 'pattern': sig.pattern,
                 'pattern_confidence': sig.pattern_confidence,
+                'volume_confirmed': sig.volume_confirmed,  # 因子①
                 **result
             }
 
@@ -341,11 +374,16 @@ def backtest_stock(symbol: str) -> Tuple[List[dict], List[dict]]:
 
 def aggregate_comparison(combined: list, indicator_only: list,
                           min_count: int = MIN_SIGNALS) -> pd.DataFrame:
-    """聚合並比較複合 vs 純指標"""
+    """
+    聚合並比較複合 vs 純指標
+    新增：按 volume_confirmed（因子①）分組，展示成交量確認對勝率的影響
+    """
     rows = []
 
     def make_key(r):
-        return (r['indicator'], r['signal'], r['direction'], r['pattern'] != 'None')
+        # 4維分組：(indicator, signal, direction, has_pattern, vol_confirmed)
+        return (r['indicator'], r['signal'], r['direction'],
+                r['pattern'] != 'None', r.get('volume_confirmed', False))
 
     agg = defaultdict(lambda: {'count': 0, 'successes': 0, 'total_return': 0.0})
 
@@ -356,7 +394,7 @@ def aggregate_comparison(combined: list, indicator_only: list,
         if r['is_success']:
             agg[key]['successes'] += 1
 
-    for (indicator, signal, direction, has_pattern), stats in agg.items():
+    for (indicator, signal, direction, has_pattern, vol_confirmed), stats in agg.items():
         if stats['count'] < min_count:
             continue
         wr = stats['successes'] / stats['count']
@@ -366,6 +404,7 @@ def aggregate_comparison(combined: list, indicator_only: list,
             'signal': signal,
             'direction': direction,
             'strategy': '✅ 複合' if has_pattern else '⚪ 純指標',
+            'volume_confirmed': '🔔 有量確認' if vol_confirmed else '⚪ 無量確認',
             'count': stats['count'],
             'successes': stats['successes'],
             'win_rate': wr,
@@ -374,18 +413,25 @@ def aggregate_comparison(combined: list, indicator_only: list,
 
     df = pd.DataFrame(rows)
     if not df.empty:
-        # Add improvement column
+        # Add improvement column (vs 純指標 + 無量確認)
         df['improvement'] = 0.0
         for idx, row in df[df['strategy'] == '✅ 複合'].iterrows():
             base_rows = df[(df['signal'] == row['signal']) &
                           (df['strategy'] == '⚪ 純指標') &
+                          (df['volume_confirmed'] == row['volume_confirmed']) &
                           (df['direction'] == row['direction'])]
             if not base_rows.empty:
                 base_wr = base_rows.iloc[0]['win_rate']
                 df.loc[idx, 'improvement'] = row['win_rate'] - base_wr
 
-        df = df.sort_values(['indicator', 'signal', 'strategy'], ascending=[True, True, False])
-        df = df.reset_index(drop=True)
+        # Sort: indicator → signal → volume_confirmed → strategy
+        vol_order = {'🔔 有量確認': 0, '⚪ 無量確認': 1}
+        df['_vol_order'] = df['volume_confirmed'].map(vol_order)
+        df = df.sort_values(
+            ['indicator', 'signal', '_vol_order', 'strategy'],
+            ascending=[True, True, True, False]
+        )
+        df = df.drop(columns=['_vol_order']).reset_index(drop=True)
 
     return df
 
@@ -429,38 +475,61 @@ def run_market_backtest(market: str) -> pd.DataFrame:
 # ─────────────────────────────────────────────
 
 def print_comparison(results: pd.DataFrame, market_name: str):
-    print(f"\n{'='*95}")
-    print(f"  📊 {market_name} — 複合策略 (指標+形態) vs 純指標策略 回測結果")
-    print(f"{'='*95}")
+    """
+    輸出複合策略回測結果，含因子①（成交量確認）維度
+    同時標記「原本 ≥70% 的信號是否被保留」
+    """
+    print(f"\n{'='*110}")
+    print(f"  📊 {market_name} — 複合策略 (指標+形態+成交量) 回測結果")
+    print(f"    因子①：形態日放量 × 1.5× + 次日跟進 × 1.2×")
+    print(f"{'='*110}")
 
     if results.empty:
         print("  無足夠數據")
         return
 
-    # 只顯示有複合信號的信號（便於對比）
     has_combo = results[results['strategy'] == '✅ 複合'].copy()
     if has_combo.empty:
         print("\n  ⚠️ 無足夠的複合信號樣本")
         return
 
-    print(f"\n{'─'*95}")
-    print(f"  {'指標':<6} {'信號':<32} {'策略':<10} {'次數':>6} {'勝率':>8} {'平均回報':>10} {'勝率提升':>10}")
-    print(f"{'─'*95}")
+    # ── ① 成交量維度對比 ──────────────────────────
+    print(f"\n{'─'*110}")
+    print(f"  📌 因子①：成交量確認對勝率的影響")
+    print(f"{'─'*110}")
+    print(f"  {'指標':<6} {'信號':<30} {'成交量':<14} {'次數':>6} {'勝率':>8} {'平均回報':>10} {'vs無確認':>10}")
+    print(f"{'─'*110}")
 
     for _, row in has_combo.sort_values('win_rate', ascending=False).iterrows():
-        emoji = "🟢" if row['direction'] == 'bullish' else "🔴"
         imp = row['improvement']
         imp_str = f"{imp:+.1%}" if imp != 0 else "-"
-        print(f"  {row['indicator']:<6} {row['signal'][:32]:<32} {row['strategy']:<10} "
+        flag = "🛡️" if row['win_rate'] >= 0.70 else "  "
+        print(f"  {flag}{row['indicator']:<4} {row['signal'][:30]:<30} {row['volume_confirmed']:<14} "
               f"{row['count']:>6} {row['win_rate']:>7.1%} {row['avg_return']:>+9.2%} {imp_str:>10}")
 
-    print(f"\n{'─'*95}")
-    print("  📌 純指標信號勝率（對比基准）:")
-    print(f"{'─'*95}")
+    # ── ② 原本 ≥70% 的信號是否被保留 ─────────────
+    print(f"\n{'─'*110}")
+    print(f"  🛡️ 原本勝率 ≥70% 的信號（加成交量後是否保留）")
+    print(f"{'─'*110}")
 
-    for _, row in results[results['strategy'] == '⚪ 純指標'].sort_values('win_rate', ascending=False).iterrows():
-        emoji = "🟢" if row['direction'] == 'bullish' else "🔴"
-        print(f"  {row['indicator']:<6} {row['signal'][:32]:<32} {row['strategy']:<10} "
+    high_wr = has_combo[has_combo['win_rate'] >= 0.70].copy()
+    if high_wr.empty:
+        print("  （無原本 ≥70% 的信號）")
+    else:
+        print(f"  {'指標':<6} {'信號':<30} {'成交量':<14} {'次數':>6} {'勝率':>8}")
+        print(f"  {'─'*80}")
+        for _, row in high_wr.sort_values('win_rate', ascending=False).iterrows():
+            print(f"  {row['indicator']:<6} {row['signal'][:30]:<30} {row['volume_confirmed']:<14} "
+                  f"{row['count']:>6} {row['win_rate']:>7.1%}")
+
+    # ── ③ 純指標基准 ─────────────────────────────
+    print(f"\n{'─'*110}")
+    print(f"  📌 純指標信號胜率（對比基准）:")
+    print(f"{'─'*110}")
+
+    ind_only = results[results['strategy'] == '⚪ 純指標'].copy()
+    for _, row in ind_only.sort_values('win_rate', ascending=False).iterrows():
+        print(f"  {row['indicator']:<6} {row['signal'][:30]:<30} {row['volume_confirmed']:<14} "
               f"{row['count']:>6} {row['win_rate']:>7.1%} {row['avg_return']:>+9.2%}")
 
 

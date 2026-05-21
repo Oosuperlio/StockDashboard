@@ -52,23 +52,37 @@ MIN_PATTERN_CONFIDENCE = 0.5
 LOOKBACK_DAYS = 60        # 用於形態計算的歷史K線數
 MIN_SCANNER_SIGNALS = 8   # 最少樣本數（勝率數據門檻）
 
-# 最佳 Sector × Signal × Pattern 組合（從 backtest_sector_subsector_results.csv 學習得來）
-# 格式：(sector, signal, pattern) → 歷史勝率
+# 成交量確認參數（因子①）
+VOL_MA_PERIOD = 20
+VOL_SPIKE_TODAY = 1.5    # 形態出現日：成交量 > MA 的倍數
+VOL_SPIKE_NEXT = 1.2     # 次日跟進：成交量 > MA 的倍數
+
+# 最佳 Sector × Signal × Pattern 組合（從 backtest_4way_results.csv 四維回測得來）
+# 包含成交量確認因子：形態確認 + 放量確認
+# 格式：(sector, signal, pattern) → (win_rate, avg_return, count)
 BEST_COMBOS = {
-    # (sector, signal, pattern) → (win_rate, avg_return, count)
-    ('Financials', 'BB 跌破下軌 (超賣)', 'Support'): (0.75, 0.038, 45),
+    # 高勝率區間（≥70%，有成交量確認）
+    ('Materials', 'BB 跌破下軌 (超賣)', 'Support'): (0.86, 0.058, 21),
+    ('Energy', 'BB 跌破下軌 (超賣)', 'Support'): (0.85, 0.048, 13),
+    ('Commerce & Industry', 'BB 跌破下軌 (超賣)', 'Support'): (0.85, 0.083, 13),
+    ('Real Estate', 'BB 跌破下軌 (超賣)', 'Support'): (0.81, 0.052, 21),
+    ('Industrials', 'RSI 維持超賣', 'Support'): (0.78, 0.060, 32),
+    ('Information Technology', 'RSI 超賣區域 (30)', 'Support'): (0.74, 0.069, 19),
+    ('Information Technology', 'RSI 維持超賣', 'Support'): (0.70, 0.056, 71),
+    ('Information Technology', 'BB 跌破下軌 (超賣)', 'Support'): (0.70, 0.055, 107),
+    ('Consumer Staples', 'BB 跌破下軌 (超賣)', 'Support'): (0.70, 0.035, 20),
+    # 中高勝率區間（60-70%，有成交量確認）
+    ('Industrials', 'BB 跌破下軌 (超賣)', 'Support'): (0.67, 0.048, 55),
+    ('Industrials', 'RSI 超賣區域 (30)', 'Support'): (0.67, 0.050, 12),
+    ('Financials', 'RSI 維持超賣', 'Support'): (0.64, 0.039, 42),
+    ('Financials', 'BB 跌破下軌 (超賣)', 'Support'): (0.63, 0.036, 76),
+    # Morning Star 形態（形態確認）
     ('Financials', 'BB 跌破下軌 (超賣)', 'Morning Star'): (0.70, 0.033, 38),
-    ('Information Technology', 'BB 跌破下軌 (超賣)', 'Support'): (0.72, 0.036, 89),
     ('Information Technology', 'BB 跌破下軌 (超賣)', 'Bull Flag'): (0.68, 0.041, 52),
-    ('Information Technology', 'RSI 超賣區域 (30)', 'Support'): (0.65, 0.031, 67),
-    ('Energy', 'RSI 維持超賣', 'Support'): (0.64, 0.028, 42),
-    ('Utilities', 'BB 跌破下軌 (超賣)', 'Support'): (0.76, 0.037, 41),
-    ('Materials', 'RSI 超賣區域 (30)', 'Morning Star'): (0.62, 0.029, 35),
-    ('Industrials', 'BB 跌破下軌 (超賣)', 'Support'): (0.58, 0.027, 78),
     ('Communication Services', 'BB 跌破下軌 (超賣)', 'Morning Star'): (0.60, 0.034, 60),
+    # 無特定形態時的 fallback（形態確認=True，成交量確認=True）
+    ('Energy', 'RSI 維持超賣', 'Support'): (0.64, 0.028, 42),
     ('Commerce & Industry', 'RSI 超賣區域 (30)', 'Support'): (0.60, 0.028, 68),
-    ('Real Estate', 'RSI 維持超賣', 'Support'): (0.65, 0.030, 30),
-    ('Properties', 'BB 跌破下軌 (超賣)', 'Support'): (0.51, 0.022, 81),
 }
 
 # 核心指標信號（入場意願高）
@@ -239,6 +253,7 @@ class ScanSignal:
     date: str
     tier: int               # 1=最高, 2=中, 3=一般
     reasons: str            # 為何入選（文字說明）
+    volume_confirmed: bool  # 因子①：成交量確認
 
 
 def scan_ticker(
@@ -248,6 +263,7 @@ def scan_ticker(
 ) -> List[ScanSignal]:
     """
     掃描單一股票，檢測最近 3 根 K 線內所有滿足條件的買入信號。
+    包含因子①：成交量確認（形態日放量 1.5× + 次日跟進 1.2× MA20）
     """
     signals = []
     if df is None or len(df) < 30:
@@ -258,6 +274,10 @@ def scan_ticker(
     except Exception:
         return signals
 
+    # ── 計算成交量均線（因子①）─────────────────────────────
+    ind_df = ind_df.copy()
+    ind_df['vol_ma20'] = ind_df['volume'].rolling(VOL_MA_PERIOD, min_periods=10).mean()
+
     last_idx = len(ind_df) - 1
 
     # 檢查最近 3 根 K 線（信號可能出現在非最新日期）
@@ -267,6 +287,19 @@ def scan_ticker(
             break
 
         bull_pis = bullish_index.get(check_idx, [])
+
+        # ── 因子①：成交量確認 ──────────────────────────────
+        vol_today_ok = vol_next_ok = False
+        if check_idx + 1 < len(ind_df):
+            vol_today = ind_df['volume'].iloc[check_idx]
+            vol_ma = ind_df['vol_ma20'].iloc[check_idx]
+            vol_next = ind_df['volume'].iloc[check_idx + 1]
+            vol_ma_next = ind_df['vol_ma20'].iloc[check_idx + 1]
+            if vol_ma > 0:
+                vol_today_ok = vol_today >= vol_ma * VOL_SPIKE_TODAY
+            if vol_ma_next > 0:
+                vol_next_ok = vol_next >= vol_ma_next * VOL_SPIKE_NEXT
+        vol_confirmed = vol_today_ok and vol_next_ok
 
         # ── 收集指標信號 ──
         all_ind_signals = []
@@ -289,23 +322,42 @@ def scan_ticker(
                     matched_pattern = pi.pattern.name
                     matched_conf = pi.pattern.confidence
 
-            # ── 計算信心度 ──
+            # ── 計算信心度（成交量確認額外加分）───────────────
             if matched_pattern:
                 conf = min(1.0, ind_sig.confidence * 1.2 + matched_conf * 0.3)
+                if vol_confirmed:
+                    conf = min(1.0, conf * 1.15)  # 成交量確認額外 +15%
             else:
                 conf = ind_sig.confidence * 0.7  # 無形態降權
 
-            # ── 查歷史勝率 ──
-            key = (sector, ind_sig.name, matched_pattern or 'None')
-            hist = BEST_COMBOS.get(key) or BEST_COMBOS.get(
-                (sector, ind_sig.name, 'Support'),
-                BEST_COMBOS.get(('Unknown', ind_sig.name, 'Support'),
-                (0.50, 0.020, 20))  # 預設值
-            )
+            # ── 查歷史勝率（優先：有成交量 + 有形態）────────────
+            key = (sector, ind_sig.name, matched_pattern or 'Support')
+            if vol_confirmed and matched_pattern:
+                # 有量 + 有形態 → 用最佳組合勝率
+                hist = BEST_COMBOS.get(key, BEST_COMBOS.get(
+                    (sector, ind_sig.name, 'Support'),
+                    (0.50, 0.020, 20)
+                ))
+            elif matched_pattern:
+                # 有形態但無量 → 降級取無量勝率（從 backtest_4way 推估）
+                # 默認：有形態無量勝率 ≈ 有量勝率 × 0.85（經驗係數）
+                base = BEST_COMBOS.get(key, BEST_COMBOS.get(
+                    (sector, ind_sig.name, 'Support'),
+                    (0.50, 0.020, 20)
+                ))
+                hist = (base[0] * 0.85, base[1] * 0.80, base[2])
+            else:
+                # 無形態 → 參考勝率
+                hist = (0.50, 0.020, 20)
+
             win_rate, avg_return, hist_count = hist
 
-            # ── Tier 分級 ──
-            if matched_pattern and matched_conf >= 0.7 and hist_count >= 30:
+            # ── Tier 分級（成交量確認提升 Tier）──────────────
+            if vol_confirmed and matched_pattern and matched_conf >= 0.7 and hist_count >= 10:
+                tier = 1
+            elif vol_confirmed and matched_pattern and hist_count >= 8:
+                tier = 1
+            elif matched_pattern and matched_conf >= 0.7 and hist_count >= 30:
                 tier = 1
             elif matched_pattern and hist_count >= 15:
                 tier = 2
@@ -314,14 +366,17 @@ def scan_ticker(
 
             # ── 構建 reasons ──
             reasons = []
-            if sector in ['Information Technology', 'Financials', 'Energy', 'Utilities']:
+            if sector in ['Information Technology', 'Financials', 'Energy',
+                           'Utilities', 'Materials', 'Industrials', 'Consumer Staples']:
                 reasons.append(f"✅ 強勢Sector（{sector}）")
+            if vol_confirmed:
+                reasons.append("📈 成交量確認（放量 + 跟進）")
             if matched_pattern:
                 reasons.append(f"形態確認：{matched_pattern}（信心 {matched_conf:.0%}）")
-            if hist_count >= 30:
+            if hist_count >= 20:
                 reasons.append(f"歷史勝率 {win_rate:.0%}（{hist_count}樣本）")
             else:
-                reasons.append(f"參考勝率 {win_rate:.0%}（樣本不足 {hist_count}）")
+                reasons.append(f"參考勝率 {win_rate:.0%}（樣本 {hist_count}）")
 
             sig_date = ind_df.index[check_idx]
             date_str = str(sig_date.date()) if hasattr(sig_date, 'date') else str(sig_date)[:10]
@@ -341,6 +396,7 @@ def scan_ticker(
                 date=date_str,
                 tier=tier,
                 reasons=' | '.join(reasons),
+                volume_confirmed=vol_confirmed,
             ))
 
     return signals
@@ -423,10 +479,11 @@ def format_signals(signals: List[ScanSignal], top_n: int = 20) -> str:
             lines.append("─" * 40)
 
         price_str = f"${sig.price:.2f}" if sig.symbol.isupper() else f"HK${sig.price:.2f}"
+        vol_icon = '📈' if sig.volume_confirmed else '⚪'
         flag = '🟢' if sig.win_rate >= 0.60 else ('🟡' if sig.win_rate >= 0.45 else '⚪')
 
         lines.append(
-            f"{flag} *{sig.symbol}* ({sig.sector[:15]})\n"
+            f"{flag}{vol_icon} *{sig.symbol}* ({sig.sector[:15]})\n"
             f"   {sig.indicator}: {sig.signal_name}\n"
             f"   形態: {sig.pattern} | 勝率: {sig.win_rate:.0%} | 參考回報: {sig.avg_return:+.1%}\n"
             f"   {price_str} | {sig.reasons}"
@@ -455,6 +512,7 @@ def signals_to_dataframe(signals: List[ScanSignal]) -> pd.DataFrame:
             'price': s.price,
             'date': s.date,
             'tier': s.tier,
+            'volume_confirmed': s.volume_confirmed,
         })
     df = pd.DataFrame(rows)
     df = df.sort_values(['tier', 'win_rate', 'confidence'], ascending=[True, False, False])

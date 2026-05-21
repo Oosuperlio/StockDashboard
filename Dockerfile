@@ -26,6 +26,7 @@ COPY optimize_exits_by_sector.py .
 COPY backtest_sector_subsector_results.csv .
 COPY backtest_sector_improvement.csv .
 COPY optimal_exits_by_sector.csv .
+COPY backtest_4way_results.csv .
 
 # Set port
 ENV PORT=8000

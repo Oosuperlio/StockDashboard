@@ -1,0 +1,559 @@
+pattern,pattern_dir,sector,count,wins,avg_ret,win_rate,combination,description,market
+Morning Star,bullish,Consumer Discretionary,1,1,0.11954261954261959,1.0,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Financials,1,1,-0.062102444998370934,1.0,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Consumer Discretionary,3,3,-0.041964423215226,1.0,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Consumer Staples,1,1,-0.038804071246819415,1.0,A,形態 alone,HSI
+Evening Star,bearish,Real Estate,1,1,-0.04315068493150678,1.0,A,形態 alone,HSI
+Bullish Engulfing,bullish,Consumer Staples,1,1,0.022193432762084596,1.0,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Communication Services,3,3,0.08252495018250987,1.0,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Real Estate,3,3,0.08512518744884413,1.0,A+D,形態+Sector,HSI
+Morning Star,bullish,Financials,1,1,0.0900473933649289,1.0,A,形態 alone,HSI
+Morning Star,bullish,Health Care,1,1,0.07389937106918235,1.0,A,形態 alone,HSI
+Morning Star,bullish,Real Estate,3,3,0.08512518744884413,1.0,A,形態 alone,HSI
+Bear Flag,bearish,Information Technology,2,2,-0.07751433170568242,1.0,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Consumer Staples,1,1,-0.02106173108079497,1.0,A+C,形態+成交量,HSI
+Bull Flag,bullish,Consumer Staples,2,2,0.09423300501056829,1.0,A+C,形態+成交量,HSI
+Morning Star,bullish,Energy,1,1,0.036077299535700845,1.0,A+B,形態+指標,S&P 500
+Hammer,bullish,Consumer Discretionary,2,2,0.08912324234904882,1.0,A+C,形態+成交量,HSI
+Hammer,bullish,Health Care,1,1,0.0254668930390493,1.0,A+C,形態+成交量,HSI
+Morning Star,bullish,Real Estate,1,1,0.15955056179775287,1.0,A+C,形態+成交量,HSI
+Hammer,bullish,Health Care,1,1,0.0254668930390493,1.0,A+B+C,形態+指標+成交量,HSI
+Bullish Engulfing,bullish,Real Estate,1,1,0.041953232462173404,1.0,A+B+C,形態+指標+成交量,HSI
+Bullish Engulfing,bullish,Financials,1,1,0.10406504065040645,1.0,A+B,形態+指標,HSI
+Bull Flag,bullish,Health Care,1,1,0.05222734254992317,1.0,A+B+C,形態+指標+成交量,HSI
+Bull Flag,bullish,Consumer Staples,1,1,0.0574012356249916,1.0,A+B+C,形態+指標+成交量,HSI
+Morning Star,bullish,Information Technology,5,5,0.08407163508991877,1.0,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Information Technology,1,1,-0.06582411795681939,1.0,A+B+C,形態+指標+成交量,HSI
+Evening Star,bearish,Consumer Discretionary,5,5,-0.03708900361601387,1.0,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Energy,1,1,-0.10120621686631781,1.0,A+C,形態+成交量,S&P 500
+Morning Star,bullish,Real Estate,1,1,0.053391053391053406,1.0,A+B,形態+指標,HSI
+Morning Star,bullish,Health Care,1,1,0.07389937106918235,1.0,A+B,形態+指標,HSI
+Evening Star,bearish,Energy,1,1,-0.10120621686631781,1.0,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Real Estate,1,1,-0.04315068493150678,1.0,A+D,形態+Sector,HSI
+Hammer,bullish,Energy,2,2,0.09914841200912064,1.0,A+C,形態+成交量,S&P 500
+Morning Star,bullish,Energy,1,1,0.036077299535700845,1.0,A+B+D,形態+指標+Sector,S&P 500
+Evening Star,bearish,Energy,1,1,-0.10120621686631781,1.0,A+B+C+D,完整全因子,S&P 500
+Morning Star,bullish,Information Technology,5,5,0.08407163508991877,1.0,A+C+D,形態+成交量+Sector,S&P 500
+Bullish Engulfing,bullish,Real Estate,1,1,0.041953232462173404,1.0,A+B+C+D,完整全因子,HSI
+Hammer,bullish,Energy,2,2,0.09914841200912064,1.0,A+C+D,形態+成交量+Sector,S&P 500
+Evening Star,bearish,Energy,1,1,-0.10120621686631781,1.0,A+C+D,形態+成交量+Sector,S&P 500
+Morning Star,bullish,Real Estate,1,1,0.15955056179775287,1.0,A+C+D,形態+成交量+Sector,HSI
+Morning Star,bullish,Real Estate,1,1,0.053391053391053406,1.0,A+B+D,形態+指標+Sector,HSI
+Bullish Engulfing,bullish,Consumer Staples,5,4,0.03498128547922589,0.8,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Consumer Staples,4,3,-0.03414983390037817,0.75,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Financials,7,5,0.05007131330199016,0.7142857142857143,A,形態 alone,HSI
+Bullish Engulfing,bullish,Real Estate,12,8,0.027262825519432664,0.6666666666666666,A+D,形態+Sector,HSI
+Bull Flag,bullish,Consumer Discretionary,3,2,0.09429874077120481,0.6666666666666666,A+B+C,形態+指標+成交量,HSI
+Hammer,bullish,Health Care,3,2,0.03509417857272152,0.6666666666666666,A+B,形態+指標,HSI
+Hammer,bullish,Real Estate,3,2,0.031460462438121166,0.6666666666666666,A+C,形態+成交量,S&P 500
+Morning Star,bullish,Consumer Discretionary,3,2,0.05031610774528216,0.6666666666666666,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Real Estate,12,8,0.027262825519432664,0.6666666666666666,A,形態 alone,HSI
+Morning Star,bullish,Consumer Discretionary,11,7,0.02793158017004619,0.6363636363636364,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Information Technology,11,7,0.02278422238047375,0.6363636363636364,A,形態 alone,HSI
+Bullish Engulfing,bullish,Consumer Staples,27,17,0.029704654627240104,0.6296296296296297,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Consumer Discretionary,7,4,0.05350974566425752,0.5714285714285714,A+B,形態+指標,HSI
+Hammer,bullish,Energy,7,4,-0.0005842468071040823,0.5714285714285714,A+B,形態+指標,S&P 500
+Hammer,bullish,Energy,7,4,-0.0005842468071040823,0.5714285714285714,A+B+D,形態+指標+Sector,S&P 500
+Bull Flag,bullish,Energy,43,24,0.022756999511740646,0.5581395348837209,A+C+D,形態+成交量+Sector,S&P 500
+Bull Flag,bullish,Energy,43,24,0.022756999511740646,0.5581395348837209,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Energy,23,12,0.02357325472620031,0.5217391304347826,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Energy,23,12,0.02357325472620031,0.5217391304347826,A+B+C+D,完整全因子,S&P 500
+Bull Flag,bullish,Real Estate,2,1,0.026725249308004413,0.5,A+B+C+D,完整全因子,HSI
+Bear Flag,bearish,Consumer Staples,20,10,-0.01403453500954907,0.5,A+B,形態+指標,HSI
+Hammer,bullish,Financials,2,1,0.03701662731588267,0.5,A+B,形態+指標,HSI
+Hammer,bullish,Utilities,6,3,0.028941118291953328,0.5,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Real Estate,4,2,-0.007565658953700085,0.5,A+B+D,形態+指標+Sector,HSI
+Bullish Engulfing,bullish,Utilities,2,1,-0.013133351051094573,0.5,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Energy,4,2,0.028682750207584255,0.5,A+C,形態+成交量,S&P 500
+Hammer,bullish,Real Estate,4,2,0.01606590503014023,0.5,A+B+D,形態+指標+Sector,HSI
+Morning Star,bullish,Utilities,2,1,-0.0010618382252778544,0.5,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Consumer Staples,16,8,-0.017204103239881977,0.5,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Real Estate,2,1,0.026725249308004413,0.5,A+B+C,形態+指標+成交量,HSI
+Bull Flag,bullish,Information Technology,12,6,0.04518713727686896,0.5,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Real Estate,4,2,-0.007565658953700085,0.5,A+B,形態+指標,HSI
+Bearish Engulfing,bearish,Consumer Discretionary,10,5,-0.03044437097272743,0.5,A+B,形態+指標,HSI
+Bearish Engulfing,bearish,Consumer Staples,2,1,-0.0022373523692117286,0.5,A+B,形態+指標,HSI
+Bull Flag,bullish,Real Estate,4,2,0.03543632652898808,0.5,A+C,形態+成交量,HSI
+Morning Star,bullish,Health Care,4,2,-0.03508346627140113,0.5,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Health Care,4,2,0.04451707912652871,0.5,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Real Estate,2,1,0.0014084650839881856,0.5,A+C,形態+成交量,HSI
+Hammer,bullish,Utilities,6,3,0.028941118291953328,0.5,A+B+D,形態+指標+Sector,S&P 500
+Morning Star,bullish,Materials,4,2,0.023793805203592852,0.5,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Utilities,2,1,-0.013133351051094573,0.5,A+C+D,形態+成交量+Sector,S&P 500
+Bull Flag,bullish,Real Estate,4,2,0.03543632652898808,0.5,A+C+D,形態+成交量+Sector,HSI
+Bullish Engulfing,bullish,Utilities,2,1,-0.013133351051094573,0.5,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Financials,6,3,-0.03650024959500129,0.5,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Utilities,2,1,-0.013133351051094573,0.5,A+B+C+D,完整全因子,S&P 500
+Bullish Engulfing,bullish,Real Estate,2,1,0.0014084650839881856,0.5,A+C+D,形態+成交量+Sector,HSI
+Morning Star,bullish,Energy,4,2,0.01718442472349053,0.5,A+D,形態+Sector,S&P 500
+Bear Flag,bearish,Health Care,2,1,0.016300512729954916,0.5,A+C,形態+成交量,HSI
+Evening Star,bearish,Health Care,2,1,-0.005444896066081322,0.5,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Energy,4,2,0.01718442472349053,0.5,A,形態 alone,S&P 500
+Hammer,bullish,Financials,2,1,0.03741471882172244,0.5,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Utilities,2,1,-0.0010618382252778544,0.5,A+C+D,形態+成交量+Sector,S&P 500
+Hammer,bullish,Health Care,8,4,0.010809373730720006,0.5,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Consumer Discretionary,8,4,0.03867675338824615,0.5,A+C,形態+成交量,HSI
+Bull Flag,bullish,Financials,2,1,0.029374977917535256,0.5,A+C,形態+成交量,HSI
+Hammer,bullish,Real Estate,4,2,0.01606590503014023,0.5,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Energy,4,2,0.028682750207584255,0.5,A+C+D,形態+成交量+Sector,S&P 500
+Bull Flag,bullish,Real Estate,35,17,0.018251286612183566,0.4857142857142857,A+B,形態+指標,HSI
+Bull Flag,bullish,Real Estate,35,17,0.018251286612183566,0.4857142857142857,A+B+D,形態+指標+Sector,HSI
+Bullish Engulfing,bullish,Energy,50,24,0.011417021031103014,0.48,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Energy,50,24,0.011417021031103014,0.48,A+D,形態+Sector,S&P 500
+Bear Flag,bearish,Consumer Staples,84,40,-0.011448982689327189,0.47619047619047616,A,形態 alone,HSI
+Bear Flag,bearish,Communication Services,68,32,-0.009095314685447857,0.47058823529411764,A+C,形態+成交量,S&P 500
+Hammer,bullish,Industrials,17,8,-0.021539937017376724,0.47058823529411764,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Materials,17,8,-0.006761335662333819,0.47058823529411764,A,形態 alone,S&P 500
+Hammer,bullish,Health Care,15,7,0.013983680230792392,0.4666666666666667,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Consumer Staples,44,20,0.01991080049109278,0.45454545454545453,A,形態 alone,HSI
+Bear Flag,bearish,Information Technology,73,33,-0.006732329673131279,0.4520547945205479,A+B+C,形態+指標+成交量,S&P 500
+Bear Flag,bearish,Information Technology,73,33,-0.006732329673131279,0.4520547945205479,A+B+C+D,完整全因子,S&P 500
+Hammer,bullish,Financials,40,18,0.011897859542472753,0.45,A+B,形態+指標,S&P 500
+Hammer,bullish,Information Technology,29,13,0.017186035524164953,0.4482758620689655,A+C,形態+成交量,S&P 500
+Hammer,bullish,Information Technology,29,13,0.017186035524164953,0.4482758620689655,A+C+D,形態+成交量+Sector,S&P 500
+Hammer,bullish,Consumer Discretionary,9,4,0.017596206872546927,0.4444444444444444,A,形態 alone,HSI
+Evening Star,bearish,Materials,9,4,-0.009962289611548778,0.4444444444444444,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Communication Services,9,4,-0.024639556139146798,0.4444444444444444,A+C,形態+成交量,S&P 500
+Hammer,bullish,Energy,32,14,0.009886786244485303,0.4375,A+D,形態+Sector,S&P 500
+Bear Flag,bearish,Communication Services,32,14,-0.007238967115108831,0.4375,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Energy,32,14,0.009886786244485303,0.4375,A,形態 alone,S&P 500
+Bull Flag,bullish,Health Care,71,31,0.007237294159336143,0.43661971830985913,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Energy,1196,519,0.012746113896753895,0.43394648829431437,A,形態 alone,S&P 500
+Bull Flag,bullish,Energy,1196,519,0.012746113896753895,0.43394648829431437,A+D,形態+Sector,S&P 500
+Bullish Engulfing,bullish,Energy,14,6,0.018998812040261024,0.42857142857142855,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Energy,14,6,0.018998812040261024,0.42857142857142855,A+B+D,形態+指標+Sector,S&P 500
+Hammer,bullish,Industrials,7,3,-0.012675275072601336,0.42857142857142855,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Information Technology,56,24,0.008331038208564484,0.42857142857142855,A,形態 alone,HSI
+Bearish Engulfing,bearish,Utilities,12,5,-0.02331925716537558,0.4166666666666667,A+C,形態+成交量,S&P 500
+Hammer,bullish,Information Technology,12,5,-0.005370247709800127,0.4166666666666667,A+B+C+D,完整全因子,S&P 500
+Bearish Engulfing,bearish,Utilities,12,5,-0.02331925716537558,0.4166666666666667,A+C+D,形態+成交量+Sector,S&P 500
+Hammer,bullish,Information Technology,12,5,-0.005370247709800127,0.4166666666666667,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Energy,272,113,0.014219660610097567,0.41544117647058826,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Energy,272,113,0.014219660610097567,0.41544117647058826,A+B+D,形態+指標+Sector,S&P 500
+Bull Flag,bullish,Information Technology,97,40,0.011205033681609692,0.41237113402061853,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Information Technology,97,40,0.011205033681609692,0.41237113402061853,A+B+C+D,完整全因子,S&P 500
+Bearish Engulfing,bearish,Information Technology,17,7,0.03182340066897943,0.4117647058823529,A+B+C+D,完整全因子,S&P 500
+Bearish Engulfing,bearish,Information Technology,17,7,0.03182340066897943,0.4117647058823529,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Consumer Staples,39,16,0.007200195678656263,0.41025641025641024,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Information Technology,49,20,0.010655610200837624,0.40816326530612246,A,形態 alone,S&P 500
+Morning Star,bullish,Information Technology,49,20,0.010655610200837624,0.40816326530612246,A+D,形態+Sector,S&P 500
+Bull Flag,bullish,Information Technology,203,82,0.008402694413689953,0.4039408866995074,A+C+D,形態+成交量+Sector,S&P 500
+Bull Flag,bullish,Information Technology,203,82,0.008402694413689953,0.4039408866995074,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Health Care,166,67,0.0008848689599275403,0.4036144578313253,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Consumer Discretionary,107,43,-0.004725681741659471,0.40186915887850466,A,形態 alone,HSI
+Bullish Engulfing,bullish,Information Technology,20,8,0.00958558471390652,0.4,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Unknown,10,4,-0.014754061193057088,0.4,A+C+D,形態+成交量+Sector,HSI
+Bearish Engulfing,bearish,Consumer Discretionary,25,10,-0.0017930509894349706,0.4,A,形態 alone,HSI
+Morning Star,bullish,Unknown,10,4,-0.014754061193057088,0.4,A+C,形態+成交量,HSI
+Bear Flag,bearish,Consumer Discretionary,30,12,-0.0019330907047970408,0.4,A+B,形態+指標,HSI
+Hammer,bullish,Financials,10,4,0.018054058310030978,0.4,A,形態 alone,HSI
+Bearish Engulfing,bearish,Utilities,5,2,-0.02955421954134089,0.4,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Materials,70,28,0.011657486833550104,0.4,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Information Technology,20,8,0.00958558471390652,0.4,A+B+C+D,完整全因子,S&P 500
+Bearish Engulfing,bearish,Utilities,5,2,-0.02955421954134089,0.4,A+B+C+D,完整全因子,S&P 500
+Hammer,bullish,Information Technology,410,162,0.006855896643852589,0.3951219512195122,A+D,形態+Sector,S&P 500
+Hammer,bullish,Information Technology,410,162,0.006855896643852589,0.3951219512195122,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Health Care,33,13,0.004670050192126599,0.3939393939393939,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Information Technology,1013,399,0.009525481150115115,0.39387956564659427,A+B+D,形態+指標+Sector,S&P 500
+Bull Flag,bullish,Information Technology,1013,399,0.009525481150115115,0.39387956564659427,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Information Technology,61,24,-0.0029747214619180473,0.39344262295081966,A,形態 alone,HSI
+Hammer,bullish,Real Estate,36,14,0.013819164626061491,0.3888888888888889,A,形態 alone,S&P 500
+Bull Flag,bullish,Financials,90,35,0.010601041322595137,0.3888888888888889,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Information Technology,13,5,0.009254143319353422,0.38461538461538464,A,形態 alone,HSI
+Bull Flag,bullish,Real Estate,112,43,0.012922426745550218,0.38392857142857145,A,形態 alone,HSI
+Bull Flag,bullish,Real Estate,112,43,0.012922426745550218,0.38392857142857145,A+D,形態+Sector,HSI
+Bear Flag,bearish,Information Technology,185,71,0.008126401097906787,0.3837837837837838,A+C+D,形態+成交量+Sector,S&P 500
+Bear Flag,bearish,Information Technology,185,71,0.008126401097906787,0.3837837837837838,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Consumer Discretionary,136,52,0.0068483459382156,0.38235294117647056,A+C,形態+成交量,S&P 500
+Morning Star,bullish,Consumer Discretionary,42,16,0.005404659554090756,0.38095238095238093,A,形態 alone,S&P 500
+Bull Flag,bullish,Financials,100,38,0.005025078316620229,0.38,A,形態 alone,HSI
+Bull Flag,bullish,Financials,187,71,0.009538245877670895,0.37967914438502676,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Financials,37,14,-0.014975821047940239,0.3783783783783784,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Communication Services,53,20,0.008055944341676483,0.37735849056603776,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Consumer Discretionary,61,23,0.00507993866470135,0.3770491803278688,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Consumer Discretionary,8,3,0.014231277112215421,0.375,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Consumer Discretionary,8,3,-0.013286380834160496,0.375,A+C,形態+成交量,HSI
+Bullish Engulfing,bullish,Consumer Staples,107,40,0.009538882716071659,0.37383177570093457,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Unknown,174,65,-0.003276184540270815,0.3735632183908046,A+B+D,形態+指標+Sector,HSI
+Bearish Engulfing,bearish,Unknown,174,65,-0.003276184540270815,0.3735632183908046,A+B,形態+指標,HSI
+Bearish Engulfing,bearish,Information Technology,59,22,0.02025382574447875,0.3728813559322034,A+C+D,形態+成交量+Sector,S&P 500
+Bearish Engulfing,bearish,Information Technology,59,22,0.02025382574447875,0.3728813559322034,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Information Technology,3967,1472,0.006773320343747323,0.3710612553566927,A+D,形態+Sector,S&P 500
+Bull Flag,bullish,Information Technology,3967,1472,0.006773320343747323,0.3710612553566927,A,形態 alone,S&P 500
+Evening Star,bearish,Health Care,27,10,-0.0016926552225447575,0.37037037037037035,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Financials,27,10,-9.53627935602424e-05,0.37037037037037035,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Information Technology,38,14,0.008816572123198167,0.3684210526315789,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Information Technology,38,14,0.008816572123198167,0.3684210526315789,A+C+D,形態+成交量+Sector,S&P 500
+Bearish Engulfing,bearish,Unknown,22,8,-0.01365629476698847,0.36363636363636365,A+B+C+D,完整全因子,HSI
+Bearish Engulfing,bearish,Unknown,22,8,-0.01365629476698847,0.36363636363636365,A+B+C,形態+指標+成交量,HSI
+Bull Flag,bullish,Consumer Discretionary,138,50,0.008338926437653695,0.36231884057971014,A,形態 alone,HSI
+Bull Flag,bullish,Utilities,25,9,0.01067914542758358,0.36,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Utilities,25,9,0.01067914542758358,0.36,A+B+C+D,完整全因子,S&P 500
+Bearish Engulfing,bearish,Financials,14,5,-0.002174820652434616,0.35714285714285715,A,形態 alone,HSI
+Bear Flag,bearish,Materials,31,11,0.011909543047560301,0.3548387096774194,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Information Technology,638,226,0.006097551369254274,0.3542319749216301,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Information Technology,638,226,0.006097551369254274,0.3542319749216301,A+D,形態+Sector,S&P 500
+Bearish Engulfing,bearish,Health Care,17,6,0.027422042663195395,0.35294117647058826,A,形態 alone,HSI
+Bear Flag,bearish,Utilities,37,13,-0.0065283977412572865,0.35135135135135137,A+B+C,形態+指標+成交量,S&P 500
+Bear Flag,bearish,Utilities,37,13,-0.0065283977412572865,0.35135135135135137,A+B+C+D,完整全因子,S&P 500
+Bear Flag,bearish,Health Care,168,59,-0.008761609684556085,0.35119047619047616,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Materials,368,129,0.0024197564465970986,0.35054347826086957,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Utilities,83,29,0.005842932402657039,0.3493975903614458,A+C,形態+成交量,S&P 500
+Bull Flag,bullish,Utilities,83,29,0.005842932402657039,0.3493975903614458,A+C+D,形態+成交量+Sector,S&P 500
+Bull Flag,bullish,Health Care,75,26,0.0030569389492860048,0.3466666666666667,A,形態 alone,HSI
+Hammer,bullish,Financials,133,46,0.0020318142266897983,0.3458646616541353,A,形態 alone,S&P 500
+Hammer,bullish,Health Care,58,20,0.00616071549711648,0.3448275862068966,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Consumer Staples,96,33,0.006592681602895772,0.34375,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Utilities,76,26,-0.00020615542027402938,0.34210526315789475,A+D,形態+Sector,S&P 500
+Bullish Engulfing,bullish,Unknown,38,13,0.0044141139957983595,0.34210526315789475,A+C,形態+成交量,HSI
+Bullish Engulfing,bullish,Utilities,76,26,-0.00020615542027402938,0.34210526315789475,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Unknown,38,13,0.0044141139957983595,0.34210526315789475,A+C+D,形態+成交量+Sector,HSI
+Bull Flag,bullish,Industrials,211,72,0.0065134612232633565,0.3412322274881517,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Materials,88,30,0.011889531235654784,0.3409090909090909,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Real Estate,68,23,0.004837697801621528,0.3382352941176471,A,形態 alone,S&P 500
+Hammer,bullish,Communication Services,3,1,-0.01624537352029005,0.3333333333333333,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Unknown,6,2,0.005912778854805965,0.3333333333333333,A+C+D,形態+成交量+Sector,HSI
+Bear Flag,bearish,Consumer Staples,6,2,-0.02065774890776408,0.3333333333333333,A+C,形態+成交量,HSI
+Morning Star,bullish,Utilities,6,2,-0.018554486281311764,0.3333333333333333,A+D,形態+Sector,S&P 500
+Bearish Engulfing,bearish,Energy,3,1,-0.025952427775283365,0.3333333333333333,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Energy,3,1,-0.025952427775283365,0.3333333333333333,A+B+C+D,完整全因子,S&P 500
+Morning Star,bullish,Health Care,3,1,-0.06318288972482805,0.3333333333333333,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Consumer Discretionary,15,5,0.0010380440347559769,0.3333333333333333,A,形態 alone,HSI
+Hammer,bullish,Real Estate,9,3,0.025242970133204697,0.3333333333333333,A+D,形態+Sector,HSI
+Hammer,bullish,Unknown,6,2,-0.005705547056953476,0.3333333333333333,A+B+C+D,完整全因子,HSI
+Evening Star,bearish,Energy,6,2,0.008883751482747606,0.3333333333333333,A+B+D,形態+指標+Sector,S&P 500
+Bullish Engulfing,bullish,Utilities,12,4,-0.009690680957414897,0.3333333333333333,A+B+D,形態+指標+Sector,S&P 500
+Bearish Engulfing,bearish,Unknown,39,13,-0.005892502350939577,0.3333333333333333,A+C+D,形態+成交量+Sector,HSI
+Bear Flag,bearish,Real Estate,42,14,-0.008109385837900149,0.3333333333333333,A+B+D,形態+指標+Sector,HSI
+Morning Star,bullish,Energy,3,1,0.010886799786087092,0.3333333333333333,A+C+D,形態+成交量+Sector,S&P 500
+Evening Star,bearish,Industrials,3,1,0.006803785316563592,0.3333333333333333,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Materials,24,8,-0.0008196521617096974,0.3333333333333333,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Unknown,21,7,0.0008204752089280778,0.3333333333333333,A+C+D,形態+成交量+Sector,HSI
+Hammer,bullish,Real Estate,9,3,0.025242970133204697,0.3333333333333333,A,形態 alone,HSI
+Hammer,bullish,Information Technology,9,3,0.009960131188777517,0.3333333333333333,A,形態 alone,HSI
+Hammer,bullish,Financials,3,1,0.011324458429428558,0.3333333333333333,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Consumer Discretionary,24,8,0.0017852515398865197,0.3333333333333333,A+B,形態+指標,S&P 500
+Evening Star,bearish,Unknown,6,2,0.005912778854805965,0.3333333333333333,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Industrials,69,23,0.012876056500827118,0.3333333333333333,A+C,形態+成交量,S&P 500
+Hammer,bullish,Unknown,21,7,0.0008204752089280778,0.3333333333333333,A+C,形態+成交量,HSI
+Hammer,bullish,Unknown,6,2,-0.005705547056953476,0.3333333333333333,A+B+C,形態+指標+成交量,HSI
+Morning Star,bullish,Energy,3,1,0.010886799786087092,0.3333333333333333,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Consumer Staples,3,1,-0.009342312008978669,0.3333333333333333,A+B+C,形態+指標+成交量,HSI
+Bullish Engulfing,bullish,Real Estate,15,5,0.006048247631208509,0.3333333333333333,A+B,形態+指標,S&P 500
+Evening Star,bearish,Industrials,27,9,-0.00399421864869892,0.3333333333333333,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Health Care,3,1,0.025374713320383973,0.3333333333333333,A+C,形態+成交量,HSI
+Morning Star,bullish,Utilities,6,2,-0.018554486281311764,0.3333333333333333,A,形態 alone,S&P 500
+Bear Flag,bearish,Real Estate,42,14,-0.008109385837900149,0.3333333333333333,A+B,形態+指標,HSI
+Evening Star,bearish,Industrials,6,2,0.00348286289989456,0.3333333333333333,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Unknown,39,13,-0.005892502350939577,0.3333333333333333,A+C,形態+成交量,HSI
+Morning Star,bullish,Health Care,39,13,-0.006179078954795387,0.3333333333333333,A,形態 alone,S&P 500
+Evening Star,bearish,Energy,6,2,0.008883751482747606,0.3333333333333333,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Utilities,12,4,-0.009690680957414897,0.3333333333333333,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Consumer Discretionary,3,1,-0.012443539487375935,0.3333333333333333,A+B+C,形態+指標+成交量,HSI
+Evening Star,bearish,Consumer Staples,6,2,-0.007966864773524944,0.3333333333333333,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Health Care,21,7,-0.0018531481721052537,0.3333333333333333,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Information Technology,3,1,0.009402369899096092,0.3333333333333333,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Health Care,157,52,0.0007069631735425213,0.33121019108280253,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Materials,76,25,0.008193535045282451,0.32894736842105265,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Unknown,475,156,0.0023628522644457734,0.32842105263157895,A,形態 alone,HSI
+Bearish Engulfing,bearish,Unknown,475,156,0.0023628522644457734,0.32842105263157895,A+D,形態+Sector,HSI
+Bull Flag,bullish,Health Care,789,258,0.0020305534027089877,0.3269961977186312,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Consumer Discretionary,104,34,0.0014500747734167785,0.3269230769230769,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Industrials,98,32,-9.680522866869439e-05,0.32653061224489793,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Utilities,46,15,0.013004720179804436,0.32608695652173914,A+D,形態+Sector,S&P 500
+Hammer,bullish,Utilities,46,15,0.013004720179804436,0.32608695652173914,A,形態 alone,S&P 500
+Bull Flag,bullish,Industrials,1122,364,0.005713562788518049,0.3244206773618538,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Unknown,929,301,0.004887830902170651,0.3240043057050592,A+B+D,形態+指標+Sector,HSI
+Bull Flag,bullish,Unknown,929,301,0.004887830902170651,0.3240043057050592,A+B,形態+指標,HSI
+Bull Flag,bullish,Unknown,3834,1240,0.00663744475824689,0.32342201356285866,A,形態 alone,HSI
+Bull Flag,bullish,Unknown,3834,1240,0.00663744475824689,0.32342201356285866,A+D,形態+Sector,HSI
+Bull Flag,bullish,Health Care,3287,1062,0.002968489910958673,0.3230909644052327,A,形態 alone,S&P 500
+Morning Star,bullish,Unknown,100,32,0.018275400007658565,0.32,A,形態 alone,HSI
+Morning Star,bullish,Unknown,100,32,0.018275400007658565,0.32,A+D,形態+Sector,HSI
+Bearish Engulfing,bearish,Consumer Discretionary,719,230,-0.0006024505095502914,0.3198887343532684,A,形態 alone,S&P 500
+Bull Flag,bullish,Consumer Discretionary,616,196,0.0019090803845781062,0.3181818181818182,A+B,形態+指標,S&P 500
+Morning Star,bullish,Financials,22,7,-0.00014387885202261667,0.3181818181818182,A,形態 alone,S&P 500
+Hammer,bullish,Information Technology,88,28,-0.0021959593411144695,0.3181818181818182,A+B,形態+指標,S&P 500
+Hammer,bullish,Information Technology,88,28,-0.0021959593411144695,0.3181818181818182,A+B+D,形態+指標+Sector,S&P 500
+Bull Flag,bullish,Consumer Discretionary,2541,807,0.002112440975381902,0.31759149940968123,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Communication Services,177,56,0.0006184542756177047,0.3163841807909605,A,形態 alone,S&P 500
+Bear Flag,bearish,Information Technology,19,6,0.011860530660140004,0.3157894736842105,A+B,形態+指標,HSI
+Bull Flag,bullish,Communication Services,73,23,-0.00048267602946584835,0.3150684931506849,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Consumer Discretionary,54,17,0.005015010893547015,0.3148148148148148,A,形態 alone,S&P 500
+Hammer,bullish,Consumer Discretionary,166,52,-0.002339955973395057,0.3132530120481928,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Consumer Discretionary,227,71,0.003543569572015789,0.31277533039647576,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Real Estate,16,5,-0.005979804795574383,0.3125,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Communication Services,16,5,-0.0018119716607634929,0.3125,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Materials,1477,461,0.0017858775354924134,0.3121191604603927,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Information Technology,194,60,-0.005141257555211523,0.30927835051546393,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Information Technology,194,60,-0.005141257555211523,0.30927835051546393,A+B+D,形態+指標+Sector,S&P 500
+Bullish Engulfing,bullish,Health Care,511,158,0.000704341589249704,0.30919765166340507,A,形態 alone,S&P 500
+Hammer,bullish,Industrials,55,17,0.0017857110324451242,0.3090909090909091,A+B,形態+指標,S&P 500
+Hammer,bullish,Industrials,231,71,-0.006666484144824248,0.30735930735930733,A,形態 alone,S&P 500
+Evening Star,bearish,Health Care,62,19,0.0013174411990425064,0.3064516129032258,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Consumer Discretionary,317,97,-5.032667591895429e-07,0.305993690851735,A,形態 alone,S&P 500
+Bull Flag,bullish,Industrials,4423,1352,0.0029193946538808623,0.30567488130228354,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Industrials,427,130,0.0005581761101662234,0.3044496487119438,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Real Estate,79,24,-0.002640668397786937,0.3037974683544304,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Industrials,33,10,-0.0006084582264874513,0.30303030303030304,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Materials,423,128,0.0008269404400423919,0.30260047281323876,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Unknown,320,96,0.0010973697834159748,0.3,A+D,形態+Sector,HSI
+Bull Flag,bullish,Consumer Staples,10,3,0.011761815866858325,0.3,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Unknown,320,96,0.0010973697834159748,0.3,A,形態 alone,HSI
+Bear Flag,bearish,Real Estate,80,24,-0.0019910357721563067,0.3,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Consumer Staples,10,3,0.003369316879627434,0.3,A,形態 alone,HSI
+Bull Flag,bullish,Consumer Staples,561,168,0.004374177720506493,0.2994652406417112,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Energy,304,91,-1.8509183361397065e-05,0.2993421052631579,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Energy,304,91,-1.8509183361397065e-05,0.2993421052631579,A+B+D,形態+指標+Sector,S&P 500
+Bullish Engulfing,bullish,Unknown,87,26,0.0005701167125831711,0.2988505747126437,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Unknown,87,26,0.0005701167125831711,0.2988505747126437,A+B+D,形態+指標+Sector,HSI
+Bearish Engulfing,bearish,Consumer Staples,104,31,-0.0033745263488115943,0.2980769230769231,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Information Technology,3816,1134,0.00953110491835183,0.2971698113207547,A,形態 alone,S&P 500
+Bear Flag,bearish,Information Technology,3816,1134,0.00953110491835183,0.2971698113207547,A+D,形態+Sector,S&P 500
+Bear Flag,bearish,Real Estate,118,35,0.0013468351472363353,0.2966101694915254,A+D,形態+Sector,HSI
+Bear Flag,bearish,Real Estate,118,35,0.0013468351472363353,0.2966101694915254,A,形態 alone,HSI
+Bull Flag,bullish,Unknown,253,75,0.006671013909576711,0.2964426877470356,A+C+D,形態+成交量+Sector,HSI
+Bull Flag,bullish,Unknown,253,75,0.006671013909576711,0.2964426877470356,A+C,形態+成交量,HSI
+Bear Flag,bearish,Real Estate,27,8,0.0014473327412795668,0.2962962962962963,A+B+C,形態+指標+成交量,S&P 500
+Bull Flag,bullish,Industrials,71,21,0.0056443329131693355,0.29577464788732394,A+B+C,形態+指標+成交量,S&P 500
+Bear Flag,bearish,Consumer Discretionary,2663,787,0.0004978894267600163,0.2955313556139692,A,形態 alone,S&P 500
+Morning Star,bullish,Industrials,44,13,-0.012636215447058242,0.29545454545454547,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Consumer Discretionary,88,26,0.00048168254914772815,0.29545454545454547,A+B,形態+指標,S&P 500
+Hammer,bullish,Health Care,259,76,0.0014747373383005476,0.29343629343629346,A,形態 alone,S&P 500
+Bull Flag,bullish,Utilities,474,139,0.004346767384334929,0.29324894514767935,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Utilities,474,139,0.004346767384334929,0.29324894514767935,A+B+D,形態+指標+Sector,S&P 500
+Bearish Engulfing,bearish,Information Technology,1041,304,0.010866803494483218,0.2920268972142171,A+D,形態+Sector,S&P 500
+Bearish Engulfing,bearish,Information Technology,1041,304,0.010866803494483218,0.2920268972142171,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Consumer Discretionary,24,7,0.01069775839811086,0.2916666666666667,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Financials,83,24,0.004705116632022378,0.2891566265060241,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Industrials,133,38,0.0007296139039167175,0.2857142857142857,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Financials,1099,314,0.0020321097677220732,0.2857142857142857,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Consumer Staples,7,2,-0.008644976533981155,0.2857142857142857,A+B,形態+指標,HSI
+Morning Star,bullish,Financials,7,2,0.006283931193704725,0.2857142857142857,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Health Care,7,2,0.011876717966575186,0.2857142857142857,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Health Care,7,2,-0.017065492743892588,0.2857142857142857,A,形態 alone,HSI
+Bull Flag,bullish,Utilities,2167,619,0.003752497516765609,0.28564836179049374,A+D,形態+Sector,S&P 500
+Bull Flag,bullish,Utilities,2167,619,0.003752497516765609,0.28564836179049374,A,形態 alone,S&P 500
+Bull Flag,bullish,Financials,4339,1234,1.4082604519330507e-05,0.2843973265729431,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Energy,95,27,0.0038989280209058737,0.28421052631578947,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Energy,95,27,0.0038989280209058737,0.28421052631578947,A+B+D,形態+指標+Sector,S&P 500
+Bear Flag,bearish,Consumer Staples,74,21,0.001612336084863835,0.28378378378378377,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Materials,1525,431,0.0016738293661960424,0.28262295081967215,A,形態 alone,S&P 500
+Bear Flag,bearish,Health Care,949,268,0.0009752574927095653,0.28240252897787144,A+B,形態+指標,S&P 500
+Evening Star,bearish,Industrials,71,20,-0.0015963834417929933,0.28169014084507044,A,形態 alone,S&P 500
+Bear Flag,bearish,Energy,1176,331,0.003113268347938683,0.2814625850340136,A,形態 alone,S&P 500
+Bear Flag,bearish,Energy,1176,331,0.003113268347938683,0.2814625850340136,A+D,形態+Sector,S&P 500
+Evening Star,bearish,Communication Services,32,9,-0.006016173979718146,0.28125,A,形態 alone,S&P 500
+Bear Flag,bearish,Information Technology,1015,285,0.014005283556975933,0.28078817733990147,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Information Technology,1015,285,0.014005283556975933,0.28078817733990147,A+B+D,形態+指標+Sector,S&P 500
+Bull Flag,bullish,Communication Services,1240,348,6.904326981760295e-05,0.2806451612903226,A,形態 alone,S&P 500
+Bear Flag,bearish,Health Care,3464,970,0.000274870200122307,0.28002309468822173,A,形態 alone,S&P 500
+Bear Flag,bearish,Industrials,247,69,0.006354710111004537,0.2793522267206478,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Health Care,273,76,0.0012529740393505083,0.2783882783882784,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Consumer Staples,2099,578,5.469546494664142e-05,0.2753692234397332,A,形態 alone,S&P 500
+Bear Flag,bearish,Consumer Discretionary,745,205,0.00306188275288507,0.2751677852348993,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Communication Services,1296,355,0.004658731086565871,0.27391975308641975,A,形態 alone,S&P 500
+Bull Flag,bullish,Unknown,95,26,0.008418455033043205,0.2736842105263158,A+B+C,形態+指標+成交量,HSI
+Bull Flag,bullish,Unknown,95,26,0.008418455033043205,0.2736842105263158,A+B+C+D,完整全因子,HSI
+Bear Flag,bearish,Unknown,150,41,0.004345532642075883,0.2733333333333333,A+B+C+D,完整全因子,HSI
+Bear Flag,bearish,Unknown,150,41,0.004345532642075883,0.2733333333333333,A+B+C,形態+指標+成交量,HSI
+Bear Flag,bearish,Financials,11,3,0.023963120663217295,0.2727272727272727,A+C,形態+成交量,HSI
+Hammer,bullish,Unknown,366,99,1.4801524630659576e-05,0.27049180327868855,A,形態 alone,HSI
+Bearish Engulfing,bearish,Materials,122,33,0.01014063272387358,0.27049180327868855,A+B,形態+指標,S&P 500
+Hammer,bullish,Unknown,366,99,1.4801524630659576e-05,0.27049180327868855,A+D,形態+Sector,HSI
+Bullish Engulfing,bullish,Financials,352,95,0.00022914463842190193,0.26988636363636365,A,形態 alone,S&P 500
+Bear Flag,bearish,Financials,63,17,-0.010223683734818316,0.2698412698412698,A+B+C,形態+指標+成交量,S&P 500
+Bear Flag,bearish,Unknown,293,79,0.014981336006299294,0.2696245733788396,A+C+D,形態+成交量+Sector,HSI
+Bear Flag,bearish,Unknown,293,79,0.014981336006299294,0.2696245733788396,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Information Technology,349,94,0.013763122751871961,0.2693409742120344,A+B+D,形態+指標+Sector,S&P 500
+Bearish Engulfing,bearish,Information Technology,349,94,0.013763122751871961,0.2693409742120344,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Health Care,873,233,0.002106730917524978,0.26689576174112256,A,形態 alone,S&P 500
+Bear Flag,bearish,Energy,15,4,0.0017270018792330394,0.26666666666666666,A+B+C+D,完整全因子,S&P 500
+Evening Star,bearish,Financials,30,8,0.01329929428571751,0.26666666666666666,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Energy,15,4,0.0017270018792330394,0.26666666666666666,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Utilities,64,17,-0.001848185689742569,0.265625,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Utilities,64,17,-0.001848185689742569,0.265625,A+B+D,形態+指標+Sector,S&P 500
+Bull Flag,bullish,Consumer Staples,2137,563,0.002297709837749999,0.2634534394010295,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Financials,19,5,-0.018442342644091794,0.2631578947368421,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Consumer Staples,550,144,0.0027645984372911066,0.26181818181818184,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Real Estate,88,23,0.004236118711555163,0.26136363636363635,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Communication Services,111,29,0.0015828003218880502,0.26126126126126126,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Health Care,77,20,0.004080145374135314,0.2597402597402597,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Consumer Staples,348,90,0.0015966124684384704,0.25862068965517243,A,形態 alone,S&P 500
+Evening Star,bearish,Information Technology,31,8,0.003923575801668131,0.25806451612903225,A+B,形態+指標,S&P 500
+Evening Star,bearish,Information Technology,31,8,0.003923575801668131,0.25806451612903225,A+B+D,形態+指標+Sector,S&P 500
+Bearish Engulfing,bearish,Real Estate,229,59,-0.000594162552227347,0.2576419213973799,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Financials,939,241,-0.0007608375531985618,0.2566560170394036,A,形態 alone,S&P 500
+Evening Star,bearish,Information Technology,82,21,0.004155952244248746,0.25609756097560976,A,形態 alone,S&P 500
+Evening Star,bearish,Information Technology,82,21,0.004155952244248746,0.25609756097560976,A+D,形態+Sector,S&P 500
+Bearish Engulfing,bearish,Financials,279,71,-0.0012769815221112101,0.25448028673835127,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Real Estate,1973,499,0.0006107113445118503,0.25291434363912824,A,形態 alone,S&P 500
+Bear Flag,bearish,Unknown,4211,1065,0.007708971973192369,0.25290904773213013,A+D,形態+Sector,HSI
+Bear Flag,bearish,Unknown,4211,1065,0.007708971973192369,0.25290904773213013,A,形態 alone,HSI
+Bull Flag,bullish,Communication Services,313,79,-0.0035109787199829445,0.2523961661341853,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Financials,4337,1087,0.001739266128442485,0.2506340788563523,A,形態 alone,S&P 500
+Evening Star,bearish,Information Technology,4,1,0.035268647652514105,0.25,A+B+C+D,完整全因子,S&P 500
+Morning Star,bullish,Consumer Discretionary,4,1,-0.001892010524848109,0.25,A,形態 alone,HSI
+Morning Star,bullish,Industrials,16,4,-0.01707323556423839,0.25,A+B,形態+指標,S&P 500
+Morning Star,bullish,Health Care,16,4,-0.021512680378121957,0.25,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Financials,4,1,0.003636383557152037,0.25,A+B,形態+指標,HSI
+Evening Star,bearish,Utilities,8,2,0.014094351181871962,0.25,A,形態 alone,S&P 500
+Evening Star,bearish,Utilities,8,2,0.014094351181871962,0.25,A+D,形態+Sector,S&P 500
+Hammer,bullish,Consumer Discretionary,4,1,-0.00799574967997584,0.25,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Health Care,4,1,0.013680211593180296,0.25,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Information Technology,4,1,0.035268647652514105,0.25,A+B+C,形態+指標+成交量,S&P 500
+Bear Flag,bearish,Real Estate,8,2,0.009425167043405664,0.25,A+B+C+D,完整全因子,HSI
+Morning Star,bullish,Materials,12,3,0.010671103920072304,0.25,A,形態 alone,S&P 500
+Evening Star,bearish,Consumer Discretionary,4,1,0.007888522288596668,0.25,A,形態 alone,HSI
+Bear Flag,bearish,Real Estate,8,2,0.009425167043405664,0.25,A+B+C,形態+指標+成交量,HSI
+Hammer,bullish,Communication Services,4,1,-0.009712646165191506,0.25,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Industrials,1229,305,0.006333517049411344,0.2481692432872254,A,形態 alone,S&P 500
+Bear Flag,bearish,Utilities,89,22,0.0006306757313211471,0.24719101123595505,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Utilities,89,22,0.0006306757313211471,0.24719101123595505,A+C+D,形態+成交量+Sector,S&P 500
+Bearish Engulfing,bearish,Communication Services,353,87,0.004856487550387306,0.24645892351274787,A,形態 alone,S&P 500
+Bear Flag,bearish,Communication Services,386,95,0.009393881165671799,0.24611398963730569,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Financials,188,46,0.0005926019562550017,0.24468085106382978,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Financials,86,21,-0.006676196941239319,0.2441860465116279,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Utilities,213,52,0.0027280804596547907,0.24413145539906103,A+D,形態+Sector,S&P 500
+Bearish Engulfing,bearish,Utilities,213,52,0.0027280804596547907,0.24413145539906103,A,形態 alone,S&P 500
+Bear Flag,bearish,Financials,1220,297,0.0037863306826487063,0.24344262295081967,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Materials,346,84,0.007660308967427103,0.24277456647398843,A,形態 alone,S&P 500
+Evening Star,bearish,Unknown,103,25,0.0015201915767261774,0.24271844660194175,A,形態 alone,HSI
+Evening Star,bearish,Unknown,103,25,0.0015201915767261774,0.24271844660194175,A+D,形態+Sector,HSI
+Bear Flag,bearish,Industrials,4485,1086,0.005805152769546746,0.24214046822742474,A,形態 alone,S&P 500
+Hammer,bullish,Unknown,83,20,-0.010723120578645861,0.24096385542168675,A+B+D,形態+指標+Sector,HSI
+Hammer,bullish,Unknown,83,20,-0.010723120578645861,0.24096385542168675,A+B,形態+指標,HSI
+Bear Flag,bearish,Unknown,1174,282,0.00975403540265066,0.2402044293015332,A+B,形態+指標,HSI
+Bear Flag,bearish,Unknown,1174,282,0.00975403540265066,0.2402044293015332,A+B+D,形態+指標+Sector,HSI
+Bearish Engulfing,bearish,Industrials,433,104,0.006873405050823455,0.24018475750577367,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Real Estate,483,116,0.0002879438534049665,0.2401656314699793,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Real Estate,38,9,0.003235429485639685,0.23684210526315788,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Materials,38,9,-0.010834513457145185,0.23684210526315788,A,形態 alone,S&P 500
+Bull Flag,bullish,Real Estate,483,114,-0.0017147031399993946,0.2360248447204969,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Consumer Discretionary,34,8,0.0031365600680727445,0.23529411764705882,A+B,形態+指標,HSI
+Bear Flag,bearish,Industrials,1210,283,0.004369051945536821,0.23388429752066114,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Real Estate,1955,454,-0.0013072663161615421,0.23222506393861891,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Unknown,13,3,-0.010918440613830323,0.23076923076923078,A+B+C+D,完整全因子,HSI
+Bullish Engulfing,bullish,Unknown,13,3,-0.010918440613830323,0.23076923076923078,A+B+C,形態+指標+成交量,HSI
+Morning Star,bullish,Information Technology,13,3,-0.011845948200979173,0.23076923076923078,A+B+D,形態+指標+Sector,S&P 500
+Morning Star,bullish,Unknown,39,9,-0.001418357579922635,0.23076923076923078,A+B,形態+指標,HSI
+Hammer,bullish,Consumer Staples,13,3,0.01181048034386169,0.23076923076923078,A+B,形態+指標,S&P 500
+Morning Star,bullish,Information Technology,13,3,-0.011845948200979173,0.23076923076923078,A+B,形態+指標,S&P 500
+Morning Star,bullish,Unknown,39,9,-0.001418357579922635,0.23076923076923078,A+B+D,形態+指標+Sector,HSI
+Evening Star,bearish,Unknown,44,10,0.002132193067324224,0.22727272727272727,A+B,形態+指標,HSI
+Evening Star,bearish,Unknown,44,10,0.002132193067324224,0.22727272727272727,A+B+D,形態+指標+Sector,HSI
+Bear Flag,bearish,Health Care,49,11,0.018729164816098317,0.22448979591836735,A,形態 alone,HSI
+Hammer,bullish,Communication Services,76,17,-0.001571700029526975,0.2236842105263158,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Financials,9,2,0.012647056202203836,0.2222222222222222,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Energy,9,2,0.012588809721794113,0.2222222222222222,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Energy,9,2,0.012588809721794113,0.2222222222222222,A+C+D,形態+成交量+Sector,S&P 500
+Bearish Engulfing,bearish,Communication Services,9,2,-0.007467337515206254,0.2222222222222222,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Consumer Staples,9,2,-0.005648676092793305,0.2222222222222222,A,形態 alone,HSI
+Hammer,bullish,Communication Services,18,4,-0.001965007241418286,0.2222222222222222,A+B,形態+指標,S&P 500
+Morning Star,bullish,Communication Services,18,4,-0.006333349638499021,0.2222222222222222,A,形態 alone,S&P 500
+Bear Flag,bearish,Consumer Discretionary,36,8,0.018709216717802082,0.2222222222222222,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Consumer Staples,9,2,-0.013219123617796778,0.2222222222222222,A,形態 alone,HSI
+Bear Flag,bearish,Utilities,590,131,-0.0020484739143973294,0.22203389830508474,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Utilities,590,131,-0.0020484739143973294,0.22203389830508474,A+B+D,形態+指標+Sector,S&P 500
+Bearish Engulfing,bearish,Industrials,23,5,0.015755621050522584,0.21739130434782608,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Energy,236,51,0.009828453373907293,0.21610169491525424,A,形態 alone,S&P 500
+Bearish Engulfing,bearish,Energy,236,51,0.009828453373907293,0.21610169491525424,A+D,形態+Sector,S&P 500
+Bear Flag,bearish,Utilities,2149,447,1.805800188923814e-05,0.2080037226617031,A,形態 alone,S&P 500
+Bear Flag,bearish,Utilities,2149,447,1.805800188923814e-05,0.2080037226617031,A+D,形態+Sector,S&P 500
+Bull Flag,bullish,Communication Services,29,6,-0.01947975022251219,0.20689655172413793,A+B+C,形態+指標+成交量,S&P 500
+Bear Flag,bearish,Financials,137,28,0.01766750739551557,0.20437956204379562,A,形態 alone,HSI
+Hammer,bullish,Consumer Staples,45,9,0.002876231888132551,0.2,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Financials,10,2,-0.026002805158777353,0.2,A+B+C,形態+指標+成交量,S&P 500
+Bearish Engulfing,bearish,Communication Services,25,5,0.014158062331455334,0.2,A+C,形態+成交量,S&P 500
+Bullish Engulfing,bullish,Materials,5,1,0.010665259579284688,0.2,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Materials,20,4,0.022637785346764118,0.2,A+C,形態+成交量,S&P 500
+Hammer,bullish,Consumer Discretionary,35,7,-0.020578048884774613,0.2,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Real Estate,5,1,-0.009053329871902827,0.2,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Consumer Staples,16,3,-0.012273988919619984,0.1875,A,形態 alone,S&P 500
+Bear Flag,bearish,Consumer Staples,32,6,0.008057636782020832,0.1875,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Consumer Staples,16,3,0.01095025207312018,0.1875,A,形態 alone,S&P 500
+Bear Flag,bearish,Real Estate,11,2,0.006906530978405722,0.18181818181818182,A+C+D,形態+成交量+Sector,HSI
+Bear Flag,bearish,Real Estate,11,2,0.006906530978405722,0.18181818181818182,A+C,形態+成交量,HSI
+Bullish Engulfing,bullish,Consumer Discretionary,17,3,-0.009247199637128662,0.17647058823529413,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Materials,6,1,0.027387485943349252,0.16666666666666666,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Real Estate,6,1,0.015110328390772157,0.16666666666666666,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Industrials,12,2,-0.010900882354703852,0.16666666666666666,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Health Care,6,1,-0.0266209489496122,0.16666666666666666,A,形態 alone,HSI
+Bear Flag,bearish,Energy,36,6,0.01022463658890961,0.16666666666666666,A+C+D,形態+成交量+Sector,S&P 500
+Bear Flag,bearish,Energy,36,6,0.01022463658890961,0.16666666666666666,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Energy,13,2,0.029470315947936813,0.15384615384615385,A+D,形態+Sector,S&P 500
+Evening Star,bearish,Energy,13,2,0.029470315947936813,0.15384615384615385,A,形態 alone,S&P 500
+Evening Star,bearish,Information Technology,7,1,0.04004384774476027,0.14285714285714285,A+C,形態+成交量,S&P 500
+Evening Star,bearish,Information Technology,7,1,0.04004384774476027,0.14285714285714285,A+C+D,形態+成交量+Sector,S&P 500
+Bear Flag,bearish,Health Care,14,2,0.028527703150683644,0.14285714285714285,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Health Care,37,5,-0.025103007230297094,0.13513513513513514,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Real Estate,15,2,0.015491896498017542,0.13333333333333333,A+D,形態+Sector,HSI
+Bearish Engulfing,bearish,Real Estate,15,2,0.015491896498017542,0.13333333333333333,A,形態 alone,HSI
+Bullish Engulfing,bullish,Materials,26,3,0.004417820030113126,0.11538461538461539,A+B,形態+指標,S&P 500
+Bullish Engulfing,bullish,Consumer Discretionary,9,1,-0.02435258721278337,0.1111111111111111,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Materials,10,1,-0.026729052884444555,0.1,A+B,形態+指標,S&P 500
+Bear Flag,bearish,Financials,34,3,0.035636661491050256,0.08823529411764706,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Health Care,25,2,-0.03774086975251942,0.08,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Real Estate,13,1,0.013310066680213438,0.07692307692307693,A,形態 alone,S&P 500
+Hammer,bullish,Financials,1,0,-0.005540166204986155,0.0,A+B+C,形態+指標+成交量,HSI
+Morning Star,bullish,Unknown,1,0,-0.05956112852664575,0.0,A+B+C,形態+指標+成交量,HSI
+Bearish Engulfing,bearish,Real Estate,1,0,0.04843737316340599,0.0,A+C+D,形態+成交量+Sector,HSI
+Bearish Engulfing,bearish,Real Estate,3,0,0.03120581237907687,0.0,A+B+D,形態+指標+Sector,HSI
+Morning Star,bullish,Real Estate,9,0,-0.009323822551739505,0.0,A,形態 alone,S&P 500
+Bullish Engulfing,bullish,Information Technology,1,0,-0.0583376355188437,0.0,A+B+C,形態+指標+成交量,HSI
+Bullish Engulfing,bullish,Energy,1,0,-0.03490711915197826,0.0,A+B+C+D,完整全因子,S&P 500
+Bullish Engulfing,bullish,Consumer Staples,1,0,-0.011787819253438095,0.0,A+B+C,形態+指標+成交量,HSI
+Bullish Engulfing,bullish,Energy,1,0,-0.03490711915197826,0.0,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Health Care,1,0,-0.06706668243083475,0.0,A+C,形態+成交量,HSI
+Bullish Engulfing,bullish,Consumer Staples,1,0,-0.011787819253438095,0.0,A+C,形態+成交量,HSI
+Bull Flag,bullish,Information Technology,1,0,0.005602240896358623,0.0,A+C,形態+成交量,HSI
+Morning Star,bullish,Real Estate,2,0,-0.029676178052926088,0.0,A+B,形態+指標,S&P 500
+Morning Star,bullish,Utilities,1,0,-0.15281352478140442,0.0,A+B,形態+指標,S&P 500
+Bearish Engulfing,bearish,Real Estate,1,0,0.04843737316340599,0.0,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Information Technology,1,0,0.03389830508474571,0.0,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Financials,1,0,0.024679610471119415,0.0,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Consumer Discretionary,2,0,0.04683914349352053,0.0,A+C,形態+成交量,HSI
+Bearish Engulfing,bearish,Consumer Discretionary,4,0,0.04002813650469535,0.0,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Information Technology,2,0,0.013407971683594979,0.0,A,形態 alone,HSI
+Evening Star,bearish,Information Technology,2,0,0.01042127377266696,0.0,A,形態 alone,HSI
+Morning Star,bullish,Consumer Staples,4,0,-0.009462061670632507,0.0,A+B,形態+指標,S&P 500
+Evening Star,bearish,Health Care,1,0,0.03610352305049427,0.0,A,形態 alone,HSI
+Evening Star,bearish,Financials,2,0,0.03188101651736307,0.0,A,形態 alone,HSI
+Bullish Engulfing,bullish,Materials,2,0,0.012369293101654865,0.0,A+B+C,形態+指標+成交量,S&P 500
+Bullish Engulfing,bullish,Real Estate,1,0,0.012540071657552313,0.0,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Consumer Staples,1,0,-0.006467574449833387,0.0,A+B+C,形態+指標+成交量,S&P 500
+Hammer,bullish,Real Estate,1,0,-0.0009927669834067137,0.0,A+B+C,形態+指標+成交量,S&P 500
+Morning Star,bullish,Materials,1,0,0.011442609417677566,0.0,A+B+C,形態+指標+成交量,S&P 500
+Evening Star,bearish,Utilities,1,0,-0.001403443780321759,0.0,A+C+D,形態+成交量+Sector,S&P 500
+Hammer,bullish,Utilities,1,0,0.013677012098895288,0.0,A+C+D,形態+成交量+Sector,S&P 500
+Evening Star,bearish,Utilities,2,0,0.03814079665910928,0.0,A+B+D,形態+指標+Sector,S&P 500
+Morning Star,bullish,Utilities,1,0,-0.15281352478140442,0.0,A+B+D,形態+指標+Sector,S&P 500
+Bullish Engulfing,bullish,Information Technology,1,0,-0.0583376355188437,0.0,A+C,形態+成交量,HSI
+Morning Star,bullish,Communication Services,5,0,-0.02390483223191325,0.0,A+B,形態+指標,S&P 500
+Bull Flag,bullish,Financials,1,0,0.01055718475073312,0.0,A+B+C,形態+指標+成交量,HSI
+Morning Star,bullish,Materials,1,0,0.011442609417677566,0.0,A+C,形態+成交量,S&P 500
+Bearish Engulfing,bearish,Information Technology,1,0,0.03389830508474571,0.0,A+B+C,形態+指標+成交量,HSI
+Bearish Engulfing,bearish,Financials,1,0,0.024679610471119415,0.0,A+B+C,形態+指標+成交量,HSI
+Bearish Engulfing,bearish,Consumer Discretionary,1,0,0.03320312499999992,0.0,A+B+C,形態+指標+成交量,HSI
+Bullish Engulfing,bullish,Real Estate,1,0,0.012540071657552313,0.0,A+C,形態+成交量,S&P 500
+Bear Flag,bearish,Health Care,1,0,0.07166209834549721,0.0,A+B+C,形態+指標+成交量,HSI
+Bear Flag,bearish,Financials,4,0,0.05906428716857968,0.0,A+B+C,形態+指標+成交量,HSI
+Evening Star,bearish,Utilities,1,0,-0.001403443780321759,0.0,A+C,形態+成交量,S&P 500
+Morning Star,bullish,Information Technology,1,0,0.013888888888888888,0.0,A+B,形態+指標,HSI
+Hammer,bullish,Consumer Staples,3,0,-0.014340294371419116,0.0,A+C,形態+成交量,S&P 500
+Hammer,bullish,Information Technology,2,0,-0.01820340148178318,0.0,A+B,形態+指標,HSI
+Hammer,bullish,Utilities,1,0,0.013677012098895288,0.0,A+C,形態+成交量,S&P 500
+Hammer,bullish,Consumer Staples,2,0,-0.01991682999145674,0.0,A+B,形態+指標,HSI
+Hammer,bullish,Real Estate,7,0,-0.017426654141451104,0.0,A+B,形態+指標,S&P 500
+Hammer,bullish,Consumer Discretionary,2,0,-0.02976308733448437,0.0,A+B,形態+指標,HSI
+Evening Star,bearish,Information Technology,1,0,-0.007352941176470588,0.0,A+B,形態+指標,HSI
+Evening Star,bearish,Health Care,1,0,0.03610352305049427,0.0,A+B,形態+指標,HSI
+Evening Star,bearish,Financials,1,0,0.06535947712418297,0.0,A+B,形態+指標,HSI
+Evening Star,bearish,Consumer Discretionary,1,0,0.0026146929736795958,0.0,A+B,形態+指標,HSI
+Bullish Engulfing,bullish,Health Care,1,0,-0.09022556390977451,0.0,A+B,形態+指標,HSI
+Bearish Engulfing,bearish,Real Estate,3,0,0.03120581237907687,0.0,A+B,形態+指標,HSI
+Bearish Engulfing,bearish,Information Technology,2,0,0.08569180824155032,0.0,A+B,形態+指標,HSI
+Evening Star,bearish,Utilities,2,0,0.03814079665910928,0.0,A+B,形態+指標,S&P 500
+Morning Star,bullish,Consumer Discretionary,2,0,0.004130892316563321,0.0,A+C,形態+成交量,HSI
+Hammer,bullish,Financials,2,0,0.001511262463256066,0.0,A+C,形態+成交量,HSI
+Morning Star,bullish,Unknown,1,0,-0.05956112852664575,0.0,A+B+C+D,完整全因子,HSI
