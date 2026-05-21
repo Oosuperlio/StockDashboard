@@ -1,0 +1,13 @@
+{
+  "ticker": "CDW",
+  "shares": 30,
+  "entry_price": 101.835,
+  "entry_date": "2025-05-14",
+  "tp1": 105.50,
+  "tp1_pct": 3.6,
+  "tp2": 109.17,
+  "tp2_pct": 7.2,
+  "stop_loss": 89.80,
+  "atr_14": 6.14,
+  "notes": "Signal Scanner 捕獲，短線反彈形態"
+}
