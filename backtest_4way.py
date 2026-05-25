@@ -192,8 +192,8 @@ def load_stock_data(symbol):
     conn.close()
     if df.empty:
         return df
+    # 保持 integer index，讓 build_pattern_index 的鍵與 scan_ticker 一致
     df['date'] = pd.to_datetime(df['date'])
-    df.set_index('date', inplace=True)
     return df
 
 
@@ -274,6 +274,7 @@ def backtest_stock(symbol, sector):
                 'indicator': ind_sig.indicator,
                 'signal': ind_sig.name,
                 'direction': direction,
+                'matched_pattern': matched_pattern or 'None',
                 'has_pattern': has_pattern,
                 'volume_confirmed': vol_confirmed,
                 'return': ret,
@@ -316,28 +317,35 @@ def main():
         print("❌ 無數據")
         return
 
-    # ── 四維聚合 ──────────────────────────────────────────────────
-    agg = defaultdict(lambda: {'count': 0, 'successes': 0, 'total_return': 0.0})
+    # ── 雙層聚合 ───────────────────────────────────────────────────────────
+    # 層次1：個股級（每隻股票單獨計算）
+    stock_agg = defaultdict(lambda: {'count': 0, 'successes': 0, 'total_return': 0.0})
+    # 層次2：Sector 級（同行業所有股票合併）
+    sector_agg_2 = defaultdict(lambda: {'count': 0, 'successes': 0, 'total_return': 0.0})
 
     for t in all_trades:
-        key = (t['sector'], t['indicator'], t['signal'], t['direction'],
-               t['has_pattern'], t['volume_confirmed'])
-        agg[key]['count'] += 1
-        agg[key]['total_return'] += t['return']
-        if t['is_success']:
-            agg[key]['successes'] += 1
+        sk = (t['symbol'], t['sector'], t['signal'],
+              t['matched_pattern'], t['has_pattern'], t['volume_confirmed'])
+        sk2 = (t['sector'], t['signal'],
+               t['matched_pattern'], t['has_pattern'], t['volume_confirmed'])
+        for agg, key in [(stock_agg, sk), (sector_agg_2, sk2)]:
+            agg[key]['count'] += 1
+            agg[key]['total_return'] += t['return']
+            if t['is_success']:
+                agg[key]['successes'] += 1
 
-    rows = []
-    for (sector, indicator, signal, direction, has_pattern, vol_confirmed), stats in agg.items():
+    # ── 建立個股級 DataFrame ──────────────────────────────────────────────
+    stock_rows = []
+    for (sym, sector, signal, matched_pattern, has_pattern, vol_confirmed), stats in stock_agg.items():
         if stats['count'] < MIN_SIGNALS:
             continue
         wr = stats['successes'] / stats['count']
         avg_ret = stats['total_return'] / stats['count']
-        rows.append({
+        stock_rows.append({
+            'symbol': sym,
             'sector': sector,
-            'indicator': indicator,
             'signal': signal,
-            'direction': direction,
+            'matched_pattern': matched_pattern,
             'has_pattern': has_pattern,
             'volume_confirmed': vol_confirmed,
             'count': stats['count'],
@@ -345,84 +353,126 @@ def main():
             'avg_return': avg_ret,
         })
 
-    df = pd.DataFrame(rows)
+    stock_df = pd.DataFrame(stock_rows)
+    if not stock_df.empty:
+        stock_df['improvement'] = 0.0
+        for idx, row in stock_df.iterrows():
+            base = stock_df[
+                (stock_df['symbol'] == row['symbol']) &
+                (stock_df['signal'] == row['signal']) &
+                (stock_df['matched_pattern'] == 'None') &
+                (stock_df['has_pattern'] == False) &
+                (stock_df['volume_confirmed'] == False)
+            ]
+            if not base.empty:
+                stock_df.loc[idx, 'improvement'] = row['win_rate'] - base.iloc[0]['win_rate']
+        stock_path = Path(__file__).parent / 'backtest_4way_results.csv'
+        stock_df.to_csv(stock_path, index=False)
+        print(f"💾 [個股級] 已保存：{stock_path}（{len(stock_df)} 組合）")
+    else:
+        print("⚠️ 個股級聚合後無足夠樣本")
 
-    if df.empty:
-        print("❌ 聚合後無足夠樣本")
-        return
+    # ── 建立 Sector 級 DataFrame ───────────────────────────────────────────
+    sector_rows2 = []
+    for (sector, signal, matched_pattern, has_pattern, vol_confirmed), stats in sector_agg_2.items():
+        if stats['count'] < MIN_SIGNALS:
+            continue
+        wr = stats['successes'] / stats['count']
+        avg_ret = stats['total_return'] / stats['count']
+        sector_rows2.append({
+            'sector': sector,
+            'signal': signal,
+            'matched_pattern': matched_pattern,
+            'has_pattern': has_pattern,
+            'volume_confirmed': vol_confirmed,
+            'count': stats['count'],
+            'win_rate': wr,
+            'avg_return': avg_ret,
+        })
 
-    # 計算相對於「無形態 + 無成交量」的提升
-    df['improvement'] = 0.0
-    for idx, row in df.iterrows():
-        base_rows = df[
-            (df['signal'] == row['signal']) &
-            (df['has_pattern'] == False) &
-            (df['volume_confirmed'] == False) &
-            (df['direction'] == row['direction']) &
-            (df['sector'] == row['sector'])
-        ]
-        if not base_rows.empty:
-            base_wr = base_rows.iloc[0]['win_rate']
-            df.loc[idx, 'improvement'] = row['win_rate'] - base_wr
+    sector_df2 = pd.DataFrame(sector_rows2)
+    if not sector_df2.empty:
+        sector_df2['improvement'] = 0.0
+        for idx, row in sector_df2.iterrows():
+            base = sector_df2[
+                (sector_df2['signal'] == row['signal']) &
+                (sector_df2['matched_pattern'] == 'None') &
+                (sector_df2['has_pattern'] == False) &
+                (sector_df2['volume_confirmed'] == False) &
+                (sector_df2['sector'] == row['sector'])
+            ]
+            if not base.empty:
+                sector_df2.loc[idx, 'improvement'] = row['win_rate'] - base.iloc[0]['win_rate']
+        sector_path2 = Path(__file__).parent / 'backtest_sector_results.csv'
+        sector_df2.to_csv(sector_path2, index=False)
+        print(f"💾 [Sector 級] 已保存：{sector_path2}（{len(sector_df2)} 組合）")
+    else:
+        print("⚠️ Sector 級聚合後無足夠樣本")
 
-    # 保存結果
-    out_path = Path(__file__).parent / 'backtest_4way_results.csv'
-    df.to_csv(out_path, index=False)
-    print(f"\n💾 已保存：{out_path}（{len(df)} 個組合）")
-
-    # ── 打印高勝率組合（≥65%，有成交量，有形態）────────────────────
+    # ── 打印：個股級高勝率 TOP10 ───────────────────────────────────────────
     print("\n" + "=" * 100)
-    print("🔥 高勝率組合（形態確認 + 成交量確認，勝率 ≥ 60%）")
+    print("🏆 個股級高勝率（形態 + 成交量確認，勝率 ≥ 60%，n ≥ 10）")
     print("=" * 100)
-    top = df[
-        (df['has_pattern'] == True) &
-        (df['volume_confirmed'] == True) &
-        (df['win_rate'] >= 0.60) &
-        (df['count'] >= 10) &
-        (df['direction'] == 'bullish')
-    ].sort_values('win_rate', ascending=False)
+    top_s = stock_df[
+        (stock_df['has_pattern'] == True) &
+        (stock_df['volume_confirmed'] == True) &
+        (stock_df['win_rate'] >= 0.60) &
+        (stock_df['count'] >= 10)
+    ].sort_values('win_rate', ascending=False).head(10)
 
-    print(f"\n{'Sector':<25} {'Signal':<28} {'Count':>6} {'勝率':>8} {'平均回報':>10} {'提升':>8}")
+    print(f"\n{'Symbol':<8} {'Sector':<18} {'Signal':<28} {'n':>5} {'勝率':>8} {'回報':>9} {'提升':>8}")
     print("-" * 100)
-    for _, r in top.iterrows():
-        vol_icon = '🔔' if r['volume_confirmed'] else '⚪'
-        pat_icon = '✅' if r['has_pattern'] else '⚪'
-        print(f"{r['sector']:<25} {r['signal']:<28} {r['count']:>6} {r['win_rate']:>8.1%} {r['avg_return']:>+10.2%} {r['improvement']:>+8.1%}")
+    for _, r in top_s.iterrows():
+        print(f"{r['symbol']:<8} {r['sector']:<18} {r['signal']:<28} {r['count']:>5} "
+              f"{r['win_rate']:>8.1%} {r['avg_return']:>+9.2%} {r['improvement']:>+8.1%}")
 
-    # ── 打印：加入成交量後勝率提升前10名 ─────────────────────────
-    print("\n\n" + "=" * 100)
-    print("📈 成交量確認帶來的勝率提升 TOP 10（形態確認=True）")
+    # ── 打印：Sector 級高勝率 TOP10 ─────────────────────────────────────────
+    print("\n" + "=" * 100)
+    print("📊 Sector 級高勝率（形態 + 成交量確認，勝率 ≥ 60%，n ≥ 10）")
     print("=" * 100)
-    vol_lift = df[
-        (df['has_pattern'] == True) &
-        (df['count'] >= 10) &
-        (df['direction'] == 'bullish')
-    ].copy()
+    top_sec = sector_df2[
+        (sector_df2['has_pattern'] == True) &
+        (sector_df2['volume_confirmed'] == True) &
+        (sector_df2['win_rate'] >= 0.60) &
+        (sector_df2['count'] >= 10)
+    ].sort_values('win_rate', ascending=False).head(10)
 
-    # 計算 volume lift per signal+sector
-    vol_lift['vol_lift'] = 0.0
-    for idx, row in vol_lift.iterrows():
-        no_vol = vol_lift[
-            (vol_lift['signal'] == row['signal']) &
-            (vol_lift['sector'] == row['sector']) &
-            (vol_lift['has_pattern'] == row['has_pattern']) &
-            (vol_lift['volume_confirmed'] == False)
+    print(f"\n{'Sector':<22} {'Signal':<28} {'n':>5} {'勝率':>8} {'回報':>9} {'提升':>8}")
+    print("-" * 100)
+    for _, r in top_sec.iterrows():
+        print(f"{r['sector']:<22} {r['signal']:<28} {r['count']:>5} "
+              f"{r['win_rate']:>8.1%} {r['avg_return']:>+9.2%} {r['improvement']:>+8.1%}")
+
+    # ── 打印：成交量確認提升（個股級）───────────────────────────────────────
+    print("\n" + "=" * 100)
+    print("📈 成交量確認勝率提升 TOP10（個股級，has_pattern=True）")
+    print("=" * 100)
+    vol_s = stock_df[
+        (stock_df['has_pattern'] == True) & (stock_df['count'] >= 10)
+    ].copy()
+    vol_s['vol_lift'] = 0.0
+    for idx, row in vol_s.iterrows():
+        no_vol = vol_s[
+            (vol_s['symbol'] == row['symbol']) &
+            (vol_s['signal'] == row['signal']) &
+            (vol_s['has_pattern'] == row['has_pattern']) &
+            (vol_s['volume_confirmed'] == False)
         ]
         if not no_vol.empty:
-            vol_lift.loc[idx, 'vol_lift'] = row['win_rate'] - no_vol.iloc[0]['win_rate']
-
-    top_lift = vol_lift[vol_lift['volume_confirmed'] == True].nlargest(10, 'vol_lift')
-    print(f"\n{'Sector':<25} {'Signal':<28} {'Count':>6} {'有量勝率':>8} {'無量勝率':>8} {'提升':>8}")
+            vol_s.loc[idx, 'vol_lift'] = row['win_rate'] - no_vol.iloc[0]['win_rate']
+    top_lift_s = vol_s[vol_s['volume_confirmed'] == True].nlargest(10, 'vol_lift')
+    print(f"\n{'Symbol':<8} {'Signal':<28} {'n':>5} {'有量':>8} {'無量':>8} {'提升':>8}")
     print("-" * 100)
-    for _, r in top_lift.iterrows():
-        no_vol_row = vol_lift[
-            (vol_lift['signal'] == r['signal']) &
-            (vol_lift['sector'] == r['sector']) &
-            (vol_lift['has_pattern'] == r['has_pattern']) &
-            (vol_lift['volume_confirmed'] == False)
+    for _, r in top_lift_s.iterrows():
+        no_vol = vol_s[
+            (vol_s['symbol'] == r['symbol']) &
+            (vol_s['signal'] == r['signal']) &
+            (vol_s['has_pattern'] == r['has_pattern']) &
+            (vol_s['volume_confirmed'] == False)
         ]
-        no_vol_wr = no_vol_row.iloc[0]['win_rate'] if not no_vol_row.empty else 0
-        print(f"{r['sector']:<25} {r['signal']:<28} {r['count']:>6} {r['win_rate']:>8.1%} {no_vol_wr:>8.1%} {r['vol_lift']:>+8.1%}")
+        no_vol_wr = no_vol.iloc[0]['win_rate'] if not no_vol.empty else 0
+        print(f"{r['symbol']:<8} {r['signal']:<28} {r['count']:>5} "
+              f"{r['win_rate']:>8.1%} {no_vol_wr:>8.1%} {r['vol_lift']:>+8.1%}")
 
     print("\n✅ 四維回測完成！")
 
