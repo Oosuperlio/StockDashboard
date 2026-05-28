@@ -57,7 +57,7 @@ VOL_MA_PERIOD = 20
 VOL_SPIKE_TODAY = 1.5    # 形態出現日：成交量 > MA 的倍數
 VOL_SPIKE_NEXT = 1.2     # 次日跟進：成交量 > MA 的倍數
 
-# ─── 最佳組合表 ────────────────────────────────────────────────────────────────
+# 最佳 Sector × Signal × Pattern 組合（從 backtest_4way_results.csv 四維回測得來）
 # 包含成交量確認因子：形態確認 + 放量確認
 # 格式：(sector, signal, pattern) → (win_rate, avg_return, count)
 BEST_COMBOS = {
@@ -261,10 +261,6 @@ class ScanSignal:
     tier: int               # 1=最高, 2=中, 3=一般
     reasons: str            # 為何入選（文字說明）
     volume_confirmed: bool  # 因子①：成交量確認
-
-
-# ─── 每檔股票最新日期信號跟蹤（scan_market 去重用）────────────────────────
-_latest_sig: Dict[str, ScanSignal] = {}
 
 
 def scan_ticker(
@@ -494,18 +490,9 @@ def scan_market(market: str, tier_filter: Optional[int] = None) -> List[ScanSign
         bullish_index, _ = build_pattern_index(df)
         sigs = scan_ticker(sym, df, sector, subsector, bullish_index, {})
 
-        # ── 每檔股票只保留最新日期的信號（不論 Tier）───────────────
-        for sig in sigs:
-            if sym not in _latest_sig or sig.date > _latest_sig[sym].date:
-                _latest_sig[sym] = sig
-
         all_signals.extend(sigs)
         if (i + 1) % 100 == 0:
             print(f"  ... 已掃描 {i+1} 隻，發現 {len(all_signals)} 個信號")
-
-    # ── 最終過濾：只保留每檔股票最新日期的信號 ───────────────────
-    all_signals = [_latest_sig[sym] for sym in _latest_sig]
-    _latest_sig.clear()   # 清理模組級狀態
 
     if tier_filter is not None:
         all_signals = [s for s in all_signals if s.tier <= tier_filter]

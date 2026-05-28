@@ -949,6 +949,8 @@ if prices:
             "open": "open", "high": "high", "low": "low",
             "close": "close", "volume": "volume"
         }, inplace=True)
+    # 確保價格按日期排序（DuckDB 數據是 newest-first，rolling() 需要 oldest-first）
+    df_prices = df_prices.sort_index()
     # 計算技術指標
     from indicator_calculator import calculate_all_indicators
     df_prices = calculate_all_indicators(df_prices)
