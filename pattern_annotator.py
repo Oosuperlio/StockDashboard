@@ -17,6 +17,7 @@ from pattern_detector import Pattern
 PATTERN_COLORS = {
     "Doji":                  "#FFD700",   # 金色
     "Hammer":                "#00FF7F",   # 深綠
+    "Inverted Hammer":       "#00FF7F",   # 深綠（反錘）
     "Shooting Star":         "#FF4444",   # 紅
     "Bullish Engulfing":     "#00FF7F",   # 深綠
     "Bearish Engulfing":     "#FF4444",   # 紅
@@ -24,6 +25,16 @@ PATTERN_COLORS = {
     "Evening Star":          "#FF4444",   # 紅
     "Bullish Harami":        "#00CED1",   # 暗綠
     "Bearish Harami":        "#FF6B6B",   # 暗紅
+    "Piercing Line":         "#00FF7F",   # 深綠（刺透線）
+    "Dark Cloud Cover":      "#FF4444",   # 紅（烏雲蓋頂）
+    "Tweezer Bottom":        "#3CB371",   # 中綠（鉗子底）
+    "Tweezer Top":           "#FF6347",   # 橙紅（鉗子頂）
+    "Three White Soldiers":  "#00FF7F",   # 深綠（三白兵）
+    "Three Black Crows":     "#FF4444",   # 紅（三黑鴉）
+    "Three Inside Up":       "#00FF7F",   # 深綠（內三根）
+    "Three Outside Up":      "#00FF7F",   # 深綠（外三根）
+    "Rising Three Methods":  "#20B2AA",   # 藍綠（上升三法）
+    "Falling Three Methods": "#F4A460",   # 沙色（下降三法）
     "Head & Shoulders":       "#FF8C00",   # 橙
     "Inverse H&S":            "#32CD32",   # 亮綠
     "Double Top":             "#FF6347",   # 橙紅
@@ -52,6 +63,7 @@ PREFIX = {
 PATTERN_NAMES_CN = {
     "Doji":                    "十字星",
     "Hammer":                  "錘子",
+    "Inverted Hammer":         "反錘",
     "Shooting Star":           "流星",
     "Bullish Engulfing":       "看漲吞噬",
     "Bearish Engulfing":       "看跌吞噬",
@@ -59,6 +71,16 @@ PATTERN_NAMES_CN = {
     "Evening Star":            "黃昏之星",
     "Bullish Harami":          "看漲內含線",
     "Bearish Harami":          "看跌內含線",
+    "Piercing Line":           "刺透線",
+    "Dark Cloud Cover":        "烏雲蓋頂",
+    "Tweezer Bottom":          "鉗子底",
+    "Tweezer Top":             "鉗子頂",
+    "Three White Soldiers":    "三白兵",
+    "Three Black Crows":       "三黑鴉",
+    "Three Inside Up":         "內三根",
+    "Three Outside Up":        "外三根",
+    "Rising Three Methods":    "上升三法",
+    "Falling Three Methods":    "下降三法",
     "Head & Shoulders":        "頭肩頂",
     "Inverse H&S":             "倒頭肩底",
     "Double Top":              "雙頂",

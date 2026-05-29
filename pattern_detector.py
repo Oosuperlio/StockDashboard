@@ -2,7 +2,7 @@
 pattern_detector.py — 圖表形態識別核心模組
 =============================================
 形態類型：
-  1. 燭線形態（單根/兩根/三根 K 線）
+  1. 燭線形態（單根/兩根/三根/五根 K 線）
   2. 價格形態（頭肩頂/底、雙頂/底、三角形、旗形、矩形、楔形）
   3. 趨勢信號（支撐/壓力位、均線排列、成交量突破）
 
@@ -367,6 +367,374 @@ def detect_harami(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
     return None
 
 
+def detect_piercing_line(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    刺透線（Piercing Line）：雙根形態
+    ① 第一根：長陰
+    ② 第二根：陽線開盤低開（低於昨收），收盤深入陰線實體 50% 以上
+    """
+    if idx < 1:
+        return None
+    prev = df.iloc[idx - 1]
+    curr = df.iloc[idx]
+    body_prev = _body_size(prev)
+    body_curr = _body_size(curr)
+    if body_prev < 0.001 or body_curr < 0.001:
+        return None
+    if not _is_bearish(prev) or not _is_bullish(curr):
+        return None
+    # 陽線開盤低於昨收，且收盤深入陰線實體 50% 以上
+    open_curr = _to_f(curr["open"])
+    close_curr = _to_f(curr["close"])
+    close_prev = _to_f(prev["close"])
+    open_prev = _to_f(prev["open"])
+    if open_curr >= close_prev:
+        return None
+    if close_curr < open_prev - 0.5 * body_prev:
+        return None
+    # 趨勢確認：前 4 根為下降
+    if idx >= 5:
+        lookback = df.iloc[idx - 5:idx - 1]
+        if not (_to_f(lookback["close"].iloc[-1]) < _to_f(lookback["close"].iloc[0])):
+            return None
+    return Pattern(
+        name="Piercing Line",
+        indices=[idx - 1, idx],
+        direction="bullish",
+        confidence=0.72,
+        metadata={"meaning": "刺透線 — 下跌後陽線反攻，見底信號", "idx": idx}
+    )
+
+
+def detect_dark_cloud_cover(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    烏雲蓋頂（Dark Cloud Cover）：雙根形態，空頭版本
+    ① 第一根：長陽
+    ② 第二根：陰線開盤高開（高於昨收），收盤深入陽線實體 50% 以上
+    """
+    if idx < 1:
+        return None
+    prev = df.iloc[idx - 1]
+    curr = df.iloc[idx]
+    body_prev = _body_size(prev)
+    body_curr = _body_size(curr)
+    if body_prev < 0.001 or body_curr < 0.001:
+        return None
+    if not _is_bullish(prev) or not _is_bearish(curr):
+        return None
+    open_curr = _to_f(curr["open"])
+    close_curr = _to_f(curr["close"])
+    close_prev = _to_f(prev["close"])
+    open_prev = _to_f(prev["open"])
+    if open_curr <= close_prev:
+        return None
+    if close_curr > open_prev - 0.5 * body_prev:
+        return None
+    # 趨勢確認：前 4 根為上升
+    if idx >= 5:
+        lookback = df.iloc[idx - 5:idx - 1]
+        if not (_to_f(lookback["close"].iloc[-1]) > _to_f(lookback["close"].iloc[0])):
+            return None
+    return Pattern(
+        name="Dark Cloud Cover",
+        indices=[idx - 1, idx],
+        direction="bearish",
+        confidence=0.72,
+        metadata={"meaning": "烏雲蓋頂 — 上升後陰線覆蓋，見頂信號", "idx": idx}
+    )
+
+
+def detect_tweezer_bottom(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    鉗子底（Tweezer Bottom）：雙根形態
+    兩根 K 線最低價相同或非常接近（±1%），代表支撐強
+    """
+    if idx < 1:
+        return None
+    r1 = df.iloc[idx - 1]
+    r2 = df.iloc[idx]
+    low1 = _to_f(r1["low"])
+    low2 = _to_f(r2["low"])
+    if low2 == 0:
+        return None
+    if abs(low1 - low2) / low2 > 0.01:
+        return None
+    # 趨勢確認：前 4 根為下降
+    if idx >= 5:
+        lookback = df.iloc[idx - 5:idx - 1]
+        if not (_to_f(lookback["close"].iloc[-1]) < _to_f(lookback["close"].iloc[0])):
+            return None
+    return Pattern(
+        name="Tweezer Bottom",
+        indices=[idx - 1, idx],
+        direction="bullish",
+        confidence=0.68,
+        metadata={"meaning": "鉗子底 — 雙底支撐確認，見底信號", "idx": idx}
+    )
+
+
+def detect_tweezer_top(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    鉗子頂（Tweezer Top）：雙根形態
+    兩根 K 線最高價相同或非常接近（±1%），代表壓力強
+    """
+    if idx < 1:
+        return None
+    r1 = df.iloc[idx - 1]
+    r2 = df.iloc[idx]
+    high1 = _to_f(r1["high"])
+    high2 = _to_f(r2["high"])
+    if high2 == 0:
+        return None
+    if abs(high1 - high2) / high2 > 0.01:
+        return None
+    # 趨勢確認：前 4 根為上升
+    if idx >= 5:
+        lookback = df.iloc[idx - 5:idx - 1]
+        if not (_to_f(lookback["close"].iloc[-1]) > _to_f(lookback["close"].iloc[0])):
+            return None
+    return Pattern(
+        name="Tweezer Top",
+        indices=[idx - 1, idx],
+        direction="bearish",
+        confidence=0.68,
+        metadata={"meaning": "鉗子頂 — 雙頂壓力確認，見頂信號", "idx": idx}
+    )
+
+
+def detect_three_white_soldiers(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    三白兵（Three White Soldiers）：三根 K 線
+    三根連續陽線，每根收盤價逐步走高，實體大致相同
+    """
+    if idx < 2:
+        return None
+    r1, r2, r3 = df.iloc[idx - 2], df.iloc[idx - 1], df.iloc[idx]
+    body1 = _body_size(r1)
+    body2 = _body_size(r2)
+    body3 = _body_size(r3)
+    if body1 < 0.001 or body2 < 0.001 or body3 < 0.001:
+        return None
+    if not (_is_bullish(r1) and _is_bullish(r2) and _is_bullish(r3)):
+        return None
+    # 三根實體大小相近（±30%）
+    avg_body = (body1 + body2 + body3) / 3
+    if not (abs(body1 - avg_body) / avg_body < 0.3 and
+            abs(body2 - avg_body) / avg_body < 0.3 and
+            abs(body3 - avg_body) / avg_body < 0.3):
+        return None
+    # 每根收盤價高於前一根收盤價
+    c1, c2, c3 = _to_f(r1["close"]), _to_f(r2["close"]), _to_f(r3["close"])
+    if not (c2 > c1 and c3 > c2):
+        return None
+    # 每根開盤價在前一根實體上半部分
+    if not (_to_f(r2["open"]) > _to_f(r1["close"]) - body1 * 0.5 and
+            _to_f(r3["open"]) > _to_f(r2["close"]) - body2 * 0.5):
+        return None
+    return Pattern(
+        name="Three White Soldiers",
+        indices=[idx - 2, idx - 1, idx],
+        direction="bullish",
+        confidence=0.80,
+        metadata={"meaning": "三白兵 — 連續三陽強勢上攻，持續看漲", "idx": idx}
+    )
+
+
+def detect_three_black_crows(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    三黑鴉（Three Black Crows）：三根 K 線
+    三根連續陰線，每根收盤價逐步走低，實體大致相同
+    """
+    if idx < 2:
+        return None
+    r1, r2, r3 = df.iloc[idx - 2], df.iloc[idx - 1], df.iloc[idx]
+    body1 = _body_size(r1)
+    body2 = _body_size(r2)
+    body3 = _body_size(r3)
+    if body1 < 0.001 or body2 < 0.001 or body3 < 0.001:
+        return None
+    if not (_is_bearish(r1) and _is_bearish(r2) and _is_bearish(r3)):
+        return None
+    avg_body = (body1 + body2 + body3) / 3
+    if not (abs(body1 - avg_body) / avg_body < 0.3 and
+            abs(body2 - avg_body) / avg_body < 0.3 and
+            abs(body3 - avg_body) / avg_body < 0.3):
+        return None
+    c1, c2, c3 = _to_f(r1["close"]), _to_f(r2["close"]), _to_f(r3["close"])
+    if not (c2 < c1 and c3 < c2):
+        return None
+    if not (_to_f(r2["open"]) < _to_f(r1["close"]) + body1 * 0.5 and
+            _to_f(r3["open"]) < _to_f(r2["close"]) + body2 * 0.5):
+        return None
+    return Pattern(
+        name="Three Black Crows",
+        indices=[idx - 2, idx - 1, idx],
+        direction="bearish",
+        confidence=0.80,
+        metadata={"meaning": "三黑鴉 — 連續三陰強勢下跌，持續看跌", "idx": idx}
+    )
+
+
+def detect_three_inside_up(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    內三向上（Three Inside Up）：三根 K 線
+    ① 第一根：長陰
+    ② 第二根：陽線，完全在第一根實體範圍內（內含線）
+    ③ 第三根：陽線收盤高於第一根收盤
+    """
+    if idx < 2:
+        return None
+    r1, r2, r3 = df.iloc[idx - 2], df.iloc[idx - 1], df.iloc[idx]
+    body1, body2, body3 = _body_size(r1), _body_size(r2), _body_size(r3)
+    if body1 < 0.001 or body2 < 0.001 or body3 < 0.001:
+        return None
+    if not (_is_bearish(r1) and _is_bullish(r2) and _is_bullish(r3)):
+        return None
+    # r2 必須完全在 r1 實體範圍內
+    if not (min(_to_f(r2["open"]), _to_f(r2["close"])) > min(_to_f(r1["open"]), _to_f(r1["close"])) and
+            max(_to_f(r2["open"]), _to_f(r2["close"])) < max(_to_f(r1["open"]), _to_f(r1["close"]))):
+        return None
+    # r3 收盤高於 r1 收盤（確認上破）
+    if _to_f(r3["close"]) <= _to_f(r1["close"]):
+        return None
+    return Pattern(
+        name="Three Inside Up",
+        indices=[idx - 2, idx - 1, idx],
+        direction="bullish",
+        confidence=0.78,
+        metadata={"meaning": "內三向上 — 母子突破，持續看漲", "idx": idx}
+    )
+
+
+def detect_three_outside_up(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    外三向上（Three Outside Up）：三根 K 線
+    ① 第一根：長陰
+    ② 第二根：陽線完全覆蓋第一根（吞噬）
+    ③ 第三根：陽線收盤高於第二根收盤
+    """
+    if idx < 2:
+        return None
+    r1, r2, r3 = df.iloc[idx - 2], df.iloc[idx - 1], df.iloc[idx]
+    body1, body2, body3 = _body_size(r1), _body_size(r2), _body_size(r3)
+    if body1 < 0.001 or body2 < 0.001 or body3 < 0.001:
+        return None
+    if not (_is_bearish(r1) and _is_bullish(r2) and _is_bullish(r3)):
+        return None
+    # r2（陽線）必須完全覆蓋 r1（陰線）
+    if not (_to_f(r2["open"]) < _to_f(r1["close"]) and _to_f(r2["close"]) > _to_f(r1["open"])):
+        return None
+    # r3 收盤高於 r2 收盤
+    if _to_f(r3["close"]) <= _to_f(r2["close"]):
+        return None
+    return Pattern(
+        name="Three Outside Up",
+        indices=[idx - 2, idx - 1, idx],
+        direction="bullish",
+        confidence=0.80,
+        metadata={"meaning": "外三向上 — 吞噬反攻，持續看漲", "idx": idx}
+    )
+
+
+def detect_rising_three_methods(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    上升三法（Rising Three Methods）：五根 K 線，持續形態
+    ① 長陽 → ②③④ 三根小回調（在長陽實體範圍內）→ ⑤ 長陽突破
+    """
+    if idx < 4:
+        return None
+    r1, r2, r3, r4, r5 = (df.iloc[idx - 4], df.iloc[idx - 3],
+                           df.iloc[idx - 2], df.iloc[idx - 1], df.iloc[idx])
+    body1 = _body_size(r1)
+    body5 = _body_size(r5)
+    if body1 < 0.001 or body5 < 0.001:
+        return None
+    # r1 和 r5 必須是長陽
+    if not (_is_bullish(r1) and _is_bullish(r5)):
+        return None
+    # r5 收盤必須高於 r1 高點（突破）
+    if _to_f(r5["close"]) <= _to_f(r1["high"]):
+        return None
+    # r2、r3、r4 實體必須在 r1 範圍內
+    for r in [r2, r3, r4]:
+        r_open = _to_f(r["open"])
+        r_close = _to_f(r["close"])
+        if not (min(r_open, r_close) >= min(_to_f(r1["open"]), _to_f(r1["close"])) and
+                max(r_open, r_close) <= max(_to_f(r1["open"]), _to_f(r1["close"]))):
+            return None
+    return Pattern(
+        name="Rising Three Methods",
+        indices=[idx - 4, idx - 3, idx - 2, idx - 1, idx],
+        direction="bullish",
+        confidence=0.75,
+        metadata={"meaning": "上升三法 — 強勢持續形態，持股信號", "idx": idx}
+    )
+
+
+def detect_falling_three_methods(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    下降三法（Falling Three Methods）：五根 K 線，持續形態
+    ① 長陰 → ②③④ 三根小反彈（在長陰實體範圍內）→ ⑤ 長陰跌破
+    """
+    if idx < 4:
+        return None
+    r1, r2, r3, r4, r5 = (df.iloc[idx - 4], df.iloc[idx - 3],
+                           df.iloc[idx - 2], df.iloc[idx - 1], df.iloc[idx])
+    body1 = _body_size(r1)
+    body5 = _body_size(r5)
+    if body1 < 0.001 or body5 < 0.001:
+        return None
+    if not (_is_bearish(r1) and _is_bearish(r5)):
+        return None
+    if _to_f(r5["close"]) >= _to_f(r1["low"]):
+        return None
+    for r in [r2, r3, r4]:
+        r_open = _to_f(r["open"])
+        r_close = _to_f(r["close"])
+        if not (min(r_open, r_close) >= min(_to_f(r1["open"]), _to_f(r1["close"])) and
+                max(r_open, r_close) <= max(_to_f(r1["open"]), _to_f(r1["close"]))):
+            return None
+    return Pattern(
+        name="Falling Three Methods",
+        indices=[idx - 4, idx - 3, idx - 2, idx - 1, idx],
+        direction="bearish",
+        confidence=0.75,
+        metadata={"meaning": "下降三法 — 弱勢持續形態，空倉信號", "idx": idx}
+    )
+
+
+def detect_inverted_hammer(df: pd.DataFrame, idx: int) -> Optional[Pattern]:
+    """
+    倒錘頭（Inverted Hammer）：單根 K 線，看漲逆轉
+    上影線很長，實體小，位於下跌趨勢末段
+    """
+    row = df.iloc[idx]
+    if not _is_bearish(row):
+        return None
+    body = _body_size(row)
+    if body < 0.001:
+        return None
+    upper = _upper_shadow(row)
+    lower = _lower_shadow(row)
+    if upper < 2 * body:
+        return None
+    if lower >= upper / 3:
+        return None
+    if idx < 10:
+        return None
+    lookback = df.iloc[idx - 10:idx]
+    if lookback["close"].iloc[-1] <= lookback["close"].iloc[0]:
+        return None
+    upper_ratio = round(upper / body, 1) if body >= 0.001 else 0.0
+    return Pattern(
+        name="Inverted Hammer",
+        indices=[idx],
+        direction="bullish",
+        confidence=0.70,
+        metadata={"meaning": "倒錘頭 — 下跌後上影線出貨，注意反轉", "idx": idx, "upper_shadow_ratio": upper_ratio}
+    )
+
+
 # ─────────────────────────────────────────────
 # ② 價格形態（多根 K 線）
 # ─────────────────────────────────────────────
@@ -706,10 +1074,21 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
             lambda i, _df=df, _d0=detect_doji:    _d0(_df, i),
             lambda i, _df=df, _d0=detect_hammer:   _d0(_df, i),
             lambda i, _df=df, _d0=detect_shooting_star: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_inverted_hammer: _d0(_df, i),
             lambda i, _df=df, _d0=detect_morning_star:  _d0(_df, i),
             lambda i, _df=df, _d0=detect_evening_star:  _d0(_df, i),
             lambda i, _df=df, _d0=detect_engulfing:    _d0(_df, i),
             lambda i, _df=df, _d0=detect_harami:        _d0(_df, i),
+            lambda i, _df=df, _d0=detect_piercing_line:  _d0(_df, i),
+            lambda i, _df=df, _d0=detect_dark_cloud_cover: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_tweezer_bottom: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_tweezer_top:    _d0(_df, i),
+            lambda i, _df=df, _d0=detect_three_white_soldiers: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_three_black_crows: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_three_inside_up:   _d0(_df, i),
+            lambda i, _df=df, _d0=detect_three_outside_up:  _d0(_df, i),
+            lambda i, _df=df, _d0=detect_rising_three_methods: _d0(_df, i),
+            lambda i, _df=df, _d0=detect_falling_three_methods: _d0(_df, i),
         ]:
             p = detector(idx)
             if p:
