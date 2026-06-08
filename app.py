@@ -1366,10 +1366,15 @@ with col_chart:
             target = _v("targetMeanPrice")
             target_high = _v("targetHighPrice")
             target_low = _v("targetLowPrice")
-            current_price = latest_price
+            current_price = float(latest_price) if latest_price is not None else None
 
             # 目標價空間
-            target_upside = (target - current_price) / current_price if target and current_price else None
+            target_upside = None
+            if target is not None and current_price is not None:
+                try:
+                    target_upside = (float(target) - float(current_price)) / float(current_price)
+                except Exception:
+                    target_upside = None
 
             # ── 10 分制評分 ──
             scores = []
