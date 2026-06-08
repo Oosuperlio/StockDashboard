@@ -1338,6 +1338,206 @@ with col_chart:
         with tab_line:
             st.plotly_chart(plot_line(df_plot, selected_ticker, company_name), width="stretch")
         st.plotly_chart(plot_volume(df_plot, selected_ticker), width="stretch")
+
+        # ── 💎 價值投資分析（移至成交量後，全寬顯示）──
+        try:
+            info_raw = get_stock_info(selected_ticker)
+
+            def _v(key, pct=False, mult=1):
+                v = info_raw.get(key)
+                if v is None:
+                    return None
+                try:
+                    return round(float(v) * mult, 2) if pct else round(float(v) * mult, 4)
+                except Exception:
+                    return None
+
+            # 核心數據
+            pe_t = _v("trailingPE")
+            pe_f = _v("forwardPE")
+            pb = _v("priceToBook")
+            peg = _v("trailingPegRatio")
+            de_yield = _v("dividendYield", pct=True)
+            earn_gr = _v("earningsGrowth", pct=True)
+            op_margin = _v("operatingMargins", pct=True)
+            gross_margin = _v("grossMargins", pct=True)
+            market_cap = _v("marketCap")
+            revenue = _v("totalRevenue")
+            target = _v("targetMeanPrice")
+            target_high = _v("targetHighPrice")
+            target_low = _v("targetLowPrice")
+            current_price = latest_price
+
+            # 目標價空間
+            target_upside = (target - current_price) / current_price if target and current_price else None
+
+            # ── 10 分制評分 ──
+            scores = []
+            details = []
+
+            # 1. P/E 估值 (max 2 pts)
+            if pe_t and pe_t > 0:
+                if pe_t < 12:
+                    scores.append(2.0)
+                    details.append(f"✅ 本益比 {pe_t:.1f}x — 顯著低於同業 ✓")
+                elif pe_t < 20:
+                    scores.append(1.5)
+                    details.append(f"📐 本益比 {pe_t:.1f}x — 合理偏低")
+                elif pe_t < 30:
+                    scores.append(1.0)
+                    details.append(f"📐 本益比 {pe_t:.1f}x — 合理偏高")
+                elif pe_t < 40:
+                    scores.append(0.5)
+                    details.append(f"⚠️ 本益比 {pe_t:.1f}x — 偏高")
+                else:
+                    scores.append(0)
+                    details.append(f"🔴 本益比 {pe_t:.1f}x — 極高")
+            else:
+                details.append("❓ 本益比 — 數據不足")
+
+            # 2. Forward PE vs Trailing (max 1 pt)
+            if pe_t and pe_f and pe_t > 0 and pe_f > 0:
+                if pe_f < pe_t * 0.85:
+                    scores.append(1.0)
+                    details.append(f"✅ Forward PE ({pe_f:.1f}x) << Trailing PE ({pe_t:.1f}x) — 盈利大幅改善 ✓")
+                elif pe_f < pe_t:
+                    scores.append(0.5)
+                    details.append(f"📐 Forward PE ({pe_f:.1f}x) < Trailing PE — 盈利改善中")
+                else:
+                    scores.append(0)
+                    details.append(f"📐 Forward PE ({pe_f:.1f}x) ≥ Trailing PE — 盈利預期持平或下滑")
+
+            # 3. 目標價空間 (max 1.5 pts)
+            if target_upside is not None:
+                if target_upside > 0.30:
+                    scores.append(1.5)
+                    details.append(f"🎯 目標價 ${target:.2f} — 潛在升幅 {target_upside:.1%} 空間巨大 ✓")
+                elif target_upside > 0.15:
+                    scores.append(1.0)
+                    details.append(f"🎯 目標價 ${target:.2f} — 潛在升幅 {target_upside:.1%} ✓")
+                elif target_upside > 0:
+                    scores.append(0.5)
+                    details.append(f"🎯 目標價 ${target:.2f} — 潛在升幅 {target_upside:.1%}")
+                else:
+                    scores.append(0)
+                    details.append(f"🎯 目標價 ${target:.2f} — 低於現價，分析師偏淡")
+            else:
+                details.append("❓ 目標價 — 數據不足")
+
+            # 4. PEG (max 1 pt)
+            if peg and peg > 0:
+                if peg < 0.8:
+                    scores.append(1.0)
+                    details.append(f"✅ PEG {peg:.2f}x — 低於 0.8x，成長價值極佳 ✓")
+                elif peg < 1.5:
+                    scores.append(0.5)
+                    details.append(f"📐 PEG {peg:.2f}x — 合理")
+                else:
+                    scores.append(0)
+                    details.append(f"⚠️ PEG {peg:.2f}x — 偏高")
+            else:
+                details.append("❓ PEG — 數據不足")
+
+            # 5. 盈利增長 (max 1.5 pts)
+            if earn_gr is not None:
+                if earn_gr > 0.15:
+                    scores.append(1.5)
+                    details.append(f"✅ 盈利增長 {earn_gr:.1%} — 雙位數增長 ✓")
+                elif earn_gr > 0.08:
+                    scores.append(1.0)
+                    details.append(f"📐 盈利增長 {earn_gr:.1%} — 穩定增長")
+                elif earn_gr > 0:
+                    scores.append(0.5)
+                    details.append(f"📐 盈利增長 {earn_gr:.1%} — 緩慢")
+                else:
+                    scores.append(0)
+                    details.append(f"🔴 盈利 {earn_gr:.1%} — 衰退")
+            else:
+                details.append("❓ 盈利增長 — 數據不足")
+
+            # 6. 股息 (max 0.5 pt)
+            if de_yield is not None:
+                if de_yield > 0.03:
+                    scores.append(0.5)
+                    details.append(f"💵 股息率 {de_yield:.2%} — 高收益 ✓")
+                elif de_yield > 0.01:
+                    scores.append(0.25)
+                    details.append(f"💵 股息率 {de_yield:.2%}")
+                else:
+                    details.append(f"💵 股息率 {de_yield:.2%} — 偏低")
+            else:
+                details.append("❌ 無股息")
+
+            # 7. 護城河 (max 1.5 pts) — 毛利率 + 營業利潤率 + 市值規模
+            moat_score = 0.0
+            moat_parts = []
+            if gross_margin is not None:
+                if gross_margin > 0.50:
+                    moat_score += 0.5
+                    moat_parts.append(f"毛利率 {gross_margin:.1%} ✓")
+                elif gross_margin > 0.30:
+                    moat_score += 0.25
+                    moat_parts.append(f"毛利率 {gross_margin:.1%}")
+                else:
+                    moat_parts.append(f"毛利率 {gross_margin:.1%} — 偏低")
+            else:
+                moat_parts.append("毛利率 — N/A")
+            if op_margin is not None:
+                if op_margin > 0.25:
+                    moat_score += 0.5
+                    moat_parts.append(f"營利率 {op_margin:.1%} ✓")
+                elif op_margin > 0.15:
+                    moat_score += 0.25
+                    moat_parts.append(f"營利率 {op_margin:.1%}")
+                else:
+                    moat_parts.append(f"營利率 {op_margin:.1%} — 競爭激烈")
+            else:
+                moat_parts.append("營利率 — N/A")
+            if market_cap is not None:
+                if market_cap > 200e9:
+                    moat_score += 0.5
+                    moat_parts.append(f"市值 ${market_cap/1e9:.1f}B — 巨無霸 ✓")
+                elif market_cap > 50e9:
+                    moat_score += 0.25
+                    moat_parts.append(f"市值 ${market_cap/1e9:.1f}B — 大型")
+                else:
+                    moat_parts.append(f"市值 ${market_cap/1e9:.1f}B — 中小型")
+            else:
+                moat_parts.append("市值 — N/A")
+            scores.append(moat_score)
+            details.append(f"🏰 護城河: {' | '.join(moat_parts)}（{moat_score:.2f}/1.5）")
+
+            # ── 總分 ──
+            total_score = sum(scores)
+            if total_score >= 8.0:
+                badge = "🟢 強烈建議買入"
+                badge_color = "#48bb78"
+            elif total_score >= 6.0:
+                badge = "🟢 值得持有"
+                badge_color = "#48bb78"
+            elif total_score >= 4.5:
+                badge = "🟡 謹慎關注"
+                badge_color = "#ecc94b"
+            elif total_score >= 3.0:
+                badge = "🟠 需進一步觀察"
+                badge_color = "#ed8936"
+            else:
+                badge = "🔴 不建議現價買入"
+                badge_color = "#fc8181"
+
+            html = f"""
+            <div class="card">
+                <div class="card-header">💎 價值投資評分 — <span style="color:{badge_color};font-weight:700;">{badge}</span>（{total_score:.1f}/10 分）</div>
+                <div style="margin-top: 8px;">
+            """
+            for d in details:
+                html += f'<div style="font-size: 13px; color: #cbd5e0; padding: 3px 0;">{d}</div>'
+            html += '</div></div>'
+            st.markdown(html, unsafe_allow_html=True)
+
+        except Exception as e:
+            st.warning(f"⚠️ 價值投資分析暫不可用：{e}")
+
     else:
         st.error(f"無法獲取 {selected_ticker} 的股票數據")
 
@@ -1415,149 +1615,6 @@ with col_side:
                    metric_row("52W Low", f"${fp(low)}" if low else "—") + \
                    metric_row("目標價", f"${fp(target)}" if target else "—")
     section_card("🎯 分析師觀點", analyst_html)
-
-    st.markdown("---")
-
-    # ── ③ 價值投資分析（橫跨全寬）──
-    st.markdown("### 💎 價值投資分析")
-    try:
-        value_pairs = []
-
-        # Valuation metrics
-        pe_t = info.get("trailing_pe")
-        pe_f = info.get("forward_pe")
-        pb = info.get("price_to_book")
-        peg = info.get("peg_ratio")
-        de_yield = info.get("dividend_yield")
-        rev_gr = info.get("revenue_growth")
-        earn_gr = info.get("earnings_growth")
-        op_margin = info.get("operating_margin")
-        profit_margin = info.get("profit_margin")
-        f_eps = info.get("forward_eps")
-
-        # Score tracking
-        scores = []
-        explanations = []
-
-        # 1. P/E估值
-        if pe_t and pe_t > 0:
-            if pe_t < 15:
-                scores.append(2)
-                explanations.append(f"✅ 本益比 {pe_t:.1f}x — 低於 15x，估值偏低 ✓")
-            elif pe_t < 25:
-                scores.append(1)
-                explanations.append(f"📐 本益比 {pe_t:.1f}x — 合理範圍 (15-25x)")
-            else:
-                scores.append(0)
-                explanations.append(f"⚠️ 本益比 {pe_t:.1f}x — 高於 25x，估值偏高")
-        else:
-            explanations.append("❓ 本益比 — 數據不足")
-
-        # 2. Forward P/E vs Trailing P/E
-        if pe_t and pe_f and pe_t > 0 and pe_f > 0:
-            if pe_f < pe_t:
-                scores.append(1)
-                explanations.append(f"✅ Forward PE ({pe_f:.1f}x) < Trailing PE ({pe_t:.1f}x) — 盈利預期改善 ✓")
-            else:
-                scores.append(0)
-                explanations.append(f"📐 Forward PE ({pe_f:.1f}x) ≥ Trailing PE — 盈利預期持平或下滑")
-
-        # 3. P/B
-        if pb and pb > 0:
-            if pb < 1.5:
-                scores.append(2)
-                explanations.append(f"✅ 股價淨值比 {pb:.2f}x — 低於 1.5x，資產價值被低估 ✓")
-            elif pb < 3:
-                scores.append(1)
-                explanations.append(f"📐 股價淨值比 {pb:.2f}x — 合理範圍 (1.5-3x)")
-            else:
-                scores.append(0)
-                explanations.append(f"⚠️ 股價淨值比 {pb:.2f}x — 高於 3x")
-
-        # 4. PEG
-        if peg and peg > 0:
-            if peg < 1:
-                scores.append(2)
-                explanations.append(f"✅ PEG {peg:.2f}x — 低於 1.0x，成長價值兼具 ✓")
-            elif peg < 2:
-                scores.append(1)
-                explanations.append(f"📐 PEG {peg:.2f}x — 合理 (1-2x)")
-            else:
-                scores.append(0)
-                explanations.append(f"⚠️ PEG {peg:.2f}x — 高於 2x")
-
-        # 5. 盈利增長
-        if earn_gr is not None:
-            epct = earn_gr * 100
-            if epct > 15:
-                scores.append(2)
-                explanations.append(f"✅ 盈利增長 {epct:.1f}% — 雙位數增長 ✓")
-            elif epct > 5:
-                scores.append(1)
-                explanations.append(f"📐 盈利增長 {epct:.1f}% — 溫和增長")
-            elif epct > 0:
-                scores.append(0)
-                explanations.append(f"⚠️ 盈利增長 {epct:.1f}% — 增長緩慢")
-            else:
-                scores.append(-1)
-                explanations.append(f"🔴 盈利增長 {epct:.1f}% — 盈利衰退")
-
-        # 6. 股息
-        if de_yield is not None:
-            dy_pct = de_yield * 100
-            if dy_pct > 2.5:
-                scores.append(1)
-                explanations.append(f"✅ 股息率 {dy_pct:.2f}% — 高於 2.5% ✓")
-            elif dy_pct > 0:
-                scores.append(0)
-                explanations.append(f"📐 股息率 {dy_pct:.2f}%")
-            else:
-                explanations.append("❌ 無股息")
-
-        # 7. 營業利潤率
-        if op_margin is not None:
-            op_pct = op_margin * 100
-            if op_pct > 20:
-                scores.append(1)
-                explanations.append(f"✅ 營業利潤率 {op_pct:.1f}% — 高利潤率 ✓")
-            elif op_pct > 10:
-                scores.append(0)
-                explanations.append(f"📐 營業利潤率 {op_pct:.1f}% — 中等")
-            else:
-                scores.append(-1)
-                explanations.append(f"⚠️ 營業利潤率 {op_pct:.1f}% — 偏低")
-
-        total_score = sum(scores)
-        max_possible = sum(max(s, 0) for s in scores)  # count only positive possible scores
-        max_possible = max(max_possible, 1)
-
-        # Overall rating
-        ratio = total_score / max_possible
-        if ratio >= 0.7:
-            badge = "🟢 強烈建議持有"
-            badge_color = "#48bb78"
-        elif ratio >= 0.45:
-            badge = "🟡 適合關注 / 謹慎持有"
-            badge_color = "#ecc94b"
-        elif ratio >= 0.2:
-            badge = "🟠 需進一步觀察"
-            badge_color = "#ed8936"
-        else:
-            badge = "🔴 不建議現價買入"
-            badge_color = "#fc8181"
-
-        html = f"""
-        <div class="card">
-            <div class="card-header">💎 價值投資評分 — <span style="color:{badge_color};font-weight:700;">{badge}</span>（{total_score}/{max_possible} 分）</div>
-            <div style="margin-top: 8px;">
-        """
-        for exp in explanations:
-            html += f'<div style="font-size: 13px; color: #cbd5e0; padding: 3px 0;">{exp}</div>'
-        html += '</div></div>'
-        st.markdown(html, unsafe_allow_html=True)
-
-    except Exception as e:
-        st.warning(f"⚠️ 價值投資分析暫不可用：{e}")
 
     st.markdown("---")
 
