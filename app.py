@@ -952,8 +952,14 @@ def render_signal_homepage():
     col_s, _, _ = st.columns([1, 1, 1])
     with col_s:
         total = len(df_us) + len(df_hk)
-        t1 = int((df_us["tier"] == 1).sum()) + int((df_hk["tier"] == 1).sum()) if total > 0 else 0
-        t2 = int((df_us["tier"] == 2).sum()) + int((df_hk["tier"] == 2).sum()) if total > 0 else 0
+
+        def _tier_count(df, tier):
+            if df.empty or "tier" not in df.columns:
+                return 0
+            return int((df["tier"] == tier).sum())
+
+        t1 = _tier_count(df_us, 1) + _tier_count(df_hk, 1)
+        t2 = _tier_count(df_us, 2) + _tier_count(df_hk, 2)
         t3 = total - t1 - t2
         st.markdown(f"<div class='card'><div class='card-header'>📡 信號總覽 ({sig_date})</div>"
                     f"<div class='card-value'>共 {total} 個</div>"
