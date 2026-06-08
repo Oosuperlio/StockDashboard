@@ -175,26 +175,6 @@ def section_card(title, content_html):
     """, unsafe_allow_html=True)
 
 
-# ── Prediction box CSS ──────────────────────────────────────────────
-st.markdown("""
-<style>
-.prediction-box {
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 12px;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-}
-.prediction-box.bullish { background: linear-gradient(135deg, #0a2e1a, #0d3d22); border: 1px solid #00FF7F; }
-.prediction-box.bearish { background: linear-gradient(135deg, #2e0a0a, #3d0d0d); border: 1px solid #FF4444; }
-.prediction-box.neutral { background: linear-gradient(135deg, #1a1a0a, #2d2d0d); border: 1px solid #FFD700; }
-.pred-header { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #e2e8f0; }
-.pred-meta { display: flex; gap: 20px; margin-bottom: 10px; font-size: 13px; color: #a0aec0; }
-.pred-meta b { color: #e2e8f0; }
-.pred-details, .pred-warnings { margin: 0; padding-left: 18px; font-size: 12px; color: #a0aec0; line-height: 1.8; }
-.pred-warnings { color: #f39c12; }
-</style>
-""", unsafe_allow_html=True)
-
 # ── Signal card CSS ───────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -327,7 +307,6 @@ from database.cache import (
 
 from pattern_detector import detect_all_patterns, get_latest_patterns
 from pattern_annotator import add_pattern_markers, build_pattern_legend
-from predictor import predict, format_prediction_html
 
 # ── Daily Signals (用於 signal homepage) ────────────────────────────────
 from database.signals import load_daily_signals, get_signal_summary, signal_date
@@ -1359,11 +1338,6 @@ with col_chart:
         with tab_line:
             st.plotly_chart(plot_line(df_plot, selected_ticker, company_name), width="stretch")
         st.plotly_chart(plot_volume(df_plot, selected_ticker), width="stretch")
-
-        # 走勢預判
-        pred = predict(df_plot)
-        st.markdown("### 🎯 走勢預判")
-        st.markdown(format_prediction_html(pred), unsafe_allow_html=True)
     else:
         st.error(f"無法獲取 {selected_ticker} 的股票數據")
 
@@ -1442,121 +1416,159 @@ with col_side:
                    metric_row("目標價", f"${fp(target)}" if target else "—")
     section_card("🎯 分析師觀點", analyst_html)
 
-st.markdown("---")
+    st.markdown("---")
 
-# ── ③ 最新消息（橫跨全寬）—— 最多 7 天，分頁顯示 ──
-st.markdown("### 📰 最新消息")
+    # ── ③ 價值投資分析（橫跨全寬）──
+    st.markdown("### 💎 價值投資分析")
+    try:
+        value_pairs = []
+
+        # Valuation metrics
+        pe_t = info.get("trailing_pe")
+        pe_f = info.get("forward_pe")
+        pb = info.get("price_to_book")
+        peg = info.get("peg_ratio")
+        de_yield = info.get("dividend_yield")
+        rev_gr = info.get("revenue_growth")
+        earn_gr = info.get("earnings_growth")
+        op_margin = info.get("operating_margin")
+        profit_margin = info.get("profit_margin")
+        f_eps = info.get("forward_eps")
+
+        # Score tracking
+        scores = []
+        explanations = []
+
+        # 1. P/E估值
+        if pe_t and pe_t > 0:
+            if pe_t < 15:
+                scores.append(2)
+                explanations.append(f"✅ 本益比 {pe_t:.1f}x — 低於 15x，估值偏低 ✓")
+            elif pe_t < 25:
+                scores.append(1)
+                explanations.append(f"📐 本益比 {pe_t:.1f}x — 合理範圍 (15-25x)")
+            else:
+                scores.append(0)
+                explanations.append(f"⚠️ 本益比 {pe_t:.1f}x — 高於 25x，估值偏高")
+        else:
+            explanations.append("❓ 本益比 — 數據不足")
+
+        # 2. Forward P/E vs Trailing P/E
+        if pe_t and pe_f and pe_t > 0 and pe_f > 0:
+            if pe_f < pe_t:
+                scores.append(1)
+                explanations.append(f"✅ Forward PE ({pe_f:.1f}x) < Trailing PE ({pe_t:.1f}x) — 盈利預期改善 ✓")
+            else:
+                scores.append(0)
+                explanations.append(f"📐 Forward PE ({pe_f:.1f}x) ≥ Trailing PE — 盈利預期持平或下滑")
+
+        # 3. P/B
+        if pb and pb > 0:
+            if pb < 1.5:
+                scores.append(2)
+                explanations.append(f"✅ 股價淨值比 {pb:.2f}x — 低於 1.5x，資產價值被低估 ✓")
+            elif pb < 3:
+                scores.append(1)
+                explanations.append(f"📐 股價淨值比 {pb:.2f}x — 合理範圍 (1.5-3x)")
+            else:
+                scores.append(0)
+                explanations.append(f"⚠️ 股價淨值比 {pb:.2f}x — 高於 3x")
+
+        # 4. PEG
+        if peg and peg > 0:
+            if peg < 1:
+                scores.append(2)
+                explanations.append(f"✅ PEG {peg:.2f}x — 低於 1.0x，成長價值兼具 ✓")
+            elif peg < 2:
+                scores.append(1)
+                explanations.append(f"📐 PEG {peg:.2f}x — 合理 (1-2x)")
+            else:
+                scores.append(0)
+                explanations.append(f"⚠️ PEG {peg:.2f}x — 高於 2x")
+
+        # 5. 盈利增長
+        if earn_gr is not None:
+            epct = earn_gr * 100
+            if epct > 15:
+                scores.append(2)
+                explanations.append(f"✅ 盈利增長 {epct:.1f}% — 雙位數增長 ✓")
+            elif epct > 5:
+                scores.append(1)
+                explanations.append(f"📐 盈利增長 {epct:.1f}% — 溫和增長")
+            elif epct > 0:
+                scores.append(0)
+                explanations.append(f"⚠️ 盈利增長 {epct:.1f}% — 增長緩慢")
+            else:
+                scores.append(-1)
+                explanations.append(f"🔴 盈利增長 {epct:.1f}% — 盈利衰退")
+
+        # 6. 股息
+        if de_yield is not None:
+            dy_pct = de_yield * 100
+            if dy_pct > 2.5:
+                scores.append(1)
+                explanations.append(f"✅ 股息率 {dy_pct:.2f}% — 高於 2.5% ✓")
+            elif dy_pct > 0:
+                scores.append(0)
+                explanations.append(f"📐 股息率 {dy_pct:.2f}%")
+            else:
+                explanations.append("❌ 無股息")
+
+        # 7. 營業利潤率
+        if op_margin is not None:
+            op_pct = op_margin * 100
+            if op_pct > 20:
+                scores.append(1)
+                explanations.append(f"✅ 營業利潤率 {op_pct:.1f}% — 高利潤率 ✓")
+            elif op_pct > 10:
+                scores.append(0)
+                explanations.append(f"📐 營業利潤率 {op_pct:.1f}% — 中等")
+            else:
+                scores.append(-1)
+                explanations.append(f"⚠️ 營業利潤率 {op_pct:.1f}% — 偏低")
+
+        total_score = sum(scores)
+        max_possible = sum(max(s, 0) for s in scores)  # count only positive possible scores
+        max_possible = max(max_possible, 1)
+
+        # Overall rating
+        ratio = total_score / max_possible
+        if ratio >= 0.7:
+            badge = "🟢 強烈建議持有"
+            badge_color = "#48bb78"
+        elif ratio >= 0.45:
+            badge = "🟡 適合關注 / 謹慎持有"
+            badge_color = "#ecc94b"
+        elif ratio >= 0.2:
+            badge = "🟠 需進一步觀察"
+            badge_color = "#ed8936"
+        else:
+            badge = "🔴 不建議現價買入"
+            badge_color = "#fc8181"
+
+        html = f"""
+        <div class="card">
+            <div class="card-header">💎 價值投資評分 — <span style="color:{badge_color};font-weight:700;">{badge}</span>（{total_score}/{max_possible} 分）</div>
+            <div style="margin-top: 8px;">
+        """
+        for exp in explanations:
+            html += f'<div style="font-size: 13px; color: #cbd5e0; padding: 3px 0;">{exp}</div>'
+        html += '</div></div>'
+        st.markdown(html, unsafe_allow_html=True)
+
+    except Exception as e:
+        st.warning(f"⚠️ 價值投資分析暫不可用：{e}")
+
+    st.markdown("---")
+
+    # ── ④ 最新消息（橫跨全寬）—— 最多 7 天，分頁顯示 ──
+    st.markdown("### 📰 最新消息")
 
 # Session state for pagination
 INITIAL_NEWS = 10
 MORE_NEWS = 10
 if "news_count" not in st.session_state:
     st.session_state.news_count = INITIAL_NEWS
-
-# ─────────────────────────────────────────────────────────
-# SECTOR MONITOR TAB
-# ─────────────────────────────────────────────────────────
-st.markdown("---")
-st.markdown("## 🏭 Sector Monitor")
-
-try:
-    sector_df = pd.read_csv('backtest_sector_subsector_results.csv')
-    improvement_df = pd.read_csv('backtest_sector_improvement.csv')
-    exits_df = None
-    try:
-        exits_df = pd.read_csv('optimal_exits_by_sector.csv')
-    except FileNotFoundError:
-        pass
-
-    # ── Sector 勝率排行 ──
-    sector_stats = sector_df[
-        (sector_df['direction'] == 'bullish') &
-        (sector_df['has_pattern'] == True)
-    ].groupby('sector').agg(
-        avg_win_rate=('win_rate', 'mean'),
-        max_win_rate=('win_rate', 'max'),
-        total_signals=('count', 'sum'),
-        n_combinations=('count', 'count')
-    ).sort_values('avg_win_rate', ascending=False)
-
-    st.markdown("#### 📊 Sector 勝率排行（形態確認組合平均）")
-    sector_stats['avg_win_rate_pct'] = sector_stats['avg_win_rate'] * 100
-    sector_stats['max_win_rate_pct'] = sector_stats['max_win_rate'] * 100
-    sector_display = sector_stats.reset_index()[
-        ['sector', 'avg_win_rate_pct', 'max_win_rate_pct', 'total_signals', 'n_combinations']
-    ].rename(columns={
-        'sector': 'Sector',
-        'avg_win_rate_pct': '平均勝率%',
-        'max_win_rate_pct': '最高勝率%',
-        'total_signals': '總信號數',
-        'n_combinations': '組合數'
-    })
-    st.dataframe(
-        sector_display.style.background_gradient(
-            cmap='Greens', subset=['平均勝率%']
-        ).format({'平均勝率%': '{:.1f}%', '最高勝率%': '{:.1f}%'}, precision=1),
-        use_container_width=True, hide_index=True
-    )
-
-    # ── 最佳 (Sector × Signal × Pattern) 組合 ──
-    st.markdown("#### 🎯 最佳 Signal × Pattern 組合（形態加成效果）")
-    imp = improvement_df[
-        (improvement_df['direction'] == 'bullish') &
-        (improvement_df['combined_count'] >= 10)
-    ].sort_values('improvement', ascending=False).head(15)
-    imp['improvement_pct'] = imp['improvement'] * 100
-    imp_display = imp[['sector', 'signal', 'pattern', 'combined_win_rate',
-                       'indicator_win_rate', 'improvement_pct', 'combined_count']].copy()
-    imp_display['combined_win_rate_pct'] = imp_display['combined_win_rate'] * 100
-    imp_display['indicator_win_rate_pct'] = imp_display['indicator_win_rate'] * 100
-    imp_display = imp_display.rename(columns={
-        'sector': 'Sector',
-        'signal': 'Signal',
-        'pattern': 'Pattern',
-        'combined_win_rate_pct': '組合勝率%',
-        'indicator_win_rate_pct': '指標勝率%',
-        'improvement_pct': '形態加成',
-        'combined_count': '樣本數'
-    })
-    st.dataframe(
-        imp_display[['Sector', 'Signal', 'Pattern', '組合勝率%', '指標勝率%', '形態加成', '樣本數']]
-        .style.background_gradient(cmap='RdYlGn', subset=['形態加成'])
-        .format({'組合勝率%': '{:.1f}%', '指標勝率%': '{:.1f}%', '形態加成': '{:+.1f}%'}, precision=1),
-        use_container_width=True, hide_index=True
-    )
-
-    # ── 止盈止損建議 ──
-    if exits_df is not None and len(exits_df) > 0:
-        st.markdown("#### 🛡️ 最佳止盈止損（分行業）")
-        exits_df = exits_df.sort_values('expected_return', ascending=False)
-        exits_display = exits_df[['sector', 'signal', 'tp', 'sl', 'expected_return',
-                                    'win_rate', 'n_trades']].copy()
-        exits_display['tp_pct'] = (exits_display['tp'] * 100).round(0).astype(int)
-        exits_display['sl_pct'] = (exits_display['sl'] * 100).round(1)
-        exits_display['exp_ret_pct'] = exits_display['expected_return'] * 100
-        exits_display['win_rate_pct'] = exits_display['win_rate'] * 100
-        exits_display = exits_display.rename(columns={
-            'sector': 'Sector',
-            'signal': 'Signal',
-            'tp_pct': '止盈%',
-            'sl_pct': '止損%',
-            'exp_ret_pct': '期望回報%',
-            'win_rate_pct': '勝率%',
-            'n_trades': '樣本'
-        })
-        st.dataframe(
-            exits_display[['Sector', 'Signal', '止盈%', '止損%', '期望回報%', '勝率%', '樣本']]
-            .style.background_gradient(cmap='Blues', subset=['期望回報%'])
-            .format({'止盈%': '{:.0f}%', '止損%': '{:.1f}%', '期望回報%': '{:+.2f}%', '勝率%': '{:.1f}%'}, precision=1),
-            use_container_width=True, hide_index=True
-        )
-    else:
-        st.caption("💡 止盈止損數據尚未生成（需運行 optimize_exits_by_sector.py）")
-
-except FileNotFoundError as e:
-    st.warning(f"⚠️ 缺少數據文件：{e}。請先運行 backtest_sector_subsector.py")
-except Exception as e:
-    st.error(f"載入失敗：{e}")
 
 # ─────────────────────────────────────────────────────────
 # NEWS SECTION

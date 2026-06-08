@@ -1081,8 +1081,7 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
             lambda i, _df=df, _d0=detect_harami:        _d0(_df, i),
             lambda i, _df=df, _d0=detect_piercing_line:  _d0(_df, i),
             lambda i, _df=df, _d0=detect_dark_cloud_cover: _d0(_df, i),
-            lambda i, _df=df, _d0=detect_tweezer_bottom: _d0(_df, i),
-            lambda i, _df=df, _d0=detect_tweezer_top:    _d0(_df, i),
+            # 鉗子底/頂已移除（Edward 要求）
             lambda i, _df=df, _d0=detect_three_white_soldiers: _d0(_df, i),
             lambda i, _df=df, _d0=detect_three_black_crows: _d0(_df, i),
             lambda i, _df=df, _d0=detect_three_inside_up:   _d0(_df, i),
