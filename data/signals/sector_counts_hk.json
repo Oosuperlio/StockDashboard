@@ -1,0 +1,31 @@
+{
+  "market": "hk",
+  "sectors": [
+    {
+      "sector": "Commerce & Industry",
+      "total_stocks": 24,
+      "signal_count": 8
+    },
+    {
+      "sector": "Finance",
+      "total_stocks": 8,
+      "signal_count": 1
+    },
+    {
+      "sector": "Properties",
+      "total_stocks": 8,
+      "signal_count": 3
+    },
+    {
+      "sector": "Unknown",
+      "total_stocks": 46,
+      "signal_count": 11
+    },
+    {
+      "sector": "Utilities",
+      "total_stocks": 5,
+      "signal_count": 5
+    }
+  ],
+  "updated": "2026-06-08"
+}

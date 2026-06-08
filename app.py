@@ -58,6 +58,13 @@ def filter_trading_days(df: pd.DataFrame, ticker: str) -> pd.DataFrame:
 
 st.set_page_config(page_title="Stock Dashboard", page_icon="📈", layout="wide")
 
+# ── Handle signal card click navigation (from ?nav_ticker=SYMBOL) ──
+nav_ticker = st.query_params.get("nav_ticker")
+if nav_ticker:
+    st.session_state["navigate_to_ticker"] = nav_ticker
+    st.query_params.clear()
+    st.rerun()
+
 # ── Custom card CSS ──────────────────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -236,6 +243,10 @@ st.markdown("""
 }
 .signal-tp { color: #48bb78; }
 .signal-sl { color: #fc8181; }
+.signal-wr { color: #e2e8f0; }
+.signal-wr b { color: #48bb78; }
+.signal-wr-sector { color: #e2e8f0; }
+.signal-wr-sector b { color: #a78bfa; }
 .signal-price-now { color: #e2e8f0; font-weight: 600; }
 .signal-vol { font-size: 11px; }
 .signal-vol-yes { color: #48bb78; }
@@ -248,6 +259,44 @@ st.markdown("""
 .signal-section-subtitle {
     font-size: 12px; color: #718096; margin-bottom: 14px;
 }
+/* ── Clickable card link ── */
+a.signal-card-link {
+    text-decoration: none !important;
+    color: inherit !important;
+    display: block;
+}
+a.signal-card-link:hover .signal-card {
+    border-color: #4a9eff;
+    box-shadow: 0 0 12px rgba(74, 158, 255, 0.15);
+}
+/* ── Sector stats ── */
+.sector-stats-container {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0;
+}
+.sector-stat-item {
+    background: #161c2e;
+    border: 1px solid #252e45;
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 120px;
+    flex: 1 0 auto;
+}
+.sector-stat-sig { border-left: 3px solid #48bb78; }
+.sector-stat-no-sig { border-left: 3px solid #4a5568; opacity: 0.6; }
+.sector-stat-name { font-size: 11px; color: #718096; margin-bottom: 4px; }
+.sector-stat-bar {
+    display: flex; align-items: center; gap: 8px;
+}
+.sector-stat-bar-fill {
+    height: 6px; border-radius: 3px; background: #2d3748; flex: 1; overflow: hidden;
+}
+.sector-stat-bar-fill-inner {
+    height: 100%; border-radius: 3px; background: #48bb78; transition: width 0.3s;
+}
+.sector-stat-numbers {
+    font-size: 11px; color: #a0aec0; white-space: nowrap;
+}
+.sector-stat-numbers b { color: #e2e8f0; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -282,6 +331,23 @@ from predictor import predict, format_prediction_html
 
 # ── Daily Signals (用於 signal homepage) ────────────────────────────────
 from database.signals import load_daily_signals, get_signal_summary, signal_date
+
+import json
+from pathlib import Path
+
+SIGNALS_DIR = Path(__file__).resolve().parent / "data" / "signals"
+
+def load_sector_counts(market: str = "us") -> list:
+    """Load sector total/signal counts from JSON saved by signal_scanner."""
+    path = SIGNALS_DIR / f"sector_counts_{market}.json"
+    if not path.exists():
+        return []
+    try:
+        with open(path) as f:
+            data = json.load(f)
+        return data.get("sectors", [])
+    except Exception:
+        return []
 
 
 # ─────────────────────────────────────────────
@@ -966,6 +1032,10 @@ def render_signal_homepage():
                     f"<div class='card-delta'>🔥 Tier-1: {t1} ｜ ⚡ Tier-2: {t2} ｜ 📊 Tier-3: {t3}</div></div>",
                     unsafe_allow_html=True)
 
+    # ── Sector breakdown ──
+    _render_sector_breakdown("us", "🇺🇸 美股板塊")
+    _render_sector_breakdown("hk", "🇭🇰 港股板塊")
+
     st.markdown("---")
 
     # ── Tabs for US / HK ──
@@ -976,6 +1046,40 @@ def render_signal_homepage():
 
     with tab_hk:
         _render_signal_tab(df_hk, "hk")
+
+
+def _render_sector_breakdown(market: str, label: str):
+    """Render a compact sector breakdown bar for one market."""
+    sectors = load_sector_counts(market)
+    if not sectors:
+        return
+
+    # Only show sectors that have either stocks or signals
+    sectors = [s for s in sectors if s["total_stocks"] > 0]
+    if not sectors:
+        return
+
+    # Sort: has signals first, then by signal_count desc
+    sectors.sort(key=lambda s: (-(1 if s["signal_count"] > 0 else 0), -s["signal_count"]))
+
+    html = f'<div class="card"><div class="card-header">{label} — 板塊分布</div><div class="sector-stats-container">'
+    for s in sectors:
+        pct = (s["signal_count"] / s["total_stocks"] * 100) if s["total_stocks"] > 0 else 0
+        cls = "sector-stat-sig" if s["signal_count"] > 0 else "sector-stat-no-sig"
+        html += f"""
+        <div class="sector-stat-item {cls}">
+            <div class="sector-stat-name">{s["sector"]}</div>
+            <div class="sector-stat-bar">
+                <div class="sector-stat-bar-fill">
+                    <div class="sector-stat-bar-fill-inner" style="width:{pct:.0f}%"></div>
+                </div>
+                <div class="sector-stat-numbers">
+                    <b>{s["signal_count"]}</b>/{s["total_stocks"]}
+                </div>
+            </div>
+        </div>"""
+    html += '</div></div>'
+    st.markdown(html, unsafe_allow_html=True)
 
 
 def _render_signal_tab(df: pd.DataFrame, market: str):
@@ -1009,7 +1113,7 @@ def _render_signal_tab(df: pd.DataFrame, market: str):
 
 def _render_signal_card(row: pd.Series, market: str, tier: int,
                         tier_classes: dict, tier_badges: dict):
-    """Render a single signal card with navigation button."""
+    """Render a single clickable signal card. Clicking navigates to stock detail page."""
     symbol = row.get("symbol", "?")
     sector = row.get("sector", "?")
     signal_name = row.get("signal", "?")
@@ -1017,7 +1121,6 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
     pattern_conf = row.get("pattern_conf", 0)
 
     price = row.get("price", 0)
-    win_rate = row.get("win_rate", 0)
     wr_stock = row.get("win_rate_stock")
     wr_sector = row.get("win_rate_sector")
     stock_n = int(row.get("stock_n", 0))
@@ -1036,19 +1139,24 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
     tp2_str = f"{price_prefix}{tp2:.2f}" if tp2 else "—"
     sl_str = f"{price_prefix}{sl:.2f}" if sl else "—"
 
-    # Win rate display
-    wr_pct = f"{win_rate:.0%}" if win_rate else "—"
-    stock_wr = f"{wr_stock:.0%}" if wr_stock and wr_stock > 0 else "—"
-    sector_wr = f"{wr_sector:.0%}" if wr_sector and wr_sector > 0 else "—"
+    # Win rate display — split into individual components
+    def _fmt_wr(val):
+        if val is None or val <= 0:
+            return "—"
+        return f"{val:.0%}"
+
+    stock_wr_str = _fmt_wr(wr_stock)
+    sector_wr_str = _fmt_wr(wr_sector)
+    stock_n_str = f"n={stock_n}" if stock_n > 0 else ""
+    sector_n_str = f"n={sector_n}" if sector_n > 0 else ""
 
     # Confidence indicator
-    flag = "🟢" if win_rate >= 0.60 else ("🟡" if win_rate >= 0.45 else "⚪")
+    overall_wr = row.get("win_rate", 0)
+    flag = "🟢" if overall_wr >= 0.60 else ("🟡" if overall_wr >= 0.45 else "⚪")
     vol_icon = "📈" if vol_conf else "⚪"
 
-    # Create a unique button key
-    btn_key = f"sig_{market}_{symbol}_{tier}_{i}" if '_i' in dir() else f"sig_{market}_{symbol}_{tier}"
-
     card_html = f"""
+    <a href="?nav_ticker={symbol}" class="signal-card-link">
     <div class="signal-card {tier_classes.get(tier, '')}">
         <div class="signal-header">
             <span class="signal-symbol">{flag} {vol_icon} {symbol}</span>
@@ -1059,25 +1167,22 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
         <div class="signal-pattern">📐 形態確認: {pattern} {f'({pattern_conf:.0%})' if pattern and pattern != 'None' else ''}</div>
         <div class="signal-meta">
             <span>💰 <b>{price_str}</b></span>
-            <span>📊 勝率: <b>{wr_pct}</b></span>
             <span>📈 回報: <b>{avg_ret:+.1%}</b></span>
         </div>
         <div class="signal-prices">
+            <span class="signal-wr">📊 個股勝率: <b>{stock_wr_str}</b> {stock_n_str}</span>
+            <span class="signal-wr-sector">🏢 板塊勝率: <b>{sector_wr_str}</b> {sector_n_str}</span>
+        </div>
+        <div class="signal-prices" style="border-top: none; padding-top: 4px;">
             <span class="signal-tp">🎯 TP1: {tp1_str}</span>
             <span class="signal-tp">🎯 TP2: {tp2_str}</span>
             <span class="signal-sl">🛑 SL: {sl_str}</span>
         </div>
     </div>
+    </a>
     """
 
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.markdown(card_html, unsafe_allow_html=True)
-    with col2:
-        st.write("")  # spacer
-        if st.button(f"🔍 查看詳情", key=f"nav_{market}_{symbol}_{tier}", use_container_width=True):
-            st.session_state["navigate_to_ticker"] = symbol
-            st.rerun()
+    st.markdown(card_html, unsafe_allow_html=True)
 
 
 

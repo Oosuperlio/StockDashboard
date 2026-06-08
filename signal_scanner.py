@@ -770,6 +770,55 @@ def _save_signals_for_dashboard(signals, args):
     _save_market(df_us, "us", scanned_us)
     _save_market(df_hk, "hk", scanned_hk)
 
+    # ── ③ Save sector total counts JSON for Dashboard sector breakdown ──
+    try:
+        import json
+        from collections import Counter
+
+        sector_map, _ = load_ticker_sector_map()
+
+        def _get_constituents_for_market(market_label: str) -> list:
+            """Return the list of tickers for the given market based on scan args."""
+            if market_label == "us":
+                tickers = []
+                if args.us_all or (not args.hsi and not args.ticker and not args.tickers):
+                    tickers = load_constituents('sp500') + load_constituents('nasdaq')
+                elif args.sp500:
+                    tickers = load_constituents('sp500')
+                elif args.nasdaq:
+                    tickers = load_constituents('nasdaq')
+                elif args.dow:
+                    tickers = load_constituents('dow')
+                return sorted(set(tickers))
+            else:  # hk
+                return load_constituents('hsi')
+
+        for mkt_label, mkt_df in [("us", df_us), ("hk", df_hk)]:
+            # Total stocks per sector
+            const_tickers = _get_constituents_for_market(mkt_label)
+            sector_total = Counter()
+            for sym in const_tickers:
+                sector_total[sector_map.get(sym, 'Unknown')] += 1
+
+            # Signals per sector from actual data
+            signal_counts = Counter(mkt_df["sector"]) if not mkt_df.empty else Counter()
+
+            # Build output
+            all_sectors = sorted(set(list(sector_total.keys()) + list(signal_counts.keys())))
+            sector_stats = []
+            for s in all_sectors:
+                sector_stats.append({
+                    "sector": s,
+                    "total_stocks": sector_total.get(s, 0),
+                    "signal_count": signal_counts.get(s, 0),
+                })
+
+            sector_json_path = base_dir / f"sector_counts_{mkt_label}.json"
+            with open(sector_json_path, "w") as f:
+                json.dump({"market": mkt_label, "sectors": sector_stats, "updated": today}, f, indent=2)
+    except Exception as e:
+        print(f"  ⚠️ 無法生成 sector 統計: {e}")
+
 
 BEST_COMBOS_SECTOR = {
     ('Commerce & Industry', 'BB 突破上軌 (超買)', 'Bearish Engulfing', 'Y', 'Y'): (0.5556, 0.0252, 9),
