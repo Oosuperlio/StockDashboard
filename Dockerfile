@@ -22,10 +22,11 @@ COPY indicator_signals.py .
 COPY signal_scanner.py .
 COPY optimize_exits_by_sector.py .
 
-# Copy data files (CSV results for Sector Monitor)
+# Copy data files (CSV results for Sector Monitor & daily signals)
 COPY backtest_sector_subsector_results.csv .
 COPY backtest_sector_improvement.csv .
 COPY backtest_4way_results.csv .
+COPY data/signals/ ./data/signals/
 
 # Set port
 ENV PORT=8000

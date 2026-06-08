@@ -223,12 +223,39 @@ def load_ticker_sector_map() -> Tuple[Dict[str, str], Dict[str, str]]:
 
     sector_map = dict(zip(combined['ticker'], combined['sector']))
     subsector_map = dict(zip(combined['ticker'], combined['subsector']))
+
+    # Wikipedia 行業 fallback for Nasdaq 100（不在 SP500 中的股票）
+    sp500_tickers = set(load_constituents('sp500'))
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    try:
+        url = 'https://en.wikipedia.org/wiki/Nasdaq-100'
+        resp = requests.get(url, headers=headers, timeout=15)
+        tables = pd.read_html(StringIO(resp.text))
+        for t in tables:
+            cols = [str(c) for c in t.columns.tolist()]
+            if 'Ticker' in cols and any('ICB Industry' in c for c in cols):
+                ticker_col = [c for c in cols if c == 'Ticker'][0]
+                sector_col = [c for c in cols if 'ICB Industry' in c][0]
+                subsector_col = [c for c in cols if 'ICB Subsector' in c][0]
+                for _, row in t.iterrows():
+                    tk = str(row[ticker_col]).strip()
+                    if tk not in sector_map and tk not in sp500_tickers:
+                        sector_map[tk] = row[sector_col] if pd.notna(row[sector_col]) else 'Unknown'
+                        subsector_map[tk] = row[subsector_col] if pd.notna(row[subsector_col]) else 'Unknown'
+                break
+    except Exception:
+        pass
+
     return sector_map, subsector_map
 
 
 def load_constituents(market: str) -> List[str]:
     if market == 'sp500':
         path = Path(__file__).parent / 'data' / 'constituents_sp500.txt'
+    elif market == 'nasdaq':
+        path = Path(__file__).parent / 'data' / 'constituents_nasdaq100.txt'
+    elif market == 'dow':
+        path = Path(__file__).parent / 'data' / 'constituents_dow.txt'
     else:
         path = Path(__file__).parent / 'data' / 'constituents_hsi.txt'
     with open(path, 'r') as f:
@@ -474,10 +501,18 @@ def scan_ticker(
 
 def scan_market(market: str, tier_filter: Optional[int] = None) -> List[ScanSignal]:
     """掃描整個市場"""
-    tickers = load_constituents(market)
-    sector_map, subsector_map = load_ticker_sector_map()
+    if market == 'us-all':
+        # 合併 SP500 + Nasdaq 100（去重，因為兩者有重疊）
+        sp_tickers = load_constituents('sp500')
+        nd_tickers = load_constituents('nasdaq')
+        tickers = sorted(set(sp_tickers + nd_tickers))
+        print(f"\n📡 掃描 美股全線 ({len(tickers)} 隻 = SP500 {len(sp_tickers)} + Nasdaq 獨有 {len(tickers)-len(sp_tickers)})...")
+    else:
+        tickers = load_constituents(market)
+        print(f"\n📡 掃描 {market} ({len(tickers)} 隻股票)...")
 
-    print(f"\n📡 掃描 {market} ({len(tickers)} 隻股票)...")
+    # 加載 Sector 映射（含 Yahoo Finance fallback for Nasdaq-only stocks）
+    sector_map, subsector_map = load_ticker_sector_map()
 
     # 批量加載數據
     all_data = load_latest_prices(tickers, days=90)
@@ -612,12 +647,17 @@ def signals_to_dataframe(signals: List[ScanSignal]) -> pd.DataFrame:
 def main():
     parser = argparse.ArgumentParser(description='每日信號掃描引擎')
     parser.add_argument('--sp500', action='store_true', help='只掃描 S&P 500')
+    parser.add_argument('--nasdaq', action='store_true', help='只掃描 Nasdaq 100')
+    parser.add_argument('--dow', action='store_true', help='只掃描 Dow Jones 30')
+    parser.add_argument('--us-all', action='store_true', help='掃描全部美股（SP500 + Nasdaq 100）')
     parser.add_argument('--hsi', action='store_true', help='只掃描 HSI')
     parser.add_argument('--ticker', type=str, help='掃描指定股票（如 0700.HK）')
     parser.add_argument('--tickers', type=str, help='逗號分隔股票列表')
     parser.add_argument('--tier', type=int, choices=[1, 2, 3], help='只輸出指定 Tier')
     parser.add_argument('--top', type=int, default=20, help='輸出前 N 個')
-    parser.add_argument('--output', type=str, help='儲存為 CSV')
+    parser.add_argument('--output', type=str, help='儲存為 CSV（指定路徑）')
+    parser.add_argument('--save', action='store_true',
+                        help='自動儲存到 data/signals/（用於 Dashboard 整合）')
     args = parser.parse_args()
 
     # 決定掃描範圍
@@ -627,6 +667,12 @@ def main():
         signals = scan_tickers([t.strip() for t in args.tickers.split(',')])
     elif args.sp500:
         signals = scan_market('sp500', tier_filter=args.tier)
+    elif args.nasdaq:
+        signals = scan_market('nasdaq', tier_filter=args.tier)
+    elif args.dow:
+        signals = scan_market('dow', tier_filter=args.tier)
+    elif args.us_all:
+        signals = scan_market('us-all', tier_filter=args.tier)
     elif args.hsi:
         signals = scan_market('hsi', tier_filter=args.tier)
     else:
@@ -650,6 +696,48 @@ def main():
         out_path = Path(__file__).parent / args.output
         df.to_csv(out_path, index=False)
         print(f"\n💾 已儲存至 {out_path}")
+
+    # ── --save: 自動儲存到 data/signals/（Dashboard 整合） ──────────────
+    if args.save:
+        _save_signals_for_dashboard(signals, args)
+
+
+def _save_signals_for_dashboard(signals, args):
+    """Save signal results to data/signals/ for Railway Dashboard consumption."""
+    from pathlib import Path
+    from datetime import date
+
+    today = date.today().isoformat()
+    base_dir = Path(__file__).parent / "data" / "signals"
+    base_dir.mkdir(parents=True, exist_ok=True)
+
+    df = signals_to_dataframe(signals)
+
+    # Separate US and HK signals by suffix
+    df_us = df[~df['symbol'].str.endswith('.HK')].copy()
+    df_hk = df[df['symbol'].str.endswith('.HK')].copy()
+
+    def _save_market(df_part: pd.DataFrame, market_label: str):
+        """Save dated file + latest (overwrite) file."""
+        if df_part.empty:
+            print(f"  ⚠️ {market_label}: 無信號，跳過")
+            return
+        dated_path = base_dir / f"daily_signals_{market_label}_{today}.csv"
+        latest_path = base_dir / f"latest_signals_{market_label}.csv"
+        df_part.to_csv(dated_path, index=False)
+        df_part.to_csv(latest_path, index=False)
+        print(f"  ✅ {market_label}: {len(df_part)} 個信號 -> {dated_path.name}")
+
+    # Also save combined
+    if not df.empty:
+        combined_dated = base_dir / f"daily_signals_all_{today}.csv"
+        combined_latest = base_dir / "latest_signals_all.csv"
+        df.to_csv(combined_dated, index=False)
+        df.to_csv(combined_latest, index=False)
+        print(f"  ✅ 合計: {len(df)} 個信號 -> {combined_dated.name}")
+
+    _save_market(df_us, "us")
+    _save_market(df_hk, "hk")
 
 
 BEST_COMBOS_SECTOR = {
@@ -11894,3 +11982,6 @@ BEST_COMBOS_STOCK = {
     ('ZTS', 'Health Care', '價格突破 EMA20', 'None', 'N', 'N'): (0.1818, -0.0068, 33),
     ('ZTS', 'Health Care', '價格跌破 EMA20', 'None', 'N', 'N'): (0.3600, 0.0090, 25),
 }
+
+if __name__ == '__main__':
+    main()

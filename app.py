@@ -188,6 +188,69 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ── Signal card CSS ───────────────────────────────────────────────
+st.markdown("""
+<style>
+.signal-card {
+    background: #1a2035;
+    border: 1px solid #252e45;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.signal-card:hover {
+    border-color: #4a9eff;
+}
+.signal-tier-1 { border-left: 4px solid #ff6b6b; }
+.signal-tier-2 { border-left: 4px solid #ffd93d; }
+.signal-tier-3 { border-left: 4px solid #6bcbff; }
+.signal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+}
+.signal-symbol { font-size: 16px; font-weight: 700; color: #e2e8f0; }
+.signal-tier-badge {
+    font-size: 11px; font-weight: 600; padding: 2px 8px;
+    border-radius: 10px; letter-spacing: 0.05em;
+}
+.tier-badge-1 { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+.tier-badge-2 { background: rgba(255,217,61,0.2); color: #ffd93d; }
+.tier-badge-3 { background: rgba(107,203,255,0.2); color: #6bcbff; }
+.signal-sector { font-size: 11px; color: #718096; }
+.signal-signal { font-size: 13px; color: #cbd5e0; margin: 4px 0; }
+.signal-pattern {
+    font-size: 11px; color: #a0aec0;
+    background: rgba(255,255,255,0.05); border-radius: 6px;
+    padding: 2px 8px; display: inline-block; margin: 2px 0;
+}
+.signal-meta {
+    display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px;
+    font-size: 12px; color: #a0aec0;
+}
+.signal-meta b { color: #e2e8f0; }
+.signal-prices {
+    display: flex; gap: 16px; margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid #2d3748; font-size: 12px;
+}
+.signal-tp { color: #48bb78; }
+.signal-sl { color: #fc8181; }
+.signal-price-now { color: #e2e8f0; font-weight: 600; }
+.signal-vol { font-size: 11px; }
+.signal-vol-yes { color: #48bb78; }
+.signal-vol-no { color: #718096; }
+.signal-section-title {
+    font-size: 18px; font-weight: 700; color: #e2e8f0;
+    margin: 20px 0 10px 0;
+    padding-bottom: 8px; border-bottom: 2px solid #2d3748;
+}
+.signal-section-subtitle {
+    font-size: 12px; color: #718096; margin-bottom: 14px;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 def metric_row(label, value):
     return f'<div class="metric-pair"><span class="metric-label">{label}</span><span class="metric-val">{value}</span></div>'
@@ -216,6 +279,9 @@ from database.cache import (
 from pattern_detector import detect_all_patterns, get_latest_patterns
 from pattern_annotator import add_pattern_markers, build_pattern_legend
 from predictor import predict, format_prediction_html
+
+# ── Daily Signals (用於 signal homepage) ────────────────────────────────
+from database.signals import load_daily_signals, get_signal_summary, signal_date
 
 
 # ─────────────────────────────────────────────
@@ -869,6 +935,146 @@ def m4(col, label, value, delta=None):
 
 st.title("📈 Stock Dashboard")
 
+
+# ──────────────── Signal Homepage ────────────────
+def render_signal_homepage():
+    """Render the daily signals homepage with clickable signal cards."""
+    df_us = load_daily_signals("us")
+    df_hk = load_daily_signals("hk")
+
+    if df_us.empty and df_hk.empty:
+        st.info("📡 今日無信號數據。信號掃描將在交易日自動生成。")
+        return
+
+    sig_date = signal_date() or "今日"
+
+    # ── Summary stats ──
+    col_s, _, _ = st.columns([1, 1, 1])
+    with col_s:
+        total = len(df_us) + len(df_hk)
+        t1 = int((df_us["tier"] == 1).sum()) + int((df_hk["tier"] == 1).sum()) if total > 0 else 0
+        t2 = int((df_us["tier"] == 2).sum()) + int((df_hk["tier"] == 2).sum()) if total > 0 else 0
+        t3 = total - t1 - t2
+        st.markdown(f"<div class='card'><div class='card-header'>📡 信號總覽 ({sig_date})</div>"
+                    f"<div class='card-value'>共 {total} 個</div>"
+                    f"<div class='card-delta'>🔥 Tier-1: {t1} ｜ ⚡ Tier-2: {t2} ｜ 📊 Tier-3: {t3}</div></div>",
+                    unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # ── Tabs for US / HK ──
+    tab_us, tab_hk = st.tabs(["🇺🇸 美股信號", "🇭🇰 港股信號"])
+
+    with tab_us:
+        _render_signal_tab(df_us, "us")
+
+    with tab_hk:
+        _render_signal_tab(df_hk, "hk")
+
+
+def _render_signal_tab(df: pd.DataFrame, market: str):
+    """Render signal cards for one market tab."""
+    if df.empty:
+        st.caption("📭 暫無信號")
+        return
+
+    # Sort: tier asc, win_rate desc
+    df = df.sort_values(["tier", "win_rate"], ascending=[True, False]).reset_index(drop=True)
+
+    tier_labels = {1: "🔥 Tier-1 強烈買入信號", 2: "⚡ Tier-2 買入信號", 3: "📊 Tier-3 觀察信號"}
+    tier_classes = {1: "signal-tier-1", 2: "signal-tier-2", 3: "signal-tier-3"}
+    tier_badges = {1: "tier-badge-1", 2: "tier-badge-2", 3: "tier-badge-3"}
+
+    for tier in [1, 2, 3]:
+        tier_df = df[df["tier"] == tier]
+        if tier_df.empty:
+            continue
+
+        st.markdown(f"<div class='signal-section-title'>{tier_labels[tier]}</div>"
+                    f"<div class='signal-section-subtitle'>{len(tier_df)} 個信號</div>",
+                    unsafe_allow_html=True)
+
+        # Two-column layout for signal cards
+        cols = st.columns(2)
+        for i, (_, row) in enumerate(tier_df.iterrows()):
+            with cols[i % 2]:
+                _render_signal_card(row, market, tier, tier_classes, tier_badges)
+
+
+def _render_signal_card(row: pd.Series, market: str, tier: int,
+                        tier_classes: dict, tier_badges: dict):
+    """Render a single signal card with navigation button."""
+    symbol = row.get("symbol", "?")
+    sector = row.get("sector", "?")
+    signal_name = row.get("signal", "?")
+    pattern = row.get("pattern", "None")
+    pattern_conf = row.get("pattern_conf", 0)
+
+    price = row.get("price", 0)
+    win_rate = row.get("win_rate", 0)
+    wr_stock = row.get("win_rate_stock")
+    wr_sector = row.get("win_rate_sector")
+    stock_n = int(row.get("stock_n", 0))
+    sector_n = int(row.get("sector_n", 0))
+    avg_ret = row.get("avg_return", 0)
+    vol_conf = bool(row.get("volume_confirmed", False))
+
+    tp1 = row.get("tp1_price", 0)
+    tp2 = row.get("tp2_price", 0)
+    sl = row.get("sl_price", 0)
+
+    # Price formatting
+    price_prefix = "HK$" if market == "hk" else "$"
+    price_str = f"{price_prefix}{price:.2f}" if price else "—"
+    tp1_str = f"{price_prefix}{tp1:.2f}" if tp1 else "—"
+    tp2_str = f"{price_prefix}{tp2:.2f}" if tp2 else "—"
+    sl_str = f"{price_prefix}{sl:.2f}" if sl else "—"
+
+    # Win rate display
+    wr_pct = f"{win_rate:.0%}" if win_rate else "—"
+    stock_wr = f"{wr_stock:.0%}" if wr_stock and wr_stock > 0 else "—"
+    sector_wr = f"{wr_sector:.0%}" if wr_sector and wr_sector > 0 else "—"
+
+    # Confidence indicator
+    flag = "🟢" if win_rate >= 0.60 else ("🟡" if win_rate >= 0.45 else "⚪")
+    vol_icon = "📈" if vol_conf else "⚪"
+
+    # Create a unique button key
+    btn_key = f"sig_{market}_{symbol}_{tier}_{i}" if '_i' in dir() else f"sig_{market}_{symbol}_{tier}"
+
+    card_html = f"""
+    <div class="signal-card {tier_classes.get(tier, '')}">
+        <div class="signal-header">
+            <span class="signal-symbol">{flag} {vol_icon} {symbol}</span>
+            <span class="signal-tier-badge {tier_badges.get(tier, '')}">Tier-{tier}</span>
+        </div>
+        <div class="signal-sector">🏭 {sector[:20]}</div>
+        <div class="signal-signal">{signal_name}</div>
+        <div class="signal-pattern">📐 形態確認: {pattern} {f'({pattern_conf:.0%})' if pattern and pattern != 'None' else ''}</div>
+        <div class="signal-meta">
+            <span>💰 <b>{price_str}</b></span>
+            <span>📊 勝率: <b>{wr_pct}</b></span>
+            <span>📈 回報: <b>{avg_ret:+.1%}</b></span>
+        </div>
+        <div class="signal-prices">
+            <span class="signal-tp">🎯 TP1: {tp1_str}</span>
+            <span class="signal-tp">🎯 TP2: {tp2_str}</span>
+            <span class="signal-sl">🛑 SL: {sl_str}</span>
+        </div>
+    </div>
+    """
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.markdown(card_html, unsafe_allow_html=True)
+    with col2:
+        st.write("")  # spacer
+        if st.button(f"🔍 查看詳情", key=f"nav_{market}_{symbol}_{tier}", use_container_width=True):
+            st.session_state["navigate_to_ticker"] = symbol
+            st.rerun()
+
+
+
 # ── 側邊欄：股票搜尋 ──
 st.sidebar.header("🔍 股票搜尋")
 search_query = st.sidebar.text_input(
@@ -899,17 +1105,16 @@ elif search_query:
     # 有輸入但沒有建議，嘗試直接使用輸入作為 ticker
     st.sidebar.warning(f"找不到「{search_query}」，請嘗試其他關鍵字")
 
-# 如果沒有輸入，使用預設
+# 如果沒有輸入且不是從信號按鈕跳轉，顯示信號首頁
 if not selected_ticker:
-    st.sidebar.caption("直接輸入股票代碼，例如：3968.HK、0700.HK、TSLA、JPM")
-    # 嘗試直接解析輸入作為 ticker
-    raw = search_query.strip().upper()
-    if raw:
-        # 如果看起來像 ticker（包含 . 或全大寫字母）
-        if "." in raw or raw.isalpha():
+    # 檢查是否從信號卡片點擊跳轉
+    if "navigate_to_ticker" in st.session_state and st.session_state.navigate_to_ticker:
+        selected_ticker = st.session_state.pop("navigate_to_ticker")
+    else:
+        st.sidebar.caption("💡 輸入股票代碼搜尋，或瀏覽下方信號")
+        raw = search_query.strip().upper()
+        if raw and ( "." in raw or raw.isalpha() ):
             selected_ticker = raw
-    if not selected_ticker:
-        selected_ticker = "3968.HK"  # 預設
 
 days_range = st.sidebar.slider("顯示天數", 30, 365, 90)
 
@@ -923,6 +1128,13 @@ with col2:
         data = load_stock_data(selected_ticker, force_refresh=True)
         st.rerun()
 
+# ── 信號首頁（無搜尋時顯示）──
+if not selected_ticker:
+    render_signal_homepage()
+    st.markdown("---")
+    st.caption(f"💡 在側邊欄輸入股票代碼可查看個股詳情 | 最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    st.stop()
+
 # ── 實時報價 + 財務數據 + 新聞（全部來自 DB 緩存）──
 data = load_stock_data(selected_ticker, days=days_range, force_refresh=False)
 prices = data["prices"]
@@ -930,6 +1142,15 @@ financials = data["financials"]
 news_items = data["news"]
 
 # ── 市場診斷提示（協助確認假期過濾是否生效）──
+# 返回信號首頁按鈕（當從信號卡片跳轉時顯示）
+from_home = st.session_state.get("_came_from_home", False)
+col_b, col_spacer = st.columns([1, 5])
+with col_b:
+    if st.button("← 返回信號首頁", use_container_width=True):
+        st.session_state.pop("navigate_to_ticker", None)
+        st.session_state["_came_from_home"] = False
+        st.rerun()
+
 _mkt = get_market_from_ticker(selected_ticker)
 if _mkt == "HK":
     _sample_hol = list(HKEX_HOLIDAYS)[:3]
