@@ -665,21 +665,28 @@ def main():
         signals = scan_tickers([args.ticker])
     elif args.tickers:
         signals = scan_tickers([t.strip() for t in args.tickers.split(',')])
-    elif args.sp500:
-        signals = scan_market('sp500', tier_filter=args.tier)
-    elif args.nasdaq:
-        signals = scan_market('nasdaq', tier_filter=args.tier)
-    elif args.dow:
-        signals = scan_market('dow', tier_filter=args.tier)
-    elif args.us_all:
-        signals = scan_market('us-all', tier_filter=args.tier)
-    elif args.hsi:
-        signals = scan_market('hsi', tier_filter=args.tier)
     else:
-        # 默認：兩個市場都掃
-        sigs_sp = scan_market('sp500', tier_filter=args.tier)
-        sigs_hk = scan_market('hsi', tier_filter=args.tier)
-        signals = sigs_sp + sigs_hk
+        # 累積掃描所有選中的市場（支援多個 flag 同時指定）
+        signals = []
+        scanned_markets = set()
+        if args.sp500:
+            signals += scan_market('sp500', tier_filter=args.tier)
+            scanned_markets.add('sp500')
+        if args.nasdaq:
+            signals += scan_market('nasdaq', tier_filter=args.tier)
+            scanned_markets.add('nasdaq')
+        if args.dow:
+            signals += scan_market('dow', tier_filter=args.tier)
+            scanned_markets.add('dow')
+        if args.us_all:
+            signals += scan_market('us-all', tier_filter=args.tier)
+            scanned_markets.add('us-all')
+        if args.hsi:
+            signals += scan_market('hsi', tier_filter=args.tier)
+            scanned_markets.add('hsi')
+        if not scanned_markets:
+            # 默認：兩個市場都掃
+            signals = scan_market('sp500', tier_filter=args.tier) + scan_market('hsi', tier_filter=args.tier)
 
     if not signals:
         print("📡 今日無符合條件的信號")
