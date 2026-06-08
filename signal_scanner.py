@@ -683,6 +683,9 @@ def main():
 
     if not signals:
         print("📡 今日無符合條件的信號")
+        # Even with no signals, save stub files for Dashboard
+        if args.save:
+            _save_signals_for_dashboard(signals, args)
         return
 
     # 輸出
@@ -713,20 +716,41 @@ def _save_signals_for_dashboard(signals, args):
 
     df = signals_to_dataframe(signals)
 
-    # Separate US and HK signals by suffix
-    df_us = df[~df['symbol'].str.endswith('.HK')].copy()
-    df_hk = df[df['symbol'].str.endswith('.HK')].copy()
+    # ── Define the expected columns for empty stub files ──
+    SIGNAL_COLUMNS = [
+        'symbol', 'sector', 'subsector', 'indicator', 'signal', 'pattern',
+        'pattern_conf', 'confidence', 'win_rate', 'win_rate_stock', 'win_rate_sector',
+        'stock_n', 'sector_n', 'avg_return', 'price', 'tp1_price', 'tp2_price',
+        'sl_price', 'date', 'tier', 'volume_confirmed'
+    ]
 
-    def _save_market(df_part: pd.DataFrame, market_label: str):
-        """Save dated file + latest (overwrite) file."""
-        if df_part.empty:
-            print(f"  ⚠️ {market_label}: 無信號，跳過")
-            return
+    # Determine which markets were scanned from args
+    scanned_us = any([args.sp500, args.nasdaq, args.dow, args.us_all]) or \
+                 (not args.hsi and not args.ticker and not args.tickers)
+    scanned_hk = args.hsi or (not args.sp500 and not args.nasdaq and not args.dow
+                              and not args.us_all and not args.ticker and not args.tickers)
+
+    # Separate US and HK signals by suffix
+    df_us = df[~df['symbol'].str.endswith('.HK')].copy() if not df.empty else pd.DataFrame(columns=SIGNAL_COLUMNS)
+    df_hk = df[df['symbol'].str.endswith('.HK')].copy() if not df.empty else pd.DataFrame(columns=SIGNAL_COLUMNS)
+
+    def _save_market(df_part: pd.DataFrame, market_label: str, scanned: bool):
+        """Save dated file + latest (overwrite) file.
+        Only overwrites latest file if this market was actually scanned.
+        If not scanned, only saves the dated file (for historical record).
+        If file doesn't exist yet and not scanned, create a stub."""
         dated_path = base_dir / f"daily_signals_{market_label}_{today}.csv"
         latest_path = base_dir / f"latest_signals_{market_label}.csv"
         df_part.to_csv(dated_path, index=False)
-        df_part.to_csv(latest_path, index=False)
-        print(f"  ✅ {market_label}: {len(df_part)} 個信號 -> {dated_path.name}")
+
+        if scanned:
+            df_part.to_csv(latest_path, index=False)  # Only overwrite latest when scanned
+        elif not latest_path.exists() and df_part.empty:
+            df_part.to_csv(latest_path, index=False)  # Create initial stub if missing
+
+        count = len(df_part)
+        if count > 0:
+            print(f"  ✅ {market_label}: {count} 個信號 -> {dated_path.name}")
 
     # Also save combined
     if not df.empty:
@@ -736,8 +760,8 @@ def _save_signals_for_dashboard(signals, args):
         df.to_csv(combined_latest, index=False)
         print(f"  ✅ 合計: {len(df)} 個信號 -> {combined_dated.name}")
 
-    _save_market(df_us, "us")
-    _save_market(df_hk, "hk")
+    _save_market(df_us, "us", scanned_us)
+    _save_market(df_hk, "hk", scanned_hk)
 
 
 BEST_COMBOS_SECTOR = {
