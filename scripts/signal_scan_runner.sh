@@ -6,6 +6,8 @@
 
 set -euo pipefail
 
+RAILWAY_CLI="/Users/aiagent/.hermes/node/bin/railway"
+
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$SCRIPT_DIR"
 
@@ -28,16 +30,16 @@ SCAN_EXIT=$?
 echo "---"
 echo "🔁 [$(date '+%Y-%m-%d %H:%M:%S %Z')] 掃描完成 (exit=$SCAN_EXIT)"
 
-# 步驟 4：提交信號 CSV 到 GitHub，觸發 Railway 自動部署
+# 步驟 4：提交信號 CSV 到 GitHub（版本歷史記錄）
 if [ -d "$SCRIPT_DIR/data/signals" ]; then
     echo "📤 提交信號數據到 GitHub..."
     cd "$SCRIPT_DIR"
-    git add data/signals/latest_signals_*.csv data/signals/.gitkeep 2>/dev/null || true
+    git add data/signals/latest_signals_*.csv data/signals/daily_signals_*.csv data/signals/sector_counts_*.json data/signals/.gitkeep 2>/dev/null || true
 
     # 只在有變更時才 commit + push
     if ! git diff --cached --quiet; then
         git commit -m "🤖 auto: update daily signal results [$(date '+%Y-%m-%d %H:%M')]"
-        echo "🚂 推送至 GitHub → 觸發 Railway 部署..."
+        echo "🚂 推送至 GitHub（版本歷史）..."
         git push origin main 2>&1 || echo "⚠️ git push 失敗（可能無變更或網路問題）"
     else
         echo "⏭️  信號數據無變更，跳過 git push"
@@ -45,6 +47,10 @@ if [ -d "$SCRIPT_DIR/data/signals" ]; then
 else
     echo "⚠️ data/signals/ 目錄不存在，跳過 git push"
 fi
+
+# 步驟 5：直接上傳到 Railway 觸發部署（git push 的 webhook 已失效）
+echo "🚀 上傳至 Railway 觸發部署..."
+$RAILWAY_CLI up 2>&1 || echo "⚠️ railway up 失敗，請檢查 Railway CLI 是否已登入"
 
 echo "✅ [$(date '+%Y-%m-%d %H:%M:%S %Z')] 完成"
 exit $SCAN_EXIT
