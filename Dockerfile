@@ -28,10 +28,6 @@ COPY backtest_sector_improvement.csv ./
 COPY backtest_4way_results.csv ./
 COPY data/signals/ ./data/signals/
 
-# Copy DuckDB price database for candlestick charts
-COPY data/prices.ddb ./data/prices.ddb
-COPY data/financials.ddb ./data/financials.ddb
-
 # Set port
 ENV PORT=8000
 
