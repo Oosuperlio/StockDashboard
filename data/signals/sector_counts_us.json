@@ -4,67 +4,67 @@
     {
       "sector": "Communication Services",
       "total_stocks": 23,
-      "signal_count": 0
+      "signal_count": 8
     },
     {
       "sector": "Consumer Discretionary",
       "total_stocks": 49,
-      "signal_count": 0
+      "signal_count": 7
     },
     {
       "sector": "Consumer Staples",
       "total_stocks": 36,
-      "signal_count": 0
+      "signal_count": 1
     },
     {
       "sector": "Energy",
       "total_stocks": 21,
-      "signal_count": 0
+      "signal_count": 5
     },
     {
       "sector": "Financials",
       "total_stocks": 75,
-      "signal_count": 0
+      "signal_count": 11
     },
     {
       "sector": "Health Care",
       "total_stocks": 59,
-      "signal_count": 0
+      "signal_count": 3
     },
     {
       "sector": "Industrials",
       "total_stocks": 79,
-      "signal_count": 0
+      "signal_count": 5
     },
     {
       "sector": "Information Technology",
       "total_stocks": 72,
-      "signal_count": 0
+      "signal_count": 11
     },
     {
       "sector": "Materials",
       "total_stocks": 26,
-      "signal_count": 0
+      "signal_count": 4
     },
     {
       "sector": "Real Estate",
       "total_stocks": 31,
-      "signal_count": 0
+      "signal_count": 3
     },
     {
       "sector": "Technology",
       "total_stocks": 5,
-      "signal_count": 0
+      "signal_count": 1
     },
     {
       "sector": "Unknown",
       "total_stocks": 13,
-      "signal_count": 0
+      "signal_count": 2
     },
     {
       "sector": "Utilities",
       "total_stocks": 31,
-      "signal_count": 0
+      "signal_count": 5
     }
   ],
   "updated": "2026-06-16"
