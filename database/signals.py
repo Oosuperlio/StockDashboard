@@ -100,19 +100,13 @@ def get_signal_summary(market: Optional[str] = None) -> dict:
 
 def signal_date() -> Optional[str]:
     """
-    Return the date of the latest signals (from the file's mtime or date column),
+    Return the date of the latest signal scan (from file mtime),
     or None if no signals found.
     """
     path = SIGNALS_DIR / "latest_signals_all.csv"
     if not path.exists():
         return None
-    try:
-        df = pd.read_csv(path, nrows=1)
-        if "date" in df.columns and not df["date"].isna().all():
-            return str(df["date"].iloc[0])
-    except Exception:
-        pass
-    # Fallback to file mtime
+    # Use file mtime — represents when the scan was last run
     from datetime import datetime
     mtime = os.path.getmtime(path)
     return datetime.fromtimestamp(mtime).strftime("%Y-%m-%d")
