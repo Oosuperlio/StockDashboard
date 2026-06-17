@@ -3,23 +3,23 @@
   "sectors": [
     {
       "sector": "Commerce & Industry",
-      "total_stocks": 24,
-      "signal_count": 10
+      "total_stocks": 38,
+      "signal_count": 15
     },
     {
       "sector": "Finance",
-      "total_stocks": 8,
-      "signal_count": 0
+      "total_stocks": 10,
+      "signal_count": 1
     },
     {
       "sector": "Properties",
-      "total_stocks": 8,
-      "signal_count": 3
+      "total_stocks": 10,
+      "signal_count": 4
     },
     {
       "sector": "Unknown",
-      "total_stocks": 46,
-      "signal_count": 15
+      "total_stocks": 50,
+      "signal_count": 16
     },
     {
       "sector": "Utilities",

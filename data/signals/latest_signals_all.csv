@@ -8,11 +8,17 @@ symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rat
 1877.HK,Unknown,Unknown,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.4167,,0.4167,0,84,0.0144,15.89,16.12,16.35,15.73,2026-06-17,3,False
 2111.HK,Unknown,Unknown,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.4167,,0.4167,0,84,0.0144,2.52,2.56,2.59,2.49,2026-06-16,3,False
 2238.HK,Unknown,Unknown,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.4167,,0.4167,0,84,0.0144,2.32,2.35,2.39,2.3,2026-06-17,3,False
+0241.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3889,,0.3889,0,36,0.0127,3.36,3.4,3.45,3.33,2026-06-17,3,False
 0941.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3889,,0.3889,0,36,0.0127,80.8,81.83,82.85,79.99,2026-06-17,3,False
+6618.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3889,,0.3889,0,36,0.0127,35.42,35.87,36.32,35.07,2026-06-17,3,False
 0823.HK,Properties,Properties,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.3846,0.3846,0.3778,13,90,0.0117,36.98,37.41,37.85,36.61,2026-06-15,3,False
+1024.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3821,,0.3821,0,123,0.0084,47.7,48.1,48.5,47.22,2026-06-17,3,False
 2899.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3821,,0.3821,0,123,0.0084,33.34,33.62,33.9,33.01,2026-06-16,3,False
 1177.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.375,0.375,0.3821,8,123,-0.0086,4.78,4.74,4.7,4.73,2026-06-15,3,False
 2202.HK,Unknown,Unknown,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.375,0.375,0.2529,8,257,0.0138,2.63,2.67,2.7,2.6,2026-06-15,3,False
+2318.HK,Finance,Finance,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3667,,0.3667,0,30,0.0152,57.7,58.58,59.45,57.12,2026-06-15,3,True
+1876.HK,Commerce & Industry,Commerce & Industry,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3654,,0.3654,0,156,0.0056,6.65,6.69,6.72,6.58,2026-06-17,3,False
+2020.HK,Commerce & Industry,Commerce & Industry,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3654,,0.3654,0,156,0.0056,72.1,72.5,72.91,71.38,2026-06-17,3,False
 0857.HK,Commerce & Industry,Commerce & Industry,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3333,0.3333,0.3654,9,156,0.0101,9.73,9.83,9.93,9.63,2026-06-17,3,False
 0012.HK,Properties,Properties,RSI,RSI 維持超賣,None,0.0,0.385,0.3333,0.3333,0.2857,6,28,0.01,26.36,26.62,26.89,26.1,2026-06-17,3,False
 0003.HK,Utilities,Utilities,RSI,RSI 維持超賣,None,0.0,0.385,0.3051,,0.3051,0,354,0.0063,6.68,6.72,6.76,6.61,2026-06-17,3,False
@@ -23,8 +29,10 @@ symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rat
 1999.HK,Unknown,Unknown,RSI,RSI 維持超賣,None,0.0,0.385,0.2923,,0.2923,0,366,0.0062,3.34,3.36,3.38,3.31,2026-06-17,3,False
 0006.HK,Utilities,Utilities,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.2914,,0.2914,0,175,-0.0003,56.2,56.18,56.17,55.64,2026-06-17,3,False
 0101.HK,Properties,Properties,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.2857,,0.2857,0,21,0.0067,7.53,7.58,7.63,7.45,2026-06-17,3,False
+1997.HK,Properties,Properties,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.2857,,0.2857,0,21,0.0067,21.78,21.93,22.07,21.56,2026-06-17,3,False
 2600.HK,Unknown,Unknown,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.2857,0.2857,0.3687,7,339,-0.0073,8.8,8.74,8.67,8.71,2026-06-17,3,False
 2138.HK,Unknown,Unknown,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2857,0.2857,0.2529,7,257,-0.0085,0.39,0.39,0.38,0.39,2026-06-16,3,False
+1787.HK,Unknown,Unknown,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2529,,0.2529,0,257,-0.0008,23.08,23.06,23.04,22.85,2026-06-15,3,False
 2601.HK,Unknown,Unknown,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2529,,0.2529,0,257,-0.0008,31.94,31.91,31.89,31.62,2026-06-15,3,False
 0738.HK,Unknown,Unknown,RSI,RSI 維持超賣,None,0.0,0.385,0.25,0.25,0.2923,12,366,0.0132,0.27,0.27,0.28,0.27,2026-06-17,3,False
 0066.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2,0.2,0.3821,5,123,0.0127,31.84,32.24,32.65,31.52,2026-06-15,3,False
