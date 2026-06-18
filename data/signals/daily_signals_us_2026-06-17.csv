@@ -1,1 +1,65 @@
 symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rate,win_rate_stock,win_rate_sector,stock_n,sector_n,avg_return,price,tp1_price,tp2_price,sl_price,date,tier,volume_confirmed
+FISV,Financials,Transaction & Payment Processing Services,RSI,RSI 超賣區域 (30),Support,0.8,1.0,0.7143,,0.7143,0,7,0.0267,47.91,49.19,50.47,47.43,2026-06-15,1,True
+ADBE,Information Technology,Application Software,BB,BB 跌破下軌 (超賣),Bullish Engulfing,0.75,1.0,0.6757,,0.6757,0,74,0.0425,206.36,215.13,223.9,204.3,2026-06-15,1,False
+ADSK,Information Technology,Application Software,RSI,RSI 維持超賣,Bullish Engulfing,0.75,0.885,0.6327,,0.6327,0,49,0.0358,198.6,205.71,212.82,196.61,2026-06-15,1,False
+BSX,Health Care,Health Care Equipment,RSI,RSI 維持超賣,None,0.0,0.385,0.6364,0.6364,0.3045,11,1271,0.0165,46.65,47.42,48.19,46.18,2026-06-17,3,False
+CVNA,Consumer Discretionary,Automotive Retail,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.625,0.625,0.306,8,732,0.0881,68.9,74.97,81.04,68.21,2026-06-15,3,False
+GEV,Industrials,Heavy Electrical Equipment,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.6,0.6,0.3168,5,1212,0.008,982.35,990.21,998.07,972.53,2026-06-16,3,False
+APA,Energy,Oil & Gas Exploration & Production,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.5625,0.5625,0.3294,32,507,0.0136,34.08,34.54,35.01,33.74,2026-06-17,3,False
+VST,Utilities,Electric Utilities,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.5455,0.5455,0.2601,11,546,0.0343,159.94,165.43,170.91,158.34,2026-06-17,3,False
+BA,Industrials,Aerospace & Defense,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.5333,0.5333,0.3168,15,1212,0.0282,228.95,235.41,241.86,226.66,2026-06-15,3,False
+UBER,Industrials,Passenger Ground Transportation,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.5333,0.5333,0.3168,15,1212,0.0192,72.85,74.25,75.65,72.12,2026-06-15,3,False
+EME,Industrials,Construction & Engineering,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.5,0.5,0.3168,10,1212,0.0036,843.305,846.34,849.38,834.87,2026-06-17,3,False
+LULU,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",MACD,MACD 金叉 (空頭區),Morning Star,0.8,0.96,0.4667,,0.4667,0,15,0.0239,118.65,121.49,124.32,117.46,2026-06-17,3,False
+TTD,Communication Services,Advertising,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.4545,0.4545,0.2669,11,236,0.0014,19.27,19.3,19.32,19.08,2026-06-15,3,False
+DD,Materials,Specialty Chemicals,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4545,0.4545,0.3657,11,443,0.016,48.04,48.81,49.58,47.56,2026-06-16,3,False
+ABNB,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4444,0.4444,0.306,18,732,0.0064,138.96,139.85,140.74,137.57,2026-06-15,3,False
+INTU,Information Technology,Application Software,KDJ,KDJ 超賣區金叉,Morning Star,0.8,1.0,0.4375,,0.4375,0,32,0.0089,281.77,284.28,286.79,278.95,2026-06-15,3,False
+ALB,Materials,Specialty Chemicals,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4375,0.4375,0.3657,16,443,0.0073,168.9,170.13,171.37,167.21,2026-06-15,3,False
+FIS,Financials,Transaction & Payment Processing Services,KDJ,KDJ 超賣區金叉,Morning Star,0.8,1.0,0.4286,,0.4286,0,49,0.0126,38.97,39.46,39.95,38.58,2026-06-15,3,False
+NRG,Utilities,Independent Power Producers & Energy Traders,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4286,0.4286,0.2601,14,546,0.0274,130.4,133.97,137.55,129.1,2026-06-15,3,False
+TRMB,Information Technology,Application Software,RSI,RSI 維持超賣,None,0.0,0.385,0.4286,0.4286,0.3539,14,907,0.0034,50.78,50.95,51.13,50.27,2026-06-16,3,False
+TYL,Information Technology,Application Software,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4231,0.4231,0.3493,26,1480,0.0079,289.84,292.13,294.42,286.94,2026-06-15,3,False
+NEM,Materials,Gold,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4167,0.4167,0.3657,12,443,0.0104,108.44,109.57,110.7,107.36,2026-06-16,3,False
+CTVA,Materials,Fertilizers & Agricultural Chemicals,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4118,0.4118,0.3657,17,443,0.0114,78.84,79.74,80.64,78.05,2026-06-17,3,False
+JKHY,Financials,Transaction & Payment Processing Services,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4091,0.4091,0.3062,22,1153,0.0048,129.29,129.91,130.53,128.0,2026-06-16,3,False
+BKR,Energy,Oil & Gas Equipment & Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4,0.4,0.3294,25,507,0.0052,60.21,60.52,60.84,59.61,2026-06-17,3,False
+DIS,Communication Services,Movies & Entertainment,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3889,0.3889,0.3473,18,334,-0.0008,101.28,101.2,101.12,100.27,2026-06-16,3,False
+NDAQ,Financials,Financial Exchanges & Data,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3889,0.3889,0.3062,18,1153,0.0111,89.29,90.28,91.27,88.4,2026-06-16,3,False
+CEG,Utilities,Electric Utilities,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3846,0.3846,0.2601,13,546,0.0296,268.98,276.94,284.9,266.29,2026-06-17,3,False
+MOS,Materials,Fertilizers & Agricultural Chemicals,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.381,0.381,0.3657,21,443,-0.0059,22.32,22.19,22.06,22.1,2026-06-17,3,False
+IT,Information Technology,IT Consulting & Other Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3714,0.3714,0.3493,35,1480,0.0069,142.77,143.76,144.74,141.34,2026-06-15,3,False
+CBOE,Financials,Financial Exchanges & Data,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3693,,0.3693,0,371,0.001,255.18,255.44,255.69,252.63,2026-06-17,3,False
+HAL,Energy,Oil & Gas Equipment & Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.36,0.36,0.3294,25,507,0.0047,36.235,36.41,36.58,35.87,2026-06-17,3,False
+KLAC,Information Technology,Semiconductor Materials & Equipment,RSI,RSI 維持超賣,None,0.0,0.385,0.3539,,0.3539,0,907,0.0034,249.27,250.12,250.97,246.78,2026-06-17,3,False
+SLB,Energy,Oil & Gas Equipment & Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3488,0.3488,0.3294,43,507,0.0011,51.25,51.31,51.36,50.74,2026-06-17,3,False
+BLK,Financials,Asset Management & Custody Banks,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3125,0.3125,0.3062,16,1153,-0.0019,1042.87,1040.89,1038.91,1032.44,2026-06-15,3,False
+COST,Consumer Staples,Consumer Staples Merchandise Retail,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3077,0.3077,0.2262,13,619,0.0039,986.68,990.53,994.38,976.81,2026-06-16,3,False
+MELI,Consumer Discretionary,Catalog/Specialty Distribution,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.306,,0.306,0,732,0.0052,1646.36,1654.92,1663.48,1629.9,2026-06-15,3,False
+DASH,Consumer Discretionary,Specialized Consumer Services,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3,0.3,0.306,10,732,0.0137,168.09,170.39,172.7,166.41,2026-06-15,3,False
+EPAM,Unknown,Unknown,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.2943,,0.2943,0,316,-0.0003,95.38,95.35,95.32,94.43,2026-06-12,3,False
+JD,Unknown,Unknown,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.2943,,0.2943,0,316,-0.0003,28.56,28.55,28.54,28.27,2026-06-12,3,False
+ICE,Financials,Financial Exchanges & Data,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2857,0.2857,0.3062,14,1153,0.004,141.28,141.85,142.41,139.87,2026-06-16,3,False
+EFX,Industrials,Research & Consulting Services,MACD,MACD 金叉 (空頭區),Morning Star,0.8,0.96,0.28,,0.28,0,25,0.0064,167.13,168.2,169.27,165.46,2026-06-16,3,False
+PYPL,Financials,Transaction & Payment Processing Services,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2778,0.2778,0.3062,18,1153,-0.003,44.5,44.37,44.23,44.05,2026-06-17,3,False
+PDD,Technology,EDP Services,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.277,,,0,0,0.001,81.56,81.64,81.72,80.74,2026-06-12,3,False
+PSKY,Communication Services,Movies & Entertainment,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2727,0.2727,0.3473,22,334,-0.0003,10.49,10.49,10.48,10.39,2026-06-15,3,False
+EQT,Energy,Oil & Gas Exploration & Production,KDJ,KDJ 超賣區金叉,Bullish Engulfing,0.75,1.0,0.25,,0.25,0,8,-0.0069,51.37,51.02,50.66,50.86,2026-06-16,3,False
+EXE,Energy,Oil & Gas Exploration & Production,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.25,0.25,0.3344,16,326,0.0028,88.78,89.03,89.28,87.89,2026-06-12,3,False
+FOXA,Communication Services,Broadcasting,RSI,RSI 維持超賣,None,0.0,0.385,0.25,0.25,0.3145,12,318,-0.0296,53.61,52.02,50.44,53.07,2026-06-17,3,False
+APD,Materials,Industrial Gases,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2353,0.2353,0.3657,17,443,-0.003,282.96,282.11,281.26,280.13,2026-06-15,3,False
+T,Communication Services,Integrated Telecommunication Services,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2308,0.2308,0.3473,13,334,0.009,23.16,23.37,23.58,22.93,2026-06-16,3,False
+COIN,Financials,Financial Exchanges & Data,MACD,MACD 金叉 (空頭區),Morning Star,0.8,0.96,0.2222,,0.2222,0,18,-0.0071,169.37,168.17,166.96,167.68,2026-06-17,3,False
+LDOS,Industrials,Diversified Support Services,RSI,RSI 維持超賣,None,0.0,0.385,0.2222,0.2222,0.2912,18,1013,-0.0079,111.505,110.62,109.74,110.39,2026-06-17,3,False
+VRSN,Information Technology,Internet Services & Infrastructure,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.2143,0.2143,0.3493,28,1480,0.0001,272.96,272.99,273.01,270.23,2026-06-15,3,False
+VLTO,Industrials,Environmental & Facilities Services,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2143,0.2143,0.3168,14,1212,-0.0035,83.98,83.69,83.39,83.14,2026-06-16,3,False
+PTC,Information Technology,Application Software,RSI,RSI 維持超賣,None,0.0,0.385,0.2105,0.2105,0.3539,19,907,0.001,118.13,118.25,118.37,116.95,2026-06-17,3,False
+DLR,Real Estate,Data Center REITs,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2,0.2,0.2429,15,560,-0.0073,190.45,189.06,187.67,188.55,2026-06-16,3,False
+FOX,Communication Services,Broadcasting,RSI,RSI 維持超賣,None,0.0,0.385,0.2,0.2,0.3145,10,318,-0.0233,48.32,47.19,46.07,47.84,2026-06-17,3,False
+PSX,Energy,Oil & Gas Refining & Marketing,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.1852,0.1852,0.3294,27,507,-0.0072,169.14,167.92,166.7,167.45,2026-06-17,3,False
+HAS,Consumer Discretionary,Leisure Products,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.1818,0.1818,0.306,11,732,-0.0201,84.99,83.28,81.57,84.14,2026-06-15,3,False
+HSY,Consumer Staples,Packaged Foods & Meats,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.1818,0.1818,0.2262,11,619,-0.0023,182.415,182.0,181.58,180.59,2026-06-17,3,False
+OXY,Energy,Oil & Gas Exploration & Production,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.1739,0.1739,0.3294,23,507,-0.0062,53.29,52.96,52.63,52.76,2026-06-17,3,False
+CCI,Real Estate,Telecom Tower REITs,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.1667,0.1667,0.2555,36,947,-0.006,87.275,86.75,86.23,86.4,2026-06-17,3,False
+MSFT,Information Technology,Systems Software,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.1,0.1,0.2934,10,501,-0.0045,393.83,392.06,390.29,389.89,2026-06-16,3,False
+NFLX,Communication Services,Movies & Entertainment,RSI,RSI 維持超賣,None,0.0,0.385,0.0833,0.0833,0.3145,12,318,-0.0175,78.025,76.66,75.29,77.24,2026-06-17,3,False
