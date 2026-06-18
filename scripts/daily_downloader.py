@@ -248,7 +248,12 @@ def daily_update():
 
             # 過濾：只保留 last_date 之後的新數據（精準增量）
             if last_date:
-                df = df[df["trade_date"] > last_date]
+                # 先刪除 last_date 起的舊數據，確保 partial data 被完整收盤數據覆蓋
+                conn.execute("DELETE FROM stock_prices WHERE symbol = ? AND trade_date >= ?", [ticker, last_date])
+                df = df[df["trade_date"] >= last_date]
+            else:
+                # 新股票：全部保留
+                pass
 
             if df.empty:
                 with lock:
