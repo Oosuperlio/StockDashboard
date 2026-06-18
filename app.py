@@ -451,6 +451,41 @@ def get_stock_data(ticker: str, days: int = 90) -> pd.DataFrame:
 
     # ── 後備：Yahoo Finance 即時拉取 ────────────────────────────────
     try:
+        # 優先使用 Yahoo v8 REST API（無 auto_adjust NaN 問題）
+        import requests as _req
+        api_ticker = ticker.replace(".", "-")
+        url = f"https://query2.finance.yahoo.com/v8/finance/chart/{api_ticker}"
+        params = {"interval": "1d", "range": f"{days}d"}
+        headers = {"User-Agent": "Mozilla/5.0"}
+        resp = _req.get(url, params=params, headers=headers, timeout=10)
+        data = resp.json()
+        result = data.get("chart", {}).get("result", [])
+        if result:
+            timestamps = result[0]["timestamp"]
+            ohlcv = result[0]["indicators"]["quote"][0]
+            df = pd.DataFrame(ohlcv, index=pd.to_datetime(timestamps, unit="s"))
+            df.index = df.index.tz_localize(None)
+            # v8 API 最新交易日的 close 可能為 None（調整未就緒）
+            # 用 yfinance fast_info 補上即時收盤價（比 info 更快）
+            if df["close"].iloc[-1] is None or pd.isna(df["close"].iloc[-1]):
+                try:
+                    _fi = yf.Ticker(ticker).fast_info
+                    cur_price = getattr(_fi, "last_price", None)
+                    if cur_price and not (isinstance(cur_price, float) and cur_price != cur_price):
+                        df.loc[df.index[-1], "close"] = cur_price
+                except Exception:
+                    pass
+            df = df.dropna(subset=["close"])
+            if not df.empty:
+                return df.rename(columns={
+                    "open": "open", "high": "high", "low": "low",
+                    "close": "close", "volume": "volume"
+                })[["open", "high", "low", "close", "volume"]]
+    except Exception:
+        pass
+
+    # 最後備用：yfinance
+    try:
         df = yf.Ticker(ticker).history(period=f"{days}d", auto_adjust=True)
         if df.empty:
             return pd.DataFrame()

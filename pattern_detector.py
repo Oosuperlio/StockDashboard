@@ -1054,6 +1054,354 @@ def detect_volume_breakout(df: pd.DataFrame, lookback=20) -> List[Pattern]:
     return patterns
 
 
+# ══════════════════════════════════════════════════
+# ✨ 新增：延續形態（動能版） 
+# ══════════════════════════════════════════════════
+
+def detect_cup_handle(df: pd.DataFrame,
+                      min_cup_depth: float = 0.10,
+                      max_cup_depth: float = 0.40,
+                      handle_retrace: float = 0.3) -> List[Pattern]:
+    """
+    Cup & Handle（杯柄形態）— 經典延續形態
+
+    結構：
+      ① 杯身：U 形回調（10-40% 跌幅），持續 15-120 根 K 線
+      ② 杯右緣：價格回到杯左緣相同水平
+      ③ 柄：從杯右緣回調 10-30%，縮量
+      ④ 突破：價格放量突破柄部高點
+
+    Parameters:
+        min_cup_depth: 最小杯深（10%）
+        max_cup_depth: 最大杯深（40%）
+        handle_retrace: 柄回調比例
+    """
+    patterns = []
+    n = len(df)
+    if n < 25:
+        return patterns
+
+    # 滑動窗口檢測杯身
+    # 杯左緣是局部高點，杯底是局部低點，杯右緣是最新高點
+    # 我們從最新 K 線往回找杯的右緣，然後找杯底和左緣
+
+    prices = df['close'].values
+    highs = df['high'].values
+    volumes = df['volume'].values
+
+    last_idx = n - 1
+    lookback_max = min(120, n - 5)  # 最多看 120 根 K 線
+
+    # 找最新 20 根 K 線內的最高點（杯右緣的候選位置）
+    right_rim_candidates = []
+    for i in range(max(0, last_idx - 20), last_idx + 1):
+        # 局部高點：左 3 右 3 都比它低
+        if i >= 3 and i < n - 3:
+            if (highs[i] >= highs[i-1] and highs[i] >= highs[i-2] and highs[i] >= highs[i-3] and
+                highs[i] >= highs[i+1] and highs[i] >= highs[i+2] and highs[i] >= highs[i+3]):
+                right_rim_candidates.append(i)
+
+    if not right_rim_candidates:
+        # 如果沒有明確局部高點，用最近 10 根 K 線的最高點
+        recent_high_idx = last_idx - 5 + list(highs[last_idx - 5:last_idx + 1]).index(max(highs[last_idx - 5:last_idx + 1]))
+        right_rim_candidates = [recent_high_idx]
+
+    for right_rim in right_rim_candidates:
+        right_price = highs[right_rim]
+
+        # 從右緣向左找杯底（最低點）
+        cup_start = max(0, right_rim - lookback_max)
+        cup_slice = df.iloc[cup_start:right_rim + 1]
+        cup_bottom_idx = cup_slice['low'].idxmin() if hasattr(cup_slice['low'], 'idxmin') else \
+                         cup_slice['low'].iloc[cup_slice['low'].values.argmin()]
+        # 轉換為位置索引
+        bottom_pos = list(df.index).index(cup_bottom_idx) if hasattr(cup_bottom_idx, 'strftime') else \
+                     (cup_bottom_idx if isinstance(cup_bottom_idx, int) else
+                      list(range(len(df)))[list(df.index).index(cup_bottom_idx)])
+
+        bottom_price = df['low'].iloc[bottom_pos]
+
+        # 杯深檢查
+        if right_price <= 0:
+            continue
+        cup_depth = (right_price - bottom_price) / right_price
+        if cup_depth < min_cup_depth or cup_depth > max_cup_depth:
+            continue
+
+        # 從杯底向左找杯左緣（左緣高度應該接近右緣）
+        left_slice = df.iloc[cup_start:bottom_pos + 1]
+        left_rim_idx = left_slice['high'].idxmax() if hasattr(left_slice['high'], 'idxmax') else \
+                       left_slice['high'].iloc[left_slice['high'].values.argmax()]
+        left_pos = list(df.index).index(left_rim_idx) if hasattr(left_rim_idx, 'strftime') else \
+                   (left_rim_idx if isinstance(left_rim_idx, int) else
+                    list(range(len(df)))[list(df.index).index(left_rim_idx)])
+
+        left_price = df['high'].iloc[left_pos]
+
+        # 杯左右緣價格接近（誤差 < 15%）
+        if right_price <= 0 or left_price <= 0:
+            continue
+        rim_symmetry = abs(right_price - left_price) / max(right_price, left_price)
+        if rim_symmetry > 0.15:
+            continue
+
+        # 杯身至少 15 根 K 線（否則太短不算杯）
+        cup_length = right_rim - left_pos
+        if cup_length < 15:
+            continue
+
+        # 杯形檢查：U 形（非 V 形）
+        # 杯底前後的價格應該形成平滑曲線
+        mid_point = (left_pos + right_rim) // 2
+        mid_to_left = abs(mid_point - left_pos)
+        mid_to_right = abs(right_rim - mid_point)
+        if mid_to_left > 0 and mid_to_right > 0:
+            # 檢查杯底是否在中間附近（不是偏左或偏右太多）
+            bottom_pos_rel = (bottom_pos - left_pos) / (right_rim - left_pos) if (right_rim - left_pos) > 0 else 0.5
+            # U 形杯底應該在中間略偏左（0.3-0.7）
+            if bottom_pos_rel < 0.15 or bottom_pos_rel > 0.85:
+                continue
+
+        # 確認柄的存在（右緣之後的縮量回調）
+        handle_slice = df.iloc[right_rim:min(last_idx + 1, right_rim + 15)]
+        if len(handle_slice) < 3:
+            handle_patterns = []
+        else:
+            handle_high = handle_slice['high'].max()
+            handle_low = handle_slice['low'].min()
+            handle_drop = (right_price - handle_low) / right_price if right_price > 0 else 0
+
+            # 柄回調深度應該在 10-50% 之間
+            if handle_drop < 0.05 or handle_drop > 0.50:
+                handle_patterns = []
+                handle_drop = 0  # 沒有明顯柄，但還是接受（無手柄的 cup）
+            else:
+                # 柄的成交量應該萎縮
+                avg_vol_cup = df['volume'].iloc[left_pos:right_rim + 1].mean()
+                avg_vol_handle = handle_slice['volume'].mean()
+                vol_shrink = avg_vol_handle / avg_vol_cup if avg_vol_cup > 0 else 1.0
+
+                # 檢查突破：最後一根 K 線是否突破柄部高點
+                is_breakout = prices[last_idx] > handle_high * 0.98 if handle_high > 0 else False
+                # 最好有成交量確認
+                vol_breakout = volumes[last_idx] > avg_vol_handle * 1.3 if avg_vol_handle > 0 else False
+
+                # 權重：柄越淺越好，縮量越好，突破有量越好
+                handle_quality = 1.0 - min(handle_drop * 2, 0.5)
+                if vol_shrink < 0.8:
+                    handle_quality += 0.15  # 縮量加分
+                if is_breakout:
+                    handle_quality += 0.20  # 突破加分
+                if vol_breakout:
+                    handle_quality += 0.15  # 放量突破加分
+
+                confidence = min(0.85, 0.55 + handle_quality * 0.3)
+
+                patterns.append(Pattern(
+                    name="Cup & Handle",
+                    indices=[left_pos, bottom_pos, right_rim],
+                    direction="bullish",
+                    confidence=round(confidence, 2),
+                    metadata={
+                        "meaning": f"杯柄形態 — U形杯身({cup_depth:.0%}深, {cup_length}根) + 柄({handle_drop:.0%}回調)",
+                        "idx": right_rim,
+                        "cup_depth": round(cup_depth, 3),
+                        "cup_length": cup_length,
+                        "right_rim_price": round(right_price, 2),
+                        "left_rim_price": round(left_price, 2),
+                        "bottom_price": round(bottom_price, 2),
+                        "handle_drop": round(handle_drop, 3),
+                        "is_breakout": is_breakout,
+                    }
+                ))
+
+    return patterns
+
+
+def detect_pullback_ema_support(df: pd.DataFrame, lookback: int = 5) -> List[Pattern]:
+    """
+    Pullback to EMA Support（回踩均線支撐）— 趨勢中的健康回調買點
+
+    條件：
+      ① 中長期 EMA 處於多頭排列（EMA20 > EMA50 > EMA200）
+      ② 價格之前遠高於 EMA20（顯示強勢）
+      ③ 最近回調到接近 EMA20 或 EMA50（但不跌破）
+      ④ 回調期間成交量縮小（健康回調）
+
+    這是 MU/STX/WDC 在上升趨勢中最常見的形態——「漲上去，回測均線，再漲」
+    """
+    patterns = []
+    n = len(df)
+    if n < 60:
+        return patterns
+
+    # 檢查均線是否已計算（indicator_calculator 已算好）
+    close = df['close'].values
+    ema_20 = df.get('ema_20', pd.Series(index=df.index)).values if 'ema_20' in df.columns else None
+    ema_50 = df.get('ema_50', pd.Series(index=df.index)).values if 'ema_50' in df.columns else None
+    ema_200 = df.get('ema_200', pd.Series(index=df.index)).values if 'ema_200' in df.columns else None
+    volume = df['volume'].values if 'volume' in df.columns else None
+
+    if ema_20 is None or ema_50 is None:
+        return patterns
+
+    # 確認多頭排列（EMA200 可選：只有 90 天數據時可能為 NaN）
+    ema200_valid = ema_200 is not None and not pd.isna(ema_200[-5:].mean()) if len(ema_200) >= 5 else False
+    if ema200_valid:
+        if not (ema_20[-1] > ema_50[-1] > ema_200[-1]):
+            return patterns
+    else:
+        # 無 EMA200 時，只要求 EMA20 > EMA50（仍然算是多頭排列）
+        if not (ema_20[-1] > ema_50[-1]):
+            return patterns
+
+    # 2. 價格之前（5-15 天前）明顯高於 EMA20（>3% 溢價——顯示強勢）
+    for i in range(min(lookback + 10, n - 1), max(lookback, 0), -1):
+        pct_above = (close[i] - ema_20[i]) / ema_20[i] if ema_20[i] > 0 else 0
+        if pct_above > 0.03:
+            lookback_idx = i
+            break
+    else:
+        return patterns  # 從未顯著高於 EMA20，不是強勢股
+
+    # 3. 當前價格接近 EMA20 或 EMA50（在 1-5% 之內）
+    last_close = close[-1]
+    pct_from_ema20 = (last_close - ema_20[-1]) / ema_20[-1] if ema_20[-1] > 0 else 0
+    pct_from_ema50 = (last_close - ema_50[-1]) / ema_50[-1] if ema_50[-1] > 0 else 0
+
+    # 距離 EMA20 在 0-3% 範圍內（接近但未跌穿）
+    at_ema20 = -0.01 <= pct_from_ema20 <= 0.03
+    # 距離 EMA50 在 0-2% 範圍內（更深回調但仍在均線之上）
+    at_ema50 = -0.01 <= pct_from_ema50 <= 0.02
+
+    if not (at_ema20 or at_ema50):
+        return patterns
+
+    # 4. 成交量萎縮（回調應縮量）
+    if volume is not None and n >= 25:
+        recent_vol_avg = df['volume'].iloc[-5:].mean() if len(df) >= 5 else 0
+        prior_vol_avg = df['volume'].iloc[-25:-5].mean() if len(df) >= 25 else 0
+        vol_shrink = recent_vol_avg / prior_vol_avg if prior_vol_avg > 0 else 1.0
+    else:
+        vol_shrink = 1.0
+
+    # 5. 計算信心度
+    # 越接近 EMA20，越縮量，信心越高
+    dist_factor = 1.0 - abs(pct_from_ema20) / 0.03 if at_ema20 else 0.8
+    vol_factor = 1.0 - min(vol_shrink, 1.0) * 0.3  # 縮量加分
+    trend_factor = 0.15 if ema_20[-1] > ema_50[-1] else 0  # 多頭排列加分
+
+    confidence = min(0.85, 0.50 + dist_factor * 0.20 + vol_factor * 0.15 + trend_factor)
+
+    # 計算支撐均線名稱和價格
+    if at_ema20:
+        support_ma = "EMA20"
+        support_price = round(ema_20[-1], 2)
+    else:
+        support_ma = "EMA50"
+        support_price = round(ema_50[-1], 2)
+
+    patterns.append(Pattern(
+        name="Pullback EMA20",
+        indices=[n - 1],
+        direction="bullish",
+        confidence=round(confidence, 2),
+        metadata={
+            "meaning": f"回踩{support_ma}支撐 — 多頭排列中健康回調，縮量確認",
+            "idx": n - 1,
+            "support_ma": support_ma,
+            "support_price": support_price,
+            "pct_from_ema20": round(pct_from_ema20 * 100, 2),
+            "pct_from_ema50": round(pct_from_ema50 * 100, 2),
+            "vol_shrink_ratio": round(vol_shrink, 2),
+        }
+    ))
+
+    return patterns
+
+
+def detect_consolidation_breakout(df: pd.DataFrame,
+                                  lookback: int = 20,
+                                  tolerance: float = 0.05) -> List[Pattern]:
+    """
+    Consolidation Breakout（整理突破）— 橫向盤整後的放量突破
+
+    條件：
+      ① 過去 N 根 K 線價格在一個窄幅區間內波動（橫盤整理）
+      ② 區間寬度 < 15%（相對於區間中位數）
+      ③ 最新 K 線收盤價突破區間上限
+      ④ 最好有成交量放大確認
+
+    適合捕捉：強勢股在突破前橫向洗盤後的爆發點
+    """
+    patterns = []
+    n = len(df)
+    if n < lookback + 3:
+        return patterns
+
+    close = df['close'].values
+    high = df['high'].values
+    volume = df['volume'].values
+
+    # 分析最近 N 根 K 線的價格區間
+    recent_high = max(high[-lookback:])
+    recent_low = min(df['low'].values[-lookback:])
+    recent_mid = (recent_high + recent_low) / 2
+
+    if recent_mid <= 0:
+        return patterns
+
+    # 區間寬度
+    range_pct = (recent_high - recent_low) / recent_mid
+
+    # 橫盤條件：區間 < 20%（相對於中位數）
+    if range_pct > 0.20:
+        return patterns
+
+    # 確認最近 5 根沒有大幅偏離區間（保持在區間內整理）
+    recent_5 = close[-5:]
+    for c in recent_5:
+        if c < recent_low * (1 - tolerance) or c > recent_high * (1 + tolerance):
+            return patterns  # 過早突破或假突破
+
+    # 最新收盤價突破區間上限
+    last_close = close[-1]
+    is_breakout = last_close > recent_high * 0.995
+
+    if not is_breakout:
+        return patterns
+
+    # 成交量確認
+    avg_vol_lookback = df['volume'].iloc[-lookback:].mean() if lookback <= n else volume[:n].mean()
+    last_vol = volume[-1]
+    vol_ratio = last_vol / avg_vol_lookback if avg_vol_lookback > 0 else 1.0
+    vol_confirmed = vol_ratio > 1.3
+
+    # 信心度
+    # 區間越窄（越低波動）、突破有量、突破幅度越大 → 越高信心
+    tightness_factor = 1.0 - min(range_pct / 0.15, 1.0) * 0.3
+    vol_factor = 0.3 if vol_confirmed else 0.1
+    confidence = min(0.85, 0.45 + tightness_factor * 0.25 + vol_factor)
+
+    patterns.append(Pattern(
+        name="Consolidation Breakout",
+        indices=[n - 1],
+        direction="bullish",
+        confidence=round(confidence, 2),
+        metadata={
+            "meaning": f"整理突破 — {lookback}根K線橫盤({range_pct:.1%}區間)後放量突破",
+            "idx": n - 1,
+            "range_pct": round(range_pct, 3),
+            "breakout_vol_ratio": round(vol_ratio, 2),
+            "vol_confirmed": vol_confirmed,
+            "consolidation_high": round(recent_high, 2),
+            "consolidation_low": round(recent_low, 2),
+        }
+    ))
+
+    return patterns
+
+
 # ─────────────────────────────────────────────
 # 主調度函數
 # ─────────────────────────────────────────────
@@ -1100,6 +1448,9 @@ def detect_all_patterns(df: pd.DataFrame) -> List[Pattern]:
         detect_triangle,
         detect_flag,
         detect_support_resistance,
+        detect_cup_handle,           # ✨ 新增：杯柄
+        detect_pullback_ema_support, # ✨ 新增：回踩均線
+        detect_consolidation_breakout,  # ✨ 新增：整理突破
     ]:
         try:
             results.extend(detector(df))

@@ -87,16 +87,39 @@ BEST_COMBOS = {
 
 # 核心指標信號（入場意願高）
 CORE_BULLISH_INDICATORS = {
+    # ── 超賣反轉（現有） ──
     ('RSI', 'RSI 超賣區域 (30)'),
     ('RSI', 'RSI 維持超賣'),
     ('BB', 'BB 跌破下軌 (超賣)'),
     ('MACD', 'MACD 金叉 (空頭區)'),
     ('KDJ', 'KDJ 超賣區金叉'),
     ('EMA', '價格突破 EMA20'),
+    # ── 動能延續（新增：已存在但未啟用） ──
+    ('MACD', 'MACD 金叉 (多頭區)'),       # confidence=0.80
+    ('MACD', 'MACD 突破 0 軸'),           # confidence=0.70
+    ('EMA', 'EMA 多頭排列 (20>50>200)'),  # confidence=0.75
+    ('KDJ', 'KDJ 金叉'),                   # confidence=0.65
+    ('RSI', 'RSI 上穿 50 中性線'),         # confidence=0.55
+    # ── 動能專用（新增：全新信號） ──
+    ('RSI', 'RSI 維持強勢 (50-70)'),          # confidence=0.60
+    ('RSI', 'RSI 加速上升'),                  # confidence=0.65
+    ('RSI', 'RSI 動能加速（強勢區）'),         # confidence=0.60
+    ('BB', '價格在 BB 中軌上方'),             # confidence=0.50
+    ('BB', 'BB 中軌向上（上升趨勢）'),         # confidence=0.60
+    ('PRICE', '價格創 20 日新高'),            # confidence=0.70
+    ('PRICE', '價格創 60 日新高'),            # confidence=0.80
+    ('VOLUME', '成交量配合上升（放量上漲）'),   # confidence=0.65
+    ('VOLUME', '縮量回調（買點信號）'),         # confidence=0.55
+    ('VOLUME', '放量突破（強勢確認）'),         # confidence=0.70
+    ('ADX', 'ADX 強趨勢（多頭主導）'),         # confidence=0.70
+    ('ADX', 'ADX 極強趨勢（多頭）'),           # confidence=0.80
+    ('MOMENTUM', '多頭排列 + 價格在均線上方（強勢確認）'),  # confidence=0.80
 }
 
 CORE_BULLISH_PATTERNS = {
     'Support', 'Morning Star', 'Bullish Engulfing', 'Bull Flag',
+    # 新增延續形態
+    'Cup & Handle', 'Pullback EMA20', 'Consolidation Breakout',
 }
 
 # ─── 行業分類 ────────────────────────────────────────────────────────────────
@@ -360,13 +383,47 @@ def scan_ticker(
                     matched_pattern = pi.pattern.name
                     matched_conf = pi.pattern.confidence
 
-            # ── 計算信心度（成交量確認額外加分）───────────────
+            # ── 計算信心度（混合評分）────────────────────
+            # 定義：哪些是動能指標、哪些是延續形態
+            MOMENTUM_INDICATORS = {
+                'MACD 金叉 (多頭區)', 'MACD 突破 0 軸',
+                'EMA 多頭排列 (20>50>200)', 'KDJ 金叉',
+                'RSI 維持強勢 (50-70)', 'RSI 加速上升',
+                'RSI 動能加速（強勢區）', 'RSI 上穿 50 中性線',
+                '價格創 20 日新高', '價格創 60 日新高',
+                '價格在 BB 中軌上方', 'BB 中軌向上（上升趨勢）',
+                '成交量配合上升（放量上漲）', '放量突破（強勢確認）',
+                'ADX 強趨勢（多頭主導）', 'ADX 極強趨勢（多頭）',
+                '多頭排列 + 價格在均線上方（強勢確認）',
+            }
+            CONTINUATION_PATTERNS = {
+                'Cup & Handle', 'Bull Flag', 'Pullback EMA20',
+                'Consolidation Breakout',
+            }
+
+            is_momentum = ind_sig.name in MOMENTUM_INDICATORS
+            is_continuation = matched_pattern in CONTINUATION_PATTERNS if matched_pattern else False
+
             if matched_pattern:
+                # 基礎：指標 * 1.2 + 形態 * 0.3
                 conf = min(1.0, ind_sig.confidence * 1.2 + matched_conf * 0.3)
+                # ⭐ 動能指標 + 延續形態 = 完美配搭（額外 +20%）
+                if is_momentum and is_continuation:
+                    conf = min(1.0, conf * 1.20)
+                # ⭐ 動能指標 + 任何形態（形態確認動能）
+                elif is_momentum:
+                    conf = min(1.0, conf * 1.10)
+                # 超賣反轉指標 + 延續形態（不太配，但形態仍可信）
+                elif is_continuation:
+                    conf = min(1.0, conf * 1.05)
                 if vol_confirmed:
-                    conf = min(1.0, conf * 1.15)  # 成交量確認額外 +15%
+                    conf = min(1.0, conf * 1.15)
             else:
-                conf = ind_sig.confidence * 0.7  # 無形態降權
+                # 無形態時：動能指標的獨立信心更高
+                if is_momentum:
+                    conf = ind_sig.confidence * 0.85  # 動能指標即使無形態仍有 85%
+                else:
+                    conf = ind_sig.confidence * 0.7   # 超賣指標無形態降權 70%
 
             # ── 查歷史勝率（雙層查找：個股 → Sector → Fallback）────────
             has_pat = matched_pattern is not None
@@ -526,8 +583,9 @@ def scan_market(market: str, tier_filter: Optional[int] = None) -> List[ScanSign
         sector = sector_map.get(sym, 'Unknown')
         subsector = subsector_map.get(sym, sector)
 
-        bullish_index, _ = build_pattern_index(df)
-        sigs = scan_ticker(sym, df, sector, subsector, bullish_index, {})
+        ind_df = calculate_all_indicators(df)
+        bullish_index, _ = build_pattern_index(ind_df)
+        sigs = scan_ticker(sym, ind_df, sector, subsector, bullish_index, {})
 
         # ── 每檔股票只保留最新日期的信號（不論 Tier）───────────────
         for sig in sigs:
@@ -562,14 +620,149 @@ def scan_tickers(tickers: List[str]) -> List[ScanSignal]:
             continue
         sector = sector_map.get(sym, 'Unknown')
         subsector = subsector_map.get(sym, sector)
-        bullish_index, _ = build_pattern_index(df)
-        sigs = scan_ticker(sym, df, sector, subsector, bullish_index, {})
+        ind_df = calculate_all_indicators(df)
+        bullish_index, _ = build_pattern_index(ind_df)
+        sigs = scan_ticker(sym, ind_df, sector, subsector, bullish_index, {})
         all_signals.extend(sigs)
 
     return all_signals
 
 
 # ─── 輸出格式化 ─────────────────────────────────────────────────────────────
+
+def detect_sector_clusters(all_signals: List[ScanSignal],
+                           sector_map: Dict[str, str],
+                           subsector_map: Dict[str, str],
+                           min_cluster_size: int = 3) -> List[dict]:
+    """
+    ✨ 新增：Sector/Subsector 集群效應檢測
+
+    當多隻股票在同一個 subsector 同時觸發信號時，產生集群信號。
+    這能捕獲「板塊整體啟動」的機會，例如半導體板塊集群。
+
+    Parameters:
+        all_signals: 所有掃描到的信號
+        sector_map: {ticker: sector}
+        subsector_map: {ticker: subsector}
+        min_cluster_size: 最少多少隻股票同時觸發才算集群
+
+    Returns:
+        [{'sector', 'subsector', 'count', 'total_in_subsector',
+          'tickers', 'avg_win_rate', 'momentum_ratio', ...}]
+    """
+    if not all_signals:
+        return []
+
+    # 統計每個 subsector 有哪些股票觸發信號
+    subsector_signals = {}
+    for sig in all_signals:
+        sub = sig.subsector if sig.subsector != sig.sector else sig.sector
+        if sub not in subsector_signals:
+            subsector_signals[sub] = {
+                'sector': sig.sector,
+                'subsector': sub,
+                'tickers': set(),
+                'momentum_tickers': set(),
+                'total_win_rate': 0.0,
+                'count': 0,
+            }
+        subsector_signals[sub]['tickers'].add(sig.symbol)
+        subsector_signals[sub]['total_win_rate'] += sig.win_rate
+        subsector_signals[sub]['count'] += 1
+
+        # 判斷是否為動能信號
+        MOMENTUM_SIGNAL_NAMES = {
+            'MACD 金叉 (多頭區)', 'MACD 突破 0 軸',
+            'EMA 多頭排列 (20>50>200)', 'KDJ 金叉',
+            'RSI 維持強勢 (50-70)', 'RSI 加速上升',
+            'RSI 動能加速（強勢區）', 'RSI 上穿 50 中性線',
+            '價格創 20 日新高', '價格創 60 日新高',
+            '價格在 BB 中軌上方', 'BB 中軌向上（上升趨勢）',
+            '成交量配合上升（放量上漲）', '放量突破（強勢確認）',
+            'ADX 強趨勢（多頭主導）', 'ADX 極強趨勢（多頭）',
+            '多頭排列 + 價格在均線上方（強勢確認）',
+        }
+        if sig.signal_name in MOMENTUM_SIGNAL_NAMES:
+            subsector_signals[sub]['momentum_tickers'].add(sig.symbol)
+
+    # 計算該 subsector 在 constituents 中的總股票數
+    const_subsector_count = {}
+    for ticker, sub in subsector_map.items():
+        const_sub = sub if sub != sector_map.get(ticker, sub) else sector_map.get(ticker, sub)
+        const_subsector_count[const_sub] = const_subsector_count.get(const_sub, 0) + 1
+
+    # 佔所有掃描 tickers（不是全部 constituents）的比例
+    scanned_tickers = set(sig.symbol for sig in all_signals)
+    scanned_subsector_count = {}
+    for ticker in scanned_tickers:
+        sub = subsector_map.get(ticker, sector_map.get(ticker, 'Unknown'))
+        const_sub = sub
+        scanned_subsector_count[const_sub] = scanned_subsector_count.get(const_sub, 0) + 1
+
+    clusters = []
+    for sub, data in subsector_signals.items():
+        cluster_size = len(data['tickers'])
+        momentum_size = len(data['momentum_tickers'])
+        total_in_sub = const_subsector_count.get(sub, 0) or scanned_subsector_count.get(sub, 0) or cluster_size
+
+        # 集群條件：至少 min_cluster_size 隻股票觸發，且佔該 subsector 一定比例
+        if cluster_size < min_cluster_size:
+            continue
+
+        # 動能信號佔比（越高越好，代表不是散戶亂槍打鳥）
+        momentum_ratio = momentum_size / cluster_size if cluster_size > 0 else 0
+
+        # 覆蓋率（觸發股票佔該板塊比例）
+        coverage = cluster_size / total_in_sub if total_in_sub > 0 else 0
+
+        # 集群信心度
+        if cluster_size >= 5 and momentum_ratio >= 0.6 and coverage >= 0.3:
+            cluster_tier = '🔥 強集群'
+        elif cluster_size >= 3 and momentum_ratio >= 0.4:
+            cluster_tier = '⚡ 中集群'
+        else:
+            cluster_tier = '📊 弱集群'
+
+        avg_win_rate = data['total_win_rate'] / data['count'] if data['count'] > 0 else 0
+
+        clusters.append({
+            'sector': data['sector'],
+            'subsector': data['subsector'],
+            'tier': cluster_tier,
+            'count': cluster_size,
+            'momentum_count': momentum_size,
+            'total_in_subsector': total_in_sub,
+            'coverage': coverage,
+            'momentum_ratio': momentum_ratio,
+            'avg_win_rate': avg_win_rate,
+            'tickers': sorted(data['tickers']),
+            'momentum_tickers': sorted(data['momentum_tickers']),
+        })
+
+    # 按集群強度排序
+    clusters.sort(key=lambda c: (-c['count'], -c['momentum_ratio'], -c['avg_win_rate']))
+    return clusters
+
+
+def format_clusters(clusters: List[dict], top_n: int = 5) -> str:
+    """格式化为 Telegram 友好文字"""
+    if not clusters:
+        return ""
+    lines = []
+    lines.append("🏢 *板塊集群效應*")
+    lines.append("")
+    for i, c in enumerate(clusters[:top_n]):
+        tickers_str = ' '.join(f'`{t}`' for t in c['tickers'][:8])
+        momentum_str = f"（動能 {c['momentum_count']}/{c['count']}）"
+        lines.append(
+            f"{c['tier']} *{c['subsector']}* {momentum_str}\n"
+            f"  {c['count']}/{c['total_in_subsector']} 隻觸發 | "
+            f"覆蓋率 {c['coverage']:.0%} | "
+            f"平均勝率 {c['avg_win_rate']:.0%}\n"
+            f"  {tickers_str}"
+        )
+    return '\n'.join(lines)
+
 
 def format_signals(signals: List[ScanSignal], top_n: int = 20) -> str:
     """將信號列表格式化為 Telegram 友好文字"""
@@ -698,6 +891,18 @@ def main():
     # 輸出
     print(f"\n{'='*70}")
     print(format_signals(signals, top_n=args.top))
+
+    # ✨ 板塊集群效應輸出
+    if len(signals) >= 10:
+        try:
+            sector_map_cluster, subsector_map_cluster = load_ticker_sector_map()
+            clusters = detect_sector_clusters(signals, sector_map_cluster, subsector_map_cluster)
+            if clusters:
+                print(f"\n{'='*70}")
+                print(format_clusters(clusters, top_n=5))
+        except Exception as e:
+            print(f"  ⚠️ 板塊集群檢測跳過: {e}")
+
     print(f"{'='*70}")
 
     # 儲存 CSV

@@ -246,7 +246,18 @@ def get_price_history(symbol: str, days: int = 90,
     for idx, row in hist.iterrows():
         if (pd.isna(row["Open"]) or pd.isna(row["High"]) or
             pd.isna(row["Low"])  or pd.isna(row["Close"])):
-            continue
+            # auto_adjust=True 時最新交易日的 Close 可能為 NaN
+            # 用 fast_info 補上即時收盤價
+            if pd.isna(row["Close"]) and not pd.isna(row["Open"]):
+                try:
+                    _cur = yf.Ticker(symbol).fast_info.last_price
+                    if _cur and not (isinstance(_cur, float) and _cur != _cur):
+                        row["Close"] = _cur
+                except Exception:
+                    pass
+            # 如果補完還是 NaN，真的跳過
+            if pd.isna(row["Close"]):
+                continue
         trade_date = idx.date() if hasattr(idx, "date") else idx
         if isinstance(trade_date, str):
             from datetime import datetime as dt

@@ -138,6 +138,42 @@ def calculate_atr(high: pd.Series, low: pd.Series, close: pd.Series,
     return atr
 
 
+def calculate_adx(high: pd.Series, low: pd.Series, close: pd.Series,
+                 period: int = 14) -> pd.Series:
+    """
+    ADX (Average Directional Index) — 趨勢強度指標
+    - ADX > 25: 強趨勢（無論方向）
+    - ADX > 40: 極強趨勢
+    - +DI > -DI: 多頭主導
+    - -DI > +DI: 空頭主導
+    """
+    tr1 = high - low
+    tr2 = abs(high - close.shift(1))
+    tr3 = abs(low - close.shift(1))
+    tr = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    atr = tr.rolling(window=period, min_periods=period).mean()
+
+    # +DM and -DM
+    up_move = high.diff()
+    down_move = -low.diff()
+    plus_dm = pd.Series(0.0, index=high.index)
+    minus_dm = pd.Series(0.0, index=high.index)
+    plus_dm[(up_move > down_move) & (up_move > 0)] = up_move
+    minus_dm[(down_move > up_move) & (down_move > 0)] = down_move
+
+    plus_di = 100 * plus_dm.ewm(alpha=1/period, adjust=False).mean() / atr
+    minus_di = 100 * minus_dm.ewm(alpha=1/period, adjust=False).mean() / atr
+
+    dx = 100 * abs(plus_di - minus_di) / (plus_di + minus_di).replace(0, float('nan'))
+    adx = dx.ewm(alpha=1/period, adjust=False).mean()
+
+    return pd.Series({
+        'adx': adx,
+        'plus_di': plus_di,
+        'minus_di': minus_di,
+    })
+
+
 def calculate_all_indicators(df: pd.DataFrame) -> pd.DataFrame:
     """
     為完整股價 DataFrame 計算所有技術指標
@@ -188,5 +224,20 @@ def calculate_all_indicators(df: pd.DataFrame) -> pd.DataFrame:
 
     # ATR
     result['atr_14'] = calculate_atr(result['high'], result['low'], result['close'])
+
+    # ADX
+    adx_data = calculate_adx(result['high'], result['low'], result['close'])
+    result['adx'] = adx_data['adx']
+    result['plus_di'] = adx_data['plus_di']
+    result['minus_di'] = adx_data['minus_di']
+
+    # 高點/低點追蹤（用於突破信號）
+    for period in [10, 20, 60]:
+        result[f'high_{period}d'] = result['high'].rolling(window=period, min_periods=period).max()
+        result[f'low_{period}d'] = result['low'].rolling(window=period, min_periods=period).min()
+
+    # 成交量均線（用於動能確認）
+    result['vol_ma5'] = result['volume'].rolling(window=5, min_periods=3).mean()
+    result['vol_ma20'] = result['volume'].rolling(window=20, min_periods=10).mean()
 
     return result

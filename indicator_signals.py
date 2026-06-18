@@ -40,6 +40,8 @@ def detect_rsi_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
     - RSI 從 <30 上穿: 強烈看漲
     - RSI 從 >70 下穿: 強烈看跌
     - RSI 50 中性
+    - RSI 50-70 維持強勢（動能版，新增）
+    - RSI 加速上升（動能版，新增）
     """
     signals = []
 
@@ -48,14 +50,14 @@ def detect_rsi_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
 
     rsi = df['rsi_14'].iloc[idx]
     rsi_prev = df['rsi_14'].iloc[idx - 1] if idx > 0 else rsi
+    rsi_5_ago = df['rsi_14'].iloc[idx - 5] if idx >= 5 else rsi_prev
 
     if pd.isna(rsi):
         return signals
 
-    # 超買信號
+    # ── 超買信號（現有）──
     if rsi > 70:
         if rsi_prev <= 70:
-            # 從非超買進入超買
             signals.append(IndicatorSignal(
                 indicator='RSI',
                 signal_type='bearish',
@@ -72,10 +74,9 @@ def detect_rsi_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
                 metadata={'rsi': rsi, 'threshold': 70}
             ))
 
-    # 超賣信號
+    # ── 超賣信號（現有）──
     elif rsi < 30:
         if rsi_prev >= 30:
-            # 從非超賣進入超賣
             signals.append(IndicatorSignal(
                 indicator='RSI',
                 signal_type='bullish',
@@ -92,7 +93,7 @@ def detect_rsi_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
                 metadata={'rsi': rsi, 'threshold': 30}
             ))
 
-    # RSI 黃金交叉 50 (從下穿上)
+    # RSI 黃金交叉 50（從下穿上）
     elif rsi_prev < 50 <= rsi:
         signals.append(IndicatorSignal(
             indicator='RSI',
@@ -102,7 +103,7 @@ def detect_rsi_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
             metadata={'rsi': rsi}
         ))
 
-    # RSI 死亡交叉 50 (從上下穿)
+    # RSI 死亡交叉 50（從上下穿）
     elif rsi_prev > 50 >= rsi:
         signals.append(IndicatorSignal(
             indicator='RSI',
@@ -110,6 +111,38 @@ def detect_rsi_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
             name='RSI 下穿 50 中性線',
             confidence=0.55,
             metadata={'rsi': rsi}
+        ))
+
+    # ── ✨ 新增：動能 RSI 信號 ──
+
+    # RSI 維持強勢 (50-70)：健康上升區間，不超買不超賣
+    if 50 <= rsi <= 70:
+        signals.append(IndicatorSignal(
+            indicator='RSI',
+            signal_type='bullish',
+            name='RSI 維持強勢 (50-70)',
+            confidence=0.60,
+            metadata={'rsi': rsi}
+        ))
+
+    # RSI 加速上升：5 天前 RSI 低於現在（動能加速）
+    if idx >= 5 and not pd.isna(rsi_5_ago) and rsi - rsi_5_ago > 5:
+        signals.append(IndicatorSignal(
+            indicator='RSI',
+            signal_type='bullish',
+            name='RSI 加速上升',
+            confidence=0.65,
+            metadata={'rsi': rsi, 'rsi_5_ago': rsi_5_ago, 'delta': rsi - rsi_5_ago}
+        ))
+
+    # RSI 由強勢區（50-70）進一步加速：昨日在 50-70，今日明顯上升
+    if (50 <= rsi_prev <= 70) and (rsi - rsi_prev) > 3:
+        signals.append(IndicatorSignal(
+            indicator='RSI',
+            signal_type='bullish',
+            name='RSI 動能加速（強勢區）',
+            confidence=0.60,
+            metadata={'rsi': rsi, 'rsi_prev': rsi_prev, 'delta': rsi - rsi_prev}
         ))
 
     return signals
@@ -403,6 +436,8 @@ def detect_bb_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
     - 價格跌破下軌: 超賣信號
     -  bands 收窄: 波動性低，突破將至
     -  bands 擴寬: 波動性高
+    - 價格在中軌上方（動能版，新增）
+    - BB 中軌向上（動能版，新增）
     """
     signals = []
 
@@ -457,6 +492,211 @@ def detect_bb_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
             metadata={'close': close, 'bb_lower': bb_lower}
         ))
 
+    # ── ✨ 新增：BB 趨勢信號 ──
+
+    # 價格在 BB 中軌上方（多頭主導）
+    if close > bb_middle:
+        signals.append(IndicatorSignal(
+            indicator='BB',
+            signal_type='bullish',
+            name='價格在 BB 中軌上方',
+            confidence=0.50,
+            metadata={'close': close, 'bb_middle': bb_middle}
+        ))
+
+    # BB 中軌向上（中軌 SMA 斜率 > 0）
+    if idx >= 5:
+        bb_middle_5ago = df['bb_middle'].iloc[idx - 5]
+        if not pd.isna(bb_middle_5ago) and bb_middle > bb_middle_5ago * 1.005:
+            signals.append(IndicatorSignal(
+                indicator='BB',
+                signal_type='bullish',
+                name='BB 中軌向上（上升趨勢）',
+                confidence=0.60,
+                metadata={'bb_middle': bb_middle, 'bb_middle_5ago': bb_middle_5ago,
+                          'slope': (bb_middle / bb_middle_5ago - 1) * 100}
+            ))
+
+    return signals
+
+
+def detect_price_breakout_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
+    """
+    ✨ 新增：價格突破信號（動能版）
+    - 價格創 N 日新高：短期/中期突破
+    """
+    signals = []
+
+    if idx < 60:
+        return signals
+
+    close = df['close'].iloc[idx]
+    high_20d = df['high_20d'].iloc[idx]
+    high_60d = df['high_60d'].iloc[idx]
+
+    if pd.isna(high_20d) or pd.isna(high_60d):
+        return signals
+
+    # 價格創 20 日新高
+    if close >= high_20d * 0.995:
+        signals.append(IndicatorSignal(
+            indicator='PRICE',
+            signal_type='bullish',
+            name='價格創 20 日新高',
+            confidence=0.70,
+            metadata={'close': close, 'high_20d': high_20d,
+                      'pct_off_high': (close / high_20d - 1) * 100}
+        ))
+
+    # 價格創 60 日新高（更強的信號）
+    if close >= high_60d * 0.995:
+        signals.append(IndicatorSignal(
+            indicator='PRICE',
+            signal_type='bullish',
+            name='價格創 60 日新高',
+            confidence=0.80,
+            metadata={'close': close, 'high_60d': high_60d,
+                      'pct_off_high': (close / high_60d - 1) * 100}
+        ))
+
+    return signals
+
+
+def detect_volume_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
+    """
+    ✨ 新增：成交量信號（動能版）
+    - 成交量配合上升：上升時有量，健康趨勢
+    - 縮量回調：回調時縮量，buy the dip 信號
+    """
+    signals = []
+
+    if idx < 25:
+        return signals
+
+    close = df['close'].iloc[idx]
+    close_5ago = df['close'].iloc[idx - 5] if idx >= 5 else close
+    volume = df['volume'].iloc[idx]
+    vol_ma5 = df['vol_ma5'].iloc[idx]
+    vol_ma20 = df['vol_ma20'].iloc[idx]
+
+    if pd.isna(vol_ma5) or pd.isna(vol_ma20) or vol_ma20 == 0:
+        return signals
+
+    # 成交量配合上升：5 天均量 > 20 天均量，且價格上升
+    if vol_ma5 > vol_ma20 * 1.2 and close > close_5ago:
+        signals.append(IndicatorSignal(
+            indicator='VOLUME',
+            signal_type='bullish',
+            name='成交量配合上升（放量上漲）',
+            confidence=0.65,
+            metadata={'vol_ma5': vol_ma5, 'vol_ma20': vol_ma20,
+                      'ratio': vol_ma5 / vol_ma20}
+        ))
+
+    # 縮量回調：價格下跌但成交量萎縮（健康回調）
+    close_1ago = df['close'].iloc[idx - 1] if idx >= 1 else close
+    if close < close_1ago and volume < vol_ma20 * 0.8:
+        signals.append(IndicatorSignal(
+            indicator='VOLUME',
+            signal_type='bullish',
+            name='縮量回調（買點信號）',
+            confidence=0.55,
+            metadata={'volume': volume, 'vol_ma20': vol_ma20,
+                      'ratio': volume / vol_ma20}
+        ))
+
+    # 放量突破：成交量 > 20 天均量 1.5 倍，且價格上升
+    close_1ago = df['close'].iloc[idx - 1] if idx >= 1 else close
+    if volume > vol_ma20 * 1.5 and close > close_1ago:
+        signals.append(IndicatorSignal(
+            indicator='VOLUME',
+            signal_type='bullish',
+            name='放量突破（強勢確認）',
+            confidence=0.70,
+            metadata={'volume': volume, 'vol_ma20': vol_ma20,
+                      'ratio': volume / vol_ma20}
+        ))
+
+    return signals
+
+
+def detect_adx_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
+    """
+    ✨ 新增：ADX 趨勢強度信號
+    - ADX > 25: 強趨勢
+    - +DI > -DI: 多頭主導
+    - ADX > 25 且 +DI > -DI: 強上升趨勢
+    """
+    signals = []
+
+    if idx < 20:
+        return signals
+
+    adx = df['adx'].iloc[idx]
+    plus_di = df['plus_di'].iloc[idx]
+    minus_di = df['minus_di'].iloc[idx]
+
+    if pd.isna(adx) or pd.isna(plus_di) or pd.isna(minus_di):
+        return signals
+
+    # ADX > 25：強趨勢
+    if adx > 25:
+        # +DI > -DI：多頭主導
+        if plus_di > minus_di:
+            signals.append(IndicatorSignal(
+                indicator='ADX',
+                signal_type='bullish',
+                name='ADX 強趨勢（多頭主導）',
+                confidence=0.70,
+                metadata={'adx': adx, 'plus_di': plus_di, 'minus_di': minus_di}
+            ))
+        else:
+            signals.append(IndicatorSignal(
+                indicator='ADX',
+                signal_type='bearish',
+                name='ADX 強趨勢（空頭主導）',
+                confidence=0.70,
+                metadata={'adx': adx, 'plus_di': plus_di, 'minus_di': minus_di}
+            ))
+
+    # ADX > 40：極強趨勢
+    if adx > 40 and plus_di > minus_di:
+        signals.append(IndicatorSignal(
+            indicator='ADX',
+            signal_type='bullish',
+            name='ADX 極強趨勢（多頭）',
+            confidence=0.80,
+            metadata={'adx': adx, 'plus_di': plus_di, 'minus_di': minus_di}
+        ))
+
+    return signals
+
+
+def detect_momentum_summary_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
+    """
+    ✨ 新增：動能綜合信號
+    將多個動能信號的結果匯總成一個綜合判斷
+    """
+    signals = []
+
+    # EMA 多頭排列：已由 detect_ema_signals 處理
+    # 這裡檢查價格是否在所有主要均線上方（最強動能確認）
+    if idx >= 50:
+        close = df['close'].iloc[idx]
+        ema_20 = df['ema_20'].iloc[idx]
+        ema_50 = df['ema_50'].iloc[idx]
+        ema_200 = df['ema_200'].iloc[idx]
+
+        if (close > ema_20 > ema_50 > ema_200 and
+            not pd.isna(ema_20) and not pd.isna(ema_50) and not pd.isna(ema_200)):
+            signals.append(IndicatorSignal(
+                indicator='MOMENTUM',
+                signal_type='bullish',
+                name='多頭排列 + 價格在均線上方（強勢確認）',
+                confidence=0.80,
+                metadata={'close': close, 'ema_20': ema_20, 'ema_50': ema_50, 'ema_200': ema_200}
+            ))
+
     return signals
 
 
@@ -471,6 +711,11 @@ def detect_all_signals(df: pd.DataFrame, idx: int) -> List[IndicatorSignal]:
     all_signals.extend(detect_kdj_signals(df, idx))
     all_signals.extend(detect_ema_signals(df, idx))
     all_signals.extend(detect_bb_signals(df, idx))
+    # ✨ 新增動能信號
+    all_signals.extend(detect_price_breakout_signals(df, idx))
+    all_signals.extend(detect_volume_signals(df, idx))
+    all_signals.extend(detect_adx_signals(df, idx))
+    all_signals.extend(detect_momentum_summary_signals(df, idx))
 
     return all_signals
 
