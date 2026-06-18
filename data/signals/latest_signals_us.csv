@@ -32,6 +32,7 @@ MOS,Materials,Fertilizers & Agricultural Chemicals,MACD,MACD 金叉 (空頭區),
 IT,Information Technology,IT Consulting & Other Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3714,0.3714,0.3493,35,1480,0.0069,133.58,134.5,135.42,132.24,2026-06-17,3,False
 CBOE,Financials,Financial Exchanges & Data,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3693,,0.3693,0,371,0.001,254.69,254.94,255.2,252.14,2026-06-17,3,False
 EPAM,Unknown,Unknown,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3687,,0.3687,0,339,0.014,87.7,88.93,90.16,86.82,2026-06-17,3,False
+DLR,Real Estate,Data Center REITs,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3636,,0.3636,0,22,0.008,190.45,191.97,193.5,188.55,2026-06-16,3,True
 HAL,Energy,Oil & Gas Equipment & Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.36,0.36,0.3294,25,507,0.0047,36.23,36.4,36.57,35.87,2026-06-17,3,False
 TTWO,Communication Services,Interactive Home Entertainment,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3571,0.3571,0.3473,14,334,0.0024,228.03,228.58,229.12,225.75,2026-06-17,3,False
 AVB,Real Estate,Multi-Family Residential REITs,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3556,0.3556,0.2555,45,947,0.0044,179.63,180.42,181.21,177.83,2026-06-17,3,False
@@ -62,7 +63,6 @@ VLTO,Industrials,Environmental & Facilities Services,MACD,MACD 金叉 (空頭區
 PTC,Information Technology,Application Software,RSI,RSI 維持超賣,None,0.0,0.385,0.2105,0.2105,0.3539,19,907,0.001,116.94,117.06,117.17,115.77,2026-06-17,3,False
 ADSK,Information Technology,Application Software,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.2,0.2,0.322,5,354,-0.0037,193.07,192.36,191.64,191.14,2026-06-17,3,False
 ROL,Industrials,Environmental & Facilities Services,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.2,0.2,0.288,5,434,-0.004,45.13,44.95,44.77,44.68,2026-06-17,3,False
-DLR,Real Estate,Data Center REITs,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.2,0.2,0.2429,15,560,-0.0073,190.45,189.06,187.67,188.55,2026-06-16,3,False
 FOX,Communication Services,Broadcasting,RSI,RSI 維持超賣,None,0.0,0.385,0.2,0.2,0.3145,10,318,-0.0233,46.73,45.64,44.55,46.26,2026-06-17,3,False
 EFX,Industrials,Research & Consulting Services,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.1905,0.1905,0.2832,21,1776,-0.0083,154.84,153.55,152.27,153.29,2026-06-17,3,False
 PSX,Energy,Oil & Gas Refining & Marketing,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.1852,0.1852,0.3294,27,507,-0.0072,167.17,165.97,164.76,165.5,2026-06-17,3,False
