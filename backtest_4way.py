@@ -32,13 +32,17 @@ import duckdb
 from indicator_calculator import calculate_all_indicators
 from indicator_signals import (
     detect_rsi_signals, detect_macd_signals, detect_kdj_signals,
-    detect_ema_signals, detect_bb_signals
+    detect_ema_signals, detect_bb_signals,
+    detect_price_breakout_signals, detect_volume_signals,
+    detect_adx_signals, detect_momentum_summary_signals
 )
 from pattern_detector import (
     Pattern, detect_doji, detect_hammer, detect_shooting_star,
     detect_morning_star, detect_evening_star, detect_engulfing,
     detect_harami, detect_support_resistance, detect_flag,
-    detect_triangle
+    detect_triangle,
+    detect_cup_handle, detect_pullback_ema_support,
+    detect_consolidation_breakout,
 )
 
 # ── 參數 ──────────────────────────────────────────────────────────────
@@ -51,6 +55,7 @@ VOL_SPIKE_TODAY = 1.5
 VOL_SPIKE_NEXT = 1.2
 
 BULLISH_INDICATORS = {
+    # ── 超賣反轉（現有） ──
     ('RSI', 'RSI 超賣區域 (30)'),
     ('RSI', 'RSI 維持超賣'),
     ('BB', 'BB 跌破下軌 (超賣)'),
@@ -59,6 +64,24 @@ BULLISH_INDICATORS = {
     ('KDJ', 'KDJ 超賣區金叉'),
     ('EMA', 'EMA 黃金交叉 (20 上穿 50)'),
     ('EMA', '價格突破 EMA20'),
+    # ── 動能延續（新增，需與 signal_scanner.py 的 CORE_BULLISH_INDICATORS 一致）──
+    ('MACD', 'MACD 金叉 (多頭區)'),
+    ('EMA', 'EMA 多頭排列 (20>50>200)'),
+    ('KDJ', 'KDJ 金叉'),
+    ('RSI', 'RSI 上穿 50 中性線'),
+    ('RSI', 'RSI 維持強勢 (50-70)'),
+    ('RSI', 'RSI 加速上升'),
+    ('RSI', 'RSI 動能加速（強勢區）'),
+    ('BB', '價格在 BB 中軌上方'),
+    ('BB', 'BB 中軌向上（上升趨勢）'),
+    ('PRICE', '價格創 20 日新高'),
+    ('PRICE', '價格創 60 日新高'),
+    ('VOLUME', '成交量配合上升（放量上漲）'),
+    ('VOLUME', '縮量回調（買點信號）'),
+    ('VOLUME', '放量突破（強勢確認）'),
+    ('ADX', 'ADX 強趨勢（多頭主導）'),
+    ('ADX', 'ADX 極強趨勢（多頭）'),
+    ('MOMENTUM', '多頭排列 + 價格在均線上方（強勢確認）'),
 }
 
 BEARISH_INDICATORS = {
@@ -74,7 +97,9 @@ BEARISH_INDICATORS = {
 
 BULLISH_PATTERNS = {
     'Support', 'Morning Star', 'Bullish Engulfing',
-    'Bull Flag', 'Hammer', 'Ascending Triangle', 'Bullish Harami'
+    'Bull Flag', 'Hammer', 'Ascending Triangle', 'Bullish Harami',
+    # 新增延續形態（需與 signal_scanner.py 的 CORE_BULLISH_PATTERNS 一致）
+    'Cup & Handle', 'Pullback EMA20', 'Consolidation Breakout',
 }
 BEARISH_PATTERNS = {
     'Resistance', 'Evening Star', 'Bearish Engulfing',
@@ -177,6 +202,22 @@ def build_pattern_index(df):
         except Exception:
             pass
 
+    # ✨ 新增：延續形態檢測
+    for detector in [detect_cup_handle, detect_pullback_ema_support, detect_consolidation_breakout]:
+        try:
+            patterns = detector(df)
+            for p in patterns:
+                if p.confidence < MIN_PATTERN_CONFIDENCE:
+                    continue
+                pi = PatternIndex(p)
+                for i in p.indices:
+                    if p.direction == 'bullish' and p.name in BULLISH_PATTERNS:
+                        bullish_index[i].append(pi)
+                    elif p.direction == 'bearish' and p.name in BEARISH_PATTERNS:
+                        bearish_index[i].append(pi)
+        except Exception:
+            pass
+
     return bullish_index, bearish_index, df
 
 
@@ -231,6 +272,10 @@ def backtest_stock(symbol, sector):
         all_ind_signals.extend(detect_kdj_signals(df, idx))
         all_ind_signals.extend(detect_ema_signals(df, idx))
         all_ind_signals.extend(detect_bb_signals(df, idx))
+        all_ind_signals.extend(detect_price_breakout_signals(df, idx))
+        all_ind_signals.extend(detect_volume_signals(df, idx))
+        all_ind_signals.extend(detect_adx_signals(df, idx))
+        all_ind_signals.extend(detect_momentum_summary_signals(df, idx))
 
         bull_pis = bullish_index.get(idx, [])
         bear_pis = bearish_index.get(idx, [])

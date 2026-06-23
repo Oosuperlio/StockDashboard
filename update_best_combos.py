@@ -119,8 +119,18 @@ def make_lines(combo_dict, key_format):
                                           bool(x[0][-1]) if isinstance(x[0][-1], bool) else
                                           x[0][-1] == 'Y')):
         k_str = key_format(key)
+        wr = data['win_rate']
+        ret = data['avg_return']
+        cnt = data['count']
+        # 處理 NaN：Pandas CSV 中的 NaN 會變成 nan 字符串，Python 無法解析
+        if pd.isna(wr):
+            wr = 0.0
+        if pd.isna(ret):
+            ret = 0.0
+        if pd.isna(cnt):
+            cnt = 0
         lines.append(
-            f"    ({k_str}): ({data['win_rate']:.4f}, {data['avg_return']:.4f}, {data['count']}),"
+            f"    ({k_str}): ({wr:.4f}, {ret:.4f}, {cnt}),"
         )
     return lines
 
