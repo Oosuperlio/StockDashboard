@@ -1155,7 +1155,7 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
 
     # Win rate display — split into individual components
     def _fmt_wr(val):
-        if val is None or val <= 0:
+        if val is None or (isinstance(val, float) and val != val) or val <= 0:
             return "—"
         return f"{val:.0%}"
 
