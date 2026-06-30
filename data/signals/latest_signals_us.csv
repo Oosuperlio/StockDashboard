@@ -2,7 +2,6 @@ symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rat
 SLB,Energy,Oil & Gas Equipment & Services,BB,BB 跌破下軌 (超賣),Bullish Engulfing,0.75,1.0,1.0,,1.0,0,9,0.0547,46.61,49.16,51.71,46.14,2026-06-24,1,True
 CRWD,Information Technology,Software - Infrastructure,BB,BB 中軌向上（上升趨勢）,Morning Star,0.8,1.0,0.7692,0.7692,0.4841,13,471,0.0761,701.09,754.44,807.8,694.08,2026-06-26,1,False
 EPAM,Information Technology,Information Technology Services,RSI,RSI 維持超賣,Bullish Engulfing,0.75,0.885,0.6944,,0.6944,0,36,0.0458,78.39,81.98,85.57,77.61,2026-06-24,1,False
-KLAC,Information Technology,Semiconductor Equipment & Materials,RSI,RSI 維持超賣,Support,0.8,1.0,0.6667,,0.6667,0,9,0.0781,240.48,259.26,278.04,238.08,2026-06-24,1,True
 DVA,Health Care,Medical Care Facilities,RSI,RSI 加速上升,Consolidation Breakout,0.85,1.0,0.5833,0.5833,0.2275,12,822,0.0256,217.04,222.6,228.15,214.87,2026-06-26,1,False
 AGNCM,Real Estate,REIT - Mortgage,RSI,RSI 上穿 50 中性線,Morning Star,0.8,0.9900000000000001,0.5833,,0.5833,0,24,0.0272,25.05,25.73,26.41,24.8,2026-06-26,1,False
 NTR,Materials,Agricultural Inputs,RSI,RSI 維持超賣,Bullish Engulfing,0.75,0.885,0.5789,,0.5789,0,19,0.0245,60.96,62.45,63.95,60.35,2026-06-25,1,False
@@ -58,6 +57,7 @@ TTE,Energy,Oil & Gas Integrated,RSI,RSI 維持超賣,None,0.0,0.385,0.6122,,0.61
 J,Industrials,Engineering & Construction,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.6,0.6,0.2674,5,531,0.0072,124.39,125.29,126.18,123.15,2026-06-25,3,False
 NRG,Utilities,Utilities - Independent Power Producers,MACD,MACD 突破 0 軸,None,0.0,0.595,0.6,0.6,0.2226,5,310,0.0364,147.11,152.46,157.82,145.64,2026-06-25,3,False
 NOC,Industrials,Aerospace & Defense,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.6,0.6,0.3086,5,337,0.0217,499.33,510.17,521.0,494.34,2026-06-25,3,False
+DD,Materials,Specialty Chemicals,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.6,0.6,0.4202,5,119,0.0041,137.82,138.39,138.95,136.44,2026-06-24,3,True
 LULU,Consumer Discretionary,Apparel Retail,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.5882,0.5882,0.3233,17,529,0.0095,117.57,118.69,119.8,116.39,2026-06-26,3,False
 BSX,Health Care,Medical Devices,RSI,RSI 維持超賣,None,0.0,0.385,0.5833,0.5833,0.3138,12,956,0.0185,44.23,45.05,45.87,43.79,2026-06-26,3,False
 WDC,Information Technology,Computer Hardware,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.5806,0.5806,0.366,62,2885,0.0319,675.39,696.93,718.48,668.64,2026-06-25,3,False
@@ -149,6 +149,7 @@ SYY,Consumer Staples,Food Distribution,BB,價格在 BB 中軌上方,Morning Star
 FRT,Real Estate,REIT - Retail,KDJ,KDJ 金叉,None,0.0,0.5525,0.4444,0.4444,0.2818,9,550,0.0188,124.62,126.96,129.31,123.37,2026-06-24,3,False
 ARE,Real Estate,REIT - Office,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4444,0.4444,0.2452,27,1093,0.0147,55.22,56.03,56.84,54.67,2026-06-26,3,False
 DLR,Real Estate,REIT - Specialty,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4444,0.4444,0.3248,9,311,0.0082,192.44,194.02,195.6,190.52,2026-06-25,3,True
+KLAC,Information Technology,Semiconductor Equipment & Materials,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4427,0.4427,0.3645,314,16764,0.0104,248.64,251.23,253.81,246.15,2026-06-26,3,False
 INVH,Real Estate,REIT - Residential,KDJ,KDJ 金叉,None,0.0,0.5525,0.4412,,0.4412,0,34,0.011,29.64,29.97,30.29,29.34,2026-06-24,3,True
 CAT,Industrials,Farm & Heavy Construction Machinery,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.439,0.439,0.2891,41,3037,0.0118,1057.01,1069.48,1081.96,1046.44,2026-06-25,3,False
 MPLX,Energy,Oil & Gas Midstream,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.4386,,0.4386,0,57,0.014,56.52,57.31,58.1,55.95,2026-06-26,3,False
@@ -648,7 +649,6 @@ PPLC,Utilities,Utilities - Regulated Electric,KDJ,KDJ 金叉,None,0.0,0.5525,0.3
 WTRG,Utilities,Utilities - Regulated Water,KDJ,KDJ 金叉,None,0.0,0.5525,0.3001,,0.3001,0,713,0.0052,37.78,37.98,38.17,37.4,2026-06-24,3,False
 PEG,Utilities,Utilities - Regulated Electric,RSI,RSI 加速上升,Consolidation Breakout,0.75,1.0,0.3,0.3,0.1896,20,633,0.0046,83.58,83.96,84.35,82.74,2026-06-26,3,False
 CPT,Real Estate,REIT - Residential,KDJ,KDJ 金叉,None,0.0,0.5525,0.3,0.3,0.2818,20,550,0.0037,113.59,114.01,114.43,112.45,2026-06-25,3,False
-DD,Materials,Specialty Chemicals,RSI,RSI 加速上升,None,0.0,0.5525,0.3,0.3,0.3048,130,3639,0.0068,137.22,138.15,139.09,135.85,2026-06-26,3,False
 INCY,Health Care,Biotechnology,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3,0.3,0.2606,30,1869,0.0016,113.75,113.93,114.11,112.61,2026-06-26,3,False
 CVX,Energy,Oil & Gas Integrated,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3,0.3,0.3664,10,292,0.0102,171.45,173.2,174.95,169.74,2026-06-24,3,False
 BURL,Consumer Discretionary,Apparel Retail,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2995,,0.2995,0,10441,0.0032,337.79,338.87,339.95,334.41,2026-06-24,3,False
