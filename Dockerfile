@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY database/ ./database/
 COPY pattern_detector.py .
+COPY portfolio_tab.py .
 COPY pattern_annotator.py .
 COPY predictor.py .
 COPY indicator_calculator.py .
