@@ -1204,16 +1204,16 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
 
 
 # ── 頁面選擇 ──
-st.sidebar.markdown("### 📋 功能")
-col_sig, col_prt = st.sidebar.columns(2)
-with col_sig:
-    if st.button("📡 信號", use_container_width=True, key="nav_sig"):
-        st.session_state["app_page"] = "signal"
-        st.rerun()
-with col_prt:
-    if st.button("🗂️ 持倉", use_container_width=True, key="nav_prt"):
-        st.session_state["app_page"] = "portfolio"
-        st.rerun()
+st.sidebar.markdown(
+    "<div style='background:#2d3748; border-radius:8px; padding:8px; margin-bottom:6px; text-align:center; font-weight:600;'>📋 功能選單</div>",
+    unsafe_allow_html=True,
+)
+if st.sidebar.button("📡 信號看板", use_container_width=True, key="nav_sig", type="secondary"):
+    st.session_state["app_page"] = "signal"
+    st.rerun()
+if st.sidebar.button("🗂️ 持倉管理", use_container_width=True, key="nav_prt", type="primary"):
+    st.session_state["app_page"] = "portfolio"
+    st.rerun()
 page = st.session_state.get("app_page", "signal")
 page_label = "📡 信號看板" if page == "signal" else "🗂️ 持倉管理"
 
