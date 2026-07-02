@@ -1204,14 +1204,13 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
 
 
 # ── 頁面選擇 ──
+st.sidebar.markdown("### 📋 功能")
 col_sig, col_prt = st.sidebar.columns(2)
 with col_sig:
-    st.sidebar.markdown("### 📋 功能")
     if st.button("📡 信號", use_container_width=True, key="nav_sig"):
         st.session_state["app_page"] = "signal"
         st.rerun()
 with col_prt:
-    st.sidebar.markdown("")  # spacer
     if st.button("🗂️ 持倉", use_container_width=True, key="nav_prt"):
         st.session_state["app_page"] = "portfolio"
         st.rerun()
