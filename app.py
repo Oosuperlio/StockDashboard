@@ -314,6 +314,9 @@ from database.signals import load_daily_signals, get_signal_summary, signal_date
 import json
 from pathlib import Path
 
+# ── Portfolio tab ──
+from portfolio_tab import render_portfolio_tab
+
 SIGNALS_DIR = Path(__file__).resolve().parent / "data" / "signals"
 
 def load_sector_counts(market: str = "us") -> list:
@@ -1200,64 +1203,75 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
 
 
 
-# ── 側邊欄：股票搜尋 ──
-st.sidebar.header("🔍 股票搜尋")
-search_query = st.sidebar.text_input(
-    "輸入股票代碼或名稱",
-    placeholder="例如：TSLA、3968.HK、AAPL",
-    help="輸入關鍵字後，系統會自動顯示相關股票建議"
+# ── 頁面選擇 ──
+page = st.sidebar.radio(
+    "📋 功能選單",
+    ["📡 信號看板", "🗂️ 持倉管理"],
+    label_visibility="collapsed",
+    horizontal=True,
 )
 
-# 搜尋建議
-suggestions = []
-if search_query:
-    suggestions = search_tickers(search_query)
-
-selected_ticker = None
-
-if suggestions:
-    # 用 selectbox 顯示建議讓用戶選擇
-    options = [format_suggestion(q) for q in suggestions]
-    selected = st.sidebar.selectbox(
-        "選擇股票",
-        options=options,
-        label_visibility="collapsed"
+# ── 側邊欄：股票搜尋（僅在信號看板頁面顯示）──
+if page == "📡 信號看板":
+    st.sidebar.header("🔍 股票搜尋")
+    search_query = st.sidebar.text_input(
+        "輸入股票代碼或名稱",
+        placeholder="例如：TSLA、3968.HK、AAPL",
+        help="輸入關鍵字後，系統會自動顯示相關股票建議"
     )
-    # 從選擇回推 symbol
-    idx = options.index(selected)
-    selected_ticker = suggestions[idx]["symbol"]
-elif search_query:
-    # 有輸入但沒有建議，嘗試直接使用輸入作為 ticker
-    st.sidebar.warning(f"找不到「{search_query}」，請嘗試其他關鍵字")
 
-# 如果沒有輸入且不是從信號按鈕跳轉，顯示信號首頁
-if not selected_ticker:
-    # 檢查是否從信號卡片點擊跳轉
-    if "navigate_to_ticker" in st.session_state and st.session_state.navigate_to_ticker:
-        selected_ticker = st.session_state.pop("navigate_to_ticker")
-    else:
-        st.sidebar.caption("💡 輸入股票代碼搜尋，或瀏覽下方信號")
-        raw = search_query.strip().upper()
-        if raw and ( "." in raw or raw.isalpha() ):
-            selected_ticker = raw
+    # 搜尋建議
+    suggestions = []
+    if search_query:
+        suggestions = search_tickers(search_query)
 
-days_range = st.sidebar.slider("顯示天數", 30, 365, 90)
+    selected_ticker = None
 
-refresh_key = f"refresh_{selected_ticker}"
-col1, col2 = st.sidebar.columns([1, 1])
-with col1:
-    st.write("")
-with col2:
-    if st.button("🔄 刷新數據", key=refresh_key):
-        st.cache_data.clear()
-        data = load_stock_data(selected_ticker, force_refresh=True)
-        st.rerun()
+    if suggestions:
+        options = [format_suggestion(q) for q in suggestions]
+        selected = st.sidebar.selectbox(
+            "選擇股票",
+            options=options,
+            label_visibility="collapsed"
+        )
+        idx = options.index(selected)
+        selected_ticker = suggestions[idx]["symbol"]
+    elif search_query:
+        st.sidebar.warning(f"找不到「{search_query}」，請嘗試其他關鍵字")
 
-# ── 信號首頁（無搜尋時顯示）──
-if not selected_ticker:
-    render_signal_homepage()
-    st.markdown("---")
-    st.caption(f"💡 在側邊欄輸入股票代碼可查看個股詳情 | 最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    # 如果沒有輸入且不是從信號按鈕跳轉，顯示信號首頁
+    if not selected_ticker:
+        if "navigate_to_ticker" in st.session_state and st.session_state.navigate_to_ticker:
+            selected_ticker = st.session_state.pop("navigate_to_ticker")
+        else:
+            st.sidebar.caption("💡 輸入股票代碼搜尋，或瀏覽下方信號")
+            raw = search_query.strip().upper()
+            if raw and ( "." in raw or raw.isalpha() ):
+                selected_ticker = raw
+
+    days_range = st.sidebar.slider("顯示天數", 30, 365, 90)
+
+    refresh_key = f"refresh_{selected_ticker}"
+    col1, col2 = st.sidebar.columns([1, 1])
+    with col1:
+        st.write("")
+    with col2:
+        if st.button("🔄 刷新數據", key=refresh_key):
+            st.cache_data.clear()
+            data = load_stock_data(selected_ticker, force_refresh=True)
+            st.rerun()
+
+    # ── 信號首頁（無搜尋時顯示）──
+    if not selected_ticker:
+        render_signal_homepage()
+        st.markdown("---")
+        st.caption(f"💡 在側邊欄輸入股票代碼可查看個股詳情 | 最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        st.stop()
+
+# ── 持倉管理（當選擇持倉管理頁面時）──
+if page == "🗂️ 持倉管理":
+    render_portfolio_tab()
+    st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     st.stop()
 
 # ── 實時報價 + 財務數據 + 新聞（全部來自 DB 緩存）──
