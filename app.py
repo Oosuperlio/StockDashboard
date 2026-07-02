@@ -1274,12 +1274,6 @@ if page == "signal":
         st.caption(f"💡 在側邊欄輸入股票代碼可查看個股詳情 | 最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         st.stop()
 
-# ── 持倉管理（當選擇持倉管理頁面時）──
-if page == "portfolio":
-    _render_portfolio_tab()
-    st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    st.stop()
-
 # ── 實時報價 + 財務數據 + 新聞（全部來自 DB 緩存）──
 data = load_stock_data(selected_ticker, days=days_range, force_refresh=False)
 prices = data["prices"]
@@ -1936,3 +1930,9 @@ def _render_date_range_form(pm: PortfolioManager):
         st.markdown(f'<div class="card"><div class="card-header">📈 匯總</div>'
                     f'<div>平均: <b>{ar:+.2f}%</b> | 總盈虧: <b style="color:{"#48bb78" if tp>=0 else "#fc8181"}">${tp:+,.2f}</b></div></div>',
                     unsafe_allow_html=True)
+
+# ── 持倉管理（當選擇持倉管理頁面時）──
+if page == "portfolio":
+    _render_portfolio_tab()
+    st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    st.stop()
