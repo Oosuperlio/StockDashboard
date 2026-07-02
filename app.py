@@ -1204,11 +1204,10 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
 
 
 # ── 頁面選擇 ──
-page = st.sidebar.radio(
+page = st.sidebar.selectbox(
     "📋 功能選單",
     ["📡 信號看板", "🗂️ 持倉管理"],
-    label_visibility="collapsed",
-    horizontal=True,
+    label_visibility="visible",
 )
 
 # ── 側邊欄：股票搜尋（僅在信號看板頁面顯示）──
