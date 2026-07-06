@@ -37,16 +37,15 @@ old_hsi   = read_csv("backtest_results_hsi.csv")
 # ── 2. 運行回測 ──────────────────────────────────────────────
 report.append("=== 運行回測 ===")
 
-for script, label in [("backtest_sp500.py", "S&P 500"), ("backtest_hsi.py", "HSI")]:
-    try:
-        result = subprocess.run(
-            [sys.executable, script],
-            capture_output=True, text=True, timeout=300, cwd=PARENT
-        )
-        last_line = result.stdout.strip().split("\n")[-1]
-        report.append(f"  ✅ {label}: {last_line}")
-    except Exception as e:
-        report.append(f"  ❌ {label}: {e}")
+# 使用新的四維回測（覆蓋 SP500 + 擴展美股 + HSI）
+try:
+    result = subprocess.run(
+        [sys.executable, "backtest_4way.py"],
+        capture_output=True, text=True, timeout=3600, cwd=PARENT
+    )
+    report.append(f"  ✅ 四維回測完成（exit={result.returncode}）")
+except Exception as e:
+    report.append(f"  ❌ 四維回測: {e}")
 
 # ── 3. 讀取新數據 ──────────────────────────────────────────────
 new_sp500 = read_csv("backtest_results_sp500.csv")

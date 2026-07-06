@@ -1,0 +1,337 @@
+{
+  "metadata": {
+    "backtest": "EMA Trailing Stop Backtest",
+    "tickers": [
+      "ACN",
+      "CBRE",
+      "CME",
+      "CRWD",
+      "MPWR",
+      "SSNC",
+      "VTRS"
+    ],
+    "period": "2023-07-05 to 2026-07-05",
+    "generated_at": "2026-07-05T05:29:41.281278"
+  },
+  "strategies": {
+    "A_EMA20": "Buy 1st-of-month open. Sell when close < EMA(20) or at month-end close.",
+    "B_EMA50": "Buy 1st-of-month open. Sell when close < EMA(50) or at month-end close.",
+    "C_EMA200": "Buy 1st-of-month open. Sell when close < EMA(200) or at month-end close.",
+    "D_Hybrid": "Buy 1st-of-month open. Stepped stops: EMA20 \u2192 EMA50 at +5% \u2192 EMA200 at +10%, revert below +5%."
+  },
+  "results": {
+    "ACN": {
+      "A_EMA20": {
+        "total_trades": 21,
+        "win_rate": 42.86,
+        "avg_win_loss_ratio": 1.8845,
+        "total_return_pct": 9.82,
+        "max_drawdown_pct": 13.58,
+        "sharpe_ratio": -0.1198,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 20,
+        "win_rate": 45.0,
+        "avg_win_loss_ratio": 1.7088,
+        "total_return_pct": 8.99,
+        "max_drawdown_pct": 20.48,
+        "sharpe_ratio": -0.1261,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 20,
+        "win_rate": 55.0,
+        "avg_win_loss_ratio": 0.8204,
+        "total_return_pct": -1.33,
+        "max_drawdown_pct": 22.13,
+        "sharpe_ratio": -0.4128,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 21,
+        "win_rate": 42.86,
+        "avg_win_loss_ratio": 1.8845,
+        "total_return_pct": 9.82,
+        "max_drawdown_pct": 13.58,
+        "sharpe_ratio": -0.1198,
+        "scheme": "D_Hybrid"
+      }
+    },
+    "CBRE": {
+      "A_EMA20": {
+        "total_trades": 20,
+        "win_rate": 40.0,
+        "avg_win_loss_ratio": 2.5342,
+        "total_return_pct": 18.04,
+        "max_drawdown_pct": 18.41,
+        "sharpe_ratio": 0.1102,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 19,
+        "win_rate": 57.89,
+        "avg_win_loss_ratio": 2.7227,
+        "total_return_pct": 56.48,
+        "max_drawdown_pct": 14.16,
+        "sharpe_ratio": 0.7814,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 17,
+        "win_rate": 58.82,
+        "avg_win_loss_ratio": 2.8047,
+        "total_return_pct": 80.78,
+        "max_drawdown_pct": 16.45,
+        "sharpe_ratio": 0.8792,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 21,
+        "win_rate": 42.86,
+        "avg_win_loss_ratio": 1.8425,
+        "total_return_pct": 10.22,
+        "max_drawdown_pct": 18.41,
+        "sharpe_ratio": -0.0608,
+        "scheme": "D_Hybrid"
+      }
+    },
+    "CME": {
+      "A_EMA20": {
+        "total_trades": 21,
+        "win_rate": 33.33,
+        "avg_win_loss_ratio": 0.7511,
+        "total_return_pct": -17.79,
+        "max_drawdown_pct": 25.64,
+        "sharpe_ratio": -1.2602,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 17,
+        "win_rate": 35.29,
+        "avg_win_loss_ratio": 1.5262,
+        "total_return_pct": -5.28,
+        "max_drawdown_pct": 16.32,
+        "sharpe_ratio": -0.597,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 13,
+        "win_rate": 46.15,
+        "avg_win_loss_ratio": 1.4384,
+        "total_return_pct": 3.78,
+        "max_drawdown_pct": 22.85,
+        "sharpe_ratio": -0.2013,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 21,
+        "win_rate": 33.33,
+        "avg_win_loss_ratio": 0.7511,
+        "total_return_pct": -17.79,
+        "max_drawdown_pct": 25.64,
+        "sharpe_ratio": -1.2602,
+        "scheme": "D_Hybrid"
+      }
+    },
+    "CRWD": {
+      "A_EMA20": {
+        "total_trades": 19,
+        "win_rate": 47.37,
+        "avg_win_loss_ratio": 4.2542,
+        "total_return_pct": 96.81,
+        "max_drawdown_pct": 20.02,
+        "sharpe_ratio": 0.8941,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 16,
+        "win_rate": 75.0,
+        "avg_win_loss_ratio": 1.7753,
+        "total_return_pct": 206.85,
+        "max_drawdown_pct": 18.53,
+        "sharpe_ratio": 1.4055,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 15,
+        "win_rate": 53.33,
+        "avg_win_loss_ratio": 1.7153,
+        "total_return_pct": 52.35,
+        "max_drawdown_pct": 47.13,
+        "sharpe_ratio": 0.4563,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 19,
+        "win_rate": 47.37,
+        "avg_win_loss_ratio": 4.2542,
+        "total_return_pct": 96.81,
+        "max_drawdown_pct": 20.02,
+        "sharpe_ratio": 0.8941,
+        "scheme": "D_Hybrid"
+      }
+    },
+    "MPWR": {
+      "A_EMA20": {
+        "total_trades": 19,
+        "win_rate": 57.89,
+        "avg_win_loss_ratio": 4.0402,
+        "total_return_pct": 171.96,
+        "max_drawdown_pct": 17.37,
+        "sharpe_ratio": 1.183,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 17,
+        "win_rate": 64.71,
+        "avg_win_loss_ratio": 3.2081,
+        "total_return_pct": 178.35,
+        "max_drawdown_pct": 20.49,
+        "sharpe_ratio": 1.1048,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 14,
+        "win_rate": 71.43,
+        "avg_win_loss_ratio": 2.0938,
+        "total_return_pct": 113.11,
+        "max_drawdown_pct": 23.66,
+        "sharpe_ratio": 0.7433,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 20,
+        "win_rate": 60.0,
+        "avg_win_loss_ratio": 3.2821,
+        "total_return_pct": 144.89,
+        "max_drawdown_pct": 17.37,
+        "sharpe_ratio": 1.0684,
+        "scheme": "D_Hybrid"
+      }
+    },
+    "SSNC": {
+      "A_EMA20": {
+        "total_trades": 21,
+        "win_rate": 42.86,
+        "avg_win_loss_ratio": 2.8341,
+        "total_return_pct": 21.85,
+        "max_drawdown_pct": 11.62,
+        "sharpe_ratio": 0.2269,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 19,
+        "win_rate": 57.89,
+        "avg_win_loss_ratio": 1.4177,
+        "total_return_pct": 18.39,
+        "max_drawdown_pct": 11.64,
+        "sharpe_ratio": 0.1156,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 16,
+        "win_rate": 68.75,
+        "avg_win_loss_ratio": 1.113,
+        "total_return_pct": 38.72,
+        "max_drawdown_pct": 10.87,
+        "sharpe_ratio": 0.5126,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 22,
+        "win_rate": 45.45,
+        "avg_win_loss_ratio": 2.3471,
+        "total_return_pct": 19.36,
+        "max_drawdown_pct": 11.62,
+        "sharpe_ratio": 0.1493,
+        "scheme": "D_Hybrid"
+      }
+    },
+    "VTRS": {
+      "A_EMA20": {
+        "total_trades": 20,
+        "win_rate": 40.0,
+        "avg_win_loss_ratio": 4.2221,
+        "total_return_pct": 34.64,
+        "max_drawdown_pct": 15.51,
+        "sharpe_ratio": 0.455,
+        "scheme": "A_EMA20"
+      },
+      "B_EMA50": {
+        "total_trades": 19,
+        "win_rate": 52.63,
+        "avg_win_loss_ratio": 3.3045,
+        "total_return_pct": 42.4,
+        "max_drawdown_pct": 20.05,
+        "sharpe_ratio": 0.5301,
+        "scheme": "B_EMA50"
+      },
+      "C_EMA200": {
+        "total_trades": 14,
+        "win_rate": 71.43,
+        "avg_win_loss_ratio": 2.3624,
+        "total_return_pct": 77.75,
+        "max_drawdown_pct": 25.29,
+        "sharpe_ratio": 0.86,
+        "scheme": "C_EMA200"
+      },
+      "D_Hybrid": {
+        "total_trades": 20,
+        "win_rate": 40.0,
+        "avg_win_loss_ratio": 4.2221,
+        "total_return_pct": 34.64,
+        "max_drawdown_pct": 15.51,
+        "sharpe_ratio": 0.455,
+        "scheme": "D_Hybrid"
+      }
+    }
+  },
+  "recommendations": {
+    "ACN": "A_EMA20",
+    "CBRE": "C_EMA200",
+    "CME": "C_EMA200",
+    "CRWD": "B_EMA50",
+    "MPWR": "A_EMA20",
+    "SSNC": "C_EMA200",
+    "VTRS": "C_EMA200"
+  },
+  "comparison": {
+    "strategy_summary": {
+      "A_EMA20": {
+        "avg_sharpe": 0.2127,
+        "avg_return_pct": 47.9,
+        "avg_max_dd_pct": 17.45,
+        "stocks_best_for": [
+          "ACN",
+          "MPWR"
+        ]
+      },
+      "B_EMA50": {
+        "avg_sharpe": 0.4592,
+        "avg_return_pct": 72.31,
+        "avg_max_dd_pct": 17.38,
+        "stocks_best_for": [
+          "CRWD"
+        ]
+      },
+      "C_EMA200": {
+        "avg_sharpe": 0.4053,
+        "avg_return_pct": 52.17,
+        "avg_max_dd_pct": 24.05,
+        "stocks_best_for": [
+          "CBRE",
+          "CME",
+          "SSNC",
+          "VTRS"
+        ]
+      },
+      "D_Hybrid": {
+        "avg_sharpe": 0.1609,
+        "avg_return_pct": 42.56,
+        "avg_max_dd_pct": 17.45,
+        "stocks_best_for": []
+      }
+    }
+  }
+}

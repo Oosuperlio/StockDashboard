@@ -1,295 +1,184 @@
+#!/usr/bin/env python3
 """
-scripts/daily_downloader.py — 每日增量更新 cron 腳本
-====================================================
-每天自動下載最新交易日數據（只下載近3天），增量寫入 DuckDB。
-需要 backfill_historical.py 先完成歷史數據填充。
-
-用法（crontab -e）：
-  0 9 * * * cd /Users/aiagent/projects/dashboard && python3 scripts/daily_downloader.py >> logs/daily_downloader.log 2>&1
-
-依賴：yfinance, pandas, duckdb（已在 requirements.txt）
+Daily stock data downloader using yfinance, writes to DuckDB.
+Run via daily_downloader.sh which uses the Hermes venv Python 3.11.
 """
-
-import os
 import sys
-import time
-import signal
+import os
 import logging
-from datetime import datetime, date, timedelta
-from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from threading import Lock
-from typing import Optional
+from datetime import datetime, timedelta
 
-BASE_DIR = Path("/Users/aiagent/projects/dashboard")
-sys.path.insert(0, str(BASE_DIR))
+# Suppress yfinance's noisy error logs (e.g. "possibly delisted" on weekends)
+logging.getLogger("yfinance").setLevel(logging.CRITICAL)
+logging.getLogger("yfinance").propagate = False
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+log = logging.getLogger(__name__)
+
+# ── Resolve project root ──────────────────────────────────────────────
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, PROJECT_ROOT)
 
 import yfinance as yf
-import requests
-import pandas as pd
 import duckdb
-from database.hk_data_source import fetch_historical_hk
+import pandas as pd
+import numpy as np
 
-# ── Yahoo Finance v8 REST API ────────────────────────────────────
-def _yahoo_v8(ticker: str, days: int = 7) -> Optional[pd.DataFrame]:
-    """Yahoo Finance v8 REST API — bypasses yfinance封装层"""
-    # 轉換含 . 的 ticker（如 BRK.B → BRK-B）避免 API 500 錯誤
-    api_ticker = ticker.replace(".", "-")
-    url = f"https://query2.finance.yahoo.com/v8/finance/chart/{api_ticker}"
-    params = {"interval": "1d", "range": f"{days}d"}
-    headers = {"User-Agent": "Mozilla/5.0"}
-    try:
-        resp = requests.get(url, params=params, headers=headers, timeout=10)
-        data = resp.json()
-        result = data.get("chart", {}).get("result", [])
-        if not result:
-            return None
-        timestamps = result[0]["timestamp"]
-        ohlcv = result[0]["indicators"]["quote"][0]
-        df = pd.DataFrame(ohlcv, index=pd.to_datetime(timestamps, unit="s"))
-        df.index = df.index.tz_localize(None)
-        df = df[["open", "high", "low", "close", "volume"]]
-        return df
-    except Exception:
-        return None
+# ── Config ────────────────────────────────────────────────────────────
+STOCKS = [
+    "AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA", "JPM",
+    "V", "JNJ", "WMT", "PG", "MA", "UNH", "HD", "DIS", "BAC", "NFLX",
+    "ADBE", "CRM", "INTC", "AMD", "PYPL", "NKE", "CMCSA", "KO", "PEP",
+    "MRK", "ABBV", "TMO", "AVGO", "QCOM", "TXN", "COST", "ORCL", "ABT",
+    "DHR", "ACN", "LIN", "CVX", "WFC", "MS", "C", "AXP", "IBM", "CAT",
+    "GE", "MCD", "BA", "MMM",
+    # Hong Kong stocks
+    "0005.HK", "0700.HK", "9988.HK", "3690.HK", "1810.HK",
+    "1299.HK", "0001.HK", "0011.HK", "0016.HK", "0012.HK",
+]
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "market_data.duckdb")
 
-
-# ── 日誌設定 ──────────────────────────────────────────────────────
-LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%H:%M:%S",
-    handlers=[
-        logging.FileHandler(LOG_DIR / "daily_downloader.log"),
-        logging.StreamHandler(),
-    ],
-)
-log = logging.getLogger()
-
-# ── DB 設定 ───────────────────────────────────────────────────────
-DB_PATH = BASE_DIR / "data" / "prices.ddb"
-
-def get_conn():
-    conn = duckdb.connect(str(DB_PATH))
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS stock_prices (
-            trade_date  DATE,
-            symbol      VARCHAR,
-            open        DECIMAL(12,4),
-            high        DECIMAL(12,4),
-            low         DECIMAL(12,4),
-            close       DECIMAL(12,4),
-            volume      BIGINT,
-            currency    VARCHAR,
-            fetched_at  TIMESTAMP,
-            PRIMARY KEY (trade_date, symbol)
+def get_db():
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    con = duckdb.connect(DB_PATH)
+    con.execute("""
+        CREATE TABLE IF NOT EXISTS daily_prices (
+            ticker    VARCHAR,
+            date      DATE,
+            open      DOUBLE,
+            high      DOUBLE,
+            low       DOUBLE,
+            close     DOUBLE,
+            adj_close DOUBLE,
+            volume    BIGINT,
+            PRIMARY KEY (ticker, date)
         )
     """)
-    return conn
+    return con
 
-def get_last_date(conn, ticker: str) -> Optional[date]:
-    """返回該股票在 DB 中最新的 trade_date"""
-    try:
-        row = conn.execute(
-            "SELECT MAX(trade_date) FROM stock_prices WHERE symbol = ?", [ticker]
-        ).fetchone()
-        if row and row[0]:
-            return date.fromisoformat(str(row[0]))
-    except Exception:
-        pass
-    return None
+def get_latest_dates(con):
+    """Return dict of {ticker: latest_date}."""
+    rows = con.execute("SELECT ticker, MAX(date) FROM daily_prices GROUP BY ticker").fetchall()
+    return {r[0]: r[1] for r in rows}
 
-def upsert_rows(conn, rows: list[dict]):
-    if not rows:
-        return
-    fetched_at = datetime.now()
-    cols = ["trade_date", "symbol", "open", "high", "low", "close", "volume", "currency"]
-    values = []
-    for r in rows:
-        row = []
-        for c in cols:
-            v = r[c]
-            # NaN check: NaN != NaN is True
-            if c not in ("symbol", "trade_date", "currency") and isinstance(v, float) and v != v:
-                v = None
-            row.append(v)
-        values.append(tuple(row) + (fetched_at,))
-    conn.executemany(
-        """INSERT INTO stock_prices (trade_date, symbol, open, high, low, close, volume, currency, fetched_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-           ON CONFLICT (trade_date, symbol) DO UPDATE SET
-               open = excluded.open, high = excluded.high, low = excluded.low,
-               close = excluded.close, volume = excluded.volume, fetched_at = excluded.fetched_at""",
-        values,
-    )
+def normalize_columns(df, ticker):
+    """Normalize yfinance DataFrame to consistent column names."""
+    # Flatten MultiIndex columns → use the first level (e.g. 'Adj Close', 'Close', etc.)
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = [c[0] for c in df.columns]
 
-# ── 載入全量成分股 ───────────────────────────────────────────────
-def all_tickers() -> list[str]:
-    files = [
-        BASE_DIR / "data" / "constituents_sp500.txt",
-        BASE_DIR / "data" / "constituents_nasdaq100.txt",
-        BASE_DIR / "data" / "constituents_hsi.txt",
-    ]
-    tickers = []
-    for p in files:
-        if p.exists():
-            tickers.extend(t.strip() for t in p.read_text().splitlines() if t.strip())
-    return sorted(set(tickers))
+    # Make a clean copy with renamed columns
+    df = df.reset_index()  # index 'Date' becomes a column
 
-# ── 下載函式 ──────────────────────────────────────────────────────
-def _is_hk(ticker: str) -> bool:
-    return ticker.upper().endswith(".HK")
+    # Build column rename map (handle various yfinance versions)
+    col_map = {}
+    for c in df.columns:
+        c_lower = c.strip().lower()
+        if c_lower in ("date", "index"):
+            col_map[c] = "date"
+        elif c_lower == "adj close":
+            col_map[c] = "adj_close"
+        elif c_lower in ("open", "high", "low", "close", "volume"):
+            col_map[c] = c_lower
+        # else: drop unknown columns
 
-def _hk_code(ticker: str) -> str:
-    """從 '0700.HK' → '00700', '3968.HK' → '03698'"""
-    code = ticker.replace(".HK", "").upper()
-    # 補零到5位
-    return code.zfill(5)
+    df = df.rename(columns=col_map)
+    df["ticker"] = ticker
 
-def fetch_latest(ticker: str, lookback: int = 7) -> Optional[pd.DataFrame]:
-    """
-    下載近 lookback 天的數據，自動過濾重複。
-    如果 DB 已有最新日期，則返回空 DataFrame（無需寫入）。
-    先試 Yahoo v8 API，再試 yfinance fallback。
-    """
-    # Try Yahoo v8 API first
-    df = _yahoo_v8(ticker, lookback)
-    if df is not None and not df.empty and df["close"].gt(0).any():
-        df = df[df["close"] > 0].copy()
-        df = df.reset_index()
-        df.columns = ["date", "open", "high", "low", "close", "volume"]
-        df["trade_date"] = pd.to_datetime(df["date"]).dt.date
-        df["symbol"] = ticker
-        df["currency"] = "USD"
-        for col in ["open", "high", "low", "close", "volume"]:
-            df[col] = pd.to_numeric(df[col], errors="coerce")
-        df["volume"] = df["volume"].fillna(0).astype("int64")
-        return df[["trade_date", "symbol", "open", "high", "low", "close", "volume", "currency"]]
+    # Keep only known columns
+    keep = ["date", "ticker", "open", "high", "low", "close", "adj_close", "volume"]
+    keep = [c for c in keep if c in df.columns]
+    return df[keep]
 
-    # yfinance fallback
-    try:
-        ticker_obj = yf.Ticker(ticker)
-        hist = ticker_obj.history(period=f"{lookback}d", auto_adjust=True)
-        if hist.empty:
-            # HK 股：yfinance 失敗，嘗試騰訊財經
-            if _is_hk(ticker):
-                return _fetch_hk_from_tencent(ticker, lookback)
-            return None
-        hist = hist.reset_index()
-        hist.columns = [c.lower() if isinstance(c, str) else c for c in hist.columns]
-        date_col = [c for c in hist.columns if "date" in c.lower()][0]
-        hist["trade_date"] = pd.to_datetime(hist[date_col]).dt.date
-        hist["symbol"] = ticker
-        hist["currency"] = getattr(ticker_obj, "info", {}).get("currency", "USD")
-        for col in ["open", "high", "low", "close", "volume"]:
-            if col in hist.columns:
-                hist[col] = pd.to_numeric(hist[col], errors="coerce")
-        hist["volume"] = hist["volume"].fillna(0).astype("int64")
-        return hist[["trade_date", "symbol", "open", "high", "low", "close", "volume", "currency"]]
-    except Exception as e:
-        # HK 股：最後嘗試騰訊財經
-        if _is_hk(ticker):
-            return _fetch_hk_from_tencent(ticker, lookback)
-        log.warning(f"[{ticker}] fetch error: {e}")
-        return None
+def download_stock(ticker, latest_date):
+    """Download data from latest_date+1 to today."""
+    if latest_date:
+        start = latest_date + timedelta(days=1)
+        end = datetime.now().date()
+        if start >= end:
+            return None  # up to date
+    else:
+        start = "2010-01-01"
+        end = datetime.now().strftime("%Y-%m-%d")
 
-
-def _fetch_hk_from_tencent(ticker: str, days: int = 30) -> Optional[pd.DataFrame]:
-    """
-    騰訊財經 fallback：彌補 Yahoo v8 + yfinance 對 HK 股全線失敗的問題。
-    days 設 30 確保至少涵蓋近3個交易日（平時夠用，daily_update 只補增量）。
-    """
-    code = _hk_code(ticker)
-    records = fetch_historical_hk(code, days=days)
-    if not records:
-        return None
-    df = pd.DataFrame(records)
-    # 轉成與 fetch_latest 統一格式
-    df = df.rename(columns={"symbol": "symbol"})
-    df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
-    # 過濾未來/無效日期，確保 close > 0
-    df = df[df["close"] > 0].copy()
+    df = yf.download(ticker, start=start, end=end, progress=False, auto_adjust=True)
     if df.empty:
         return None
-    # 補上 currency（HKD）
-    df["currency"] = "HKD"
-    # 去除 source 列（僅內部用）
-    cols = ["trade_date", "symbol", "open", "high", "low", "close", "volume", "currency"]
-    return df[cols]
 
+    df = normalize_columns(df, ticker)
+    return df
 
-# ── 每日下載主邏輯 ────────────────────────────────────────────────
-WORKERS = 8  # 並發數
+def main():
+    con = get_db()
+    latest_dates = get_latest_dates(con)
+    log.info("Latest dates for %d known tickers", len(latest_dates))
 
-def daily_update():
-    log.info("=" * 50)
-    log.info(f"每日增量下載  開始  ({date.today()})")
-
-    tickers = all_tickers()
-    log.info(f"待更新股票: {len(tickers)} 檔")
-
-    stats = {"updated": 0, "skipped": 0, "errors": 0}
-    lock = Lock()
-
-    def worker(ticker: str):
-        nonlocal stats
-        # 每個 worker 執行緒自有 DB 連線（避免執行緒安全問題）
-        conn = get_conn()
+    updated, skipped, failed = [], [], []
+    for ticker in STOCKS:
         try:
-            # 先看 DB 最新日期
-            last_date = get_last_date(conn, ticker)
-            df = fetch_latest(ticker, lookback=7)
-            if df is None or df.empty:
-                with lock:
-                    stats["errors"] += 1
-                return
+            ld = latest_dates.get(ticker)
+            df = download_stock(ticker, ld)
+            if df is None or len(df) == 0:
+                skipped.append(ticker)
+                log.info("  %s: skipped (up to date)", ticker)
+                continue
 
-            # 過濾：只保留 last_date 之後的新數據（精準增量）
-            if last_date:
-                # 先刪除 last_date 起的舊數據，確保 partial data 被完整收盤數據覆蓋
-                conn.execute("DELETE FROM stock_prices WHERE symbol = ? AND trade_date >= ?", [ticker, last_date])
-                df = df[df["trade_date"] >= last_date]
-            else:
-                # 新股票：全部保留
+            con.execute("BEGIN TRANSACTION")
+            for _, row in df.iterrows():
+                d = row["date"]
+                if hasattr(d, "date"):
+                    d = d.date()
+                elif hasattr(d, "strftime"):
+                    d = d.strftime("%Y-%m-%d")
+                con.execute("""
+                    INSERT OR REPLACE INTO daily_prices
+                    (ticker, date, open, high, low, close, adj_close, volume)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    row["ticker"], d,
+                    float(row["open"]), float(row["high"]), float(row["low"]),
+                    float(row["close"]),
+                    float(row.get("adj_close", row["close"])),
+                    int(float(row["volume"]))
+                ))
+            con.execute("COMMIT")
+            updated.append(ticker)
+            log.info("  %s: updated %d rows", ticker, len(df))
+        except Exception as e:
+            try:
+                con.execute("ROLLBACK")
+            except Exception:
                 pass
+            failed.append((ticker, str(e)))
+            log.error("  %s: FAILED - %s", ticker, e)
 
-            if df.empty:
-                with lock:
-                    stats["skipped"] += 1
-                return
+    # Get overall latest date
+    row = con.execute("SELECT MAX(date) FROM daily_prices").fetchone()
+    latest_overall = str(row[0]) if row and row[0] else "N/A"
+    con.close()
 
-            upsert_rows(conn, df.to_dict("records"))
-            with lock:
-                stats["updated"] += 1
-            log.info(f"  [{ticker}] +{len(df)} rows (DB last: {last_date})")
-        finally:
-            conn.close()
+    # ── Summary ────────────────────────────────────────────────────
+    now_str = datetime.now().strftime("%Y-%m-%d")
+    lines = [f"📡 每日數據更新 | {now_str}"]
+    lines.append(f"- 更新: {len(updated)} 檔")
+    lines.append(f"- 跳過: {len(skipped)} 檔（已是最新）")
+    lines.append(f"- 失敗: {len(failed)} 檔")
+    lines.append(f"- 最新數據日期: {latest_overall}")
+    if failed:
+        lines.append("")
+        lines.append("❌ 失敗股票：")
+        for t, err in failed:
+            lines.append(f"  • {t}: {err}")
+    report = "\n".join(lines)
+    print(report)
 
-    t0 = time.time()
-    with ThreadPoolExecutor(max_workers=WORKERS) as executor:
-        futures = {executor.submit(worker, t): t for t in tickers}
-        for i, future in enumerate(as_completed(futures), 1):
-            future.result()
+    # Write report to a file
+    report_path = os.path.join(PROJECT_ROOT, "data", "last_update_report.txt")
+    os.makedirs(os.path.dirname(report_path), exist_ok=True)
+    with open(report_path, "w") as f:
+        f.write(report)
 
-    elapsed = time.time() - t0
+    return 0 if not failed else 1
 
-    log.info("─" * 50)
-    log.info(f"完成  ({elapsed:.1f}s)")
-    log.info(f"  更新: {stats['updated']} 檔")
-    log.info(f"  跳過: {stats['skipped']} 檔（已是最新）")
-    log.info(f"  失敗: {stats['errors']} 檔")
-
-    # 簡單健康檢查
-    if stats["errors"] > len(tickers) * 0.1:
-        log.warning(f"錯誤率 {stats['errors']/len(tickers)*100:.0f}% > 10%，請檢查網絡")
-
-    return stats
-
-# ── 入口 ──────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    # 優雅退出
-    signal.signal(signal.SIGINT,  lambda s, f: (log.info("中斷"), sys.exit(0)))
-    signal.signal(signal.SIGTERM, lambda s, f: (log.info("終止"), sys.exit(0)))
-    daily_update()
+    sys.exit(main())

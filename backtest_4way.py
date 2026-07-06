@@ -54,6 +54,11 @@ VOL_MA_PERIOD = 20
 VOL_SPIKE_TODAY = 1.5
 VOL_SPIKE_NEXT = 1.2
 
+# 3年滾動回測窗口（從今天往回推 3年）
+BACKTEST_START = '2023-06-23'   # 回測窗口起始（之前數據用於指標計算）
+BACKTEST_END   = '2026-06-23'   # 回測窗口結束
+WARMUP_DAYS    = 90             # 窗口前預留天數（用於均線/指標計算）
+
 BULLISH_INDICATORS = {
     # ── 超賣反轉（現有） ──
     ('RSI', 'RSI 超賣區域 (30)'),
@@ -141,12 +146,46 @@ def fetch_hsi_sectors():
 def load_constituents(market):
     if market == 'sp500':
         path = Path(__file__).parent / 'data' / 'constituents_sp500.txt'
+        with open(path, 'r') as f:
+            return [line.strip() for line in f if line.strip()]
+    elif market == 'us-extended':
+        # 從 DB 讀取所有美股（覆蓋擴展宇宙 ~1,101 隻）
+        try:
+            conn = duckdb.connect(str(Path(__file__).parent / 'data' / 'prices.ddb'), read_only=True)
+            rows = conn.execute(
+                "SELECT DISTINCT symbol FROM stock_prices WHERE symbol NOT LIKE '%.HK' AND symbol NOT LIKE 'hk%' ORDER BY symbol"
+            ).fetchall()
+            conn.close()
+            return [r[0] for r in rows]
+        except Exception as e:
+            print(f"  ⚠️ DB 讀取失敗: {e}，回退到 SP500")
+            path = Path(__file__).parent / 'data' / 'constituents_sp500.txt'
+            with open(path, 'r') as f:
+                return [line.strip() for line in f if line.strip()]
     else:
         path = Path(__file__).parent / 'data' / 'constituents_hsi.txt'
-    with open(path, 'r') as f:
-        return [line.strip() for line in f if line.strip()]
+        with open(path, 'r') as f:
+            return [line.strip() for line in f if line.strip()]
 
 def get_sector_map():
+    # 使用統一 sector 快取（Yahoo Finance）
+    _cache_path = Path(__file__).parent / 'data' / 'sector_cache.json'
+    if _cache_path.exists():
+        try:
+            import json
+            with open(_cache_path) as _f:
+                _cache = json.load(_f)
+            _sm = {}
+            for _tk, _info in _cache.items():
+                _sec = _info.get('sector', 'Unknown')
+                if _sec != 'Unknown':
+                    _sm[_tk] = _sec
+            if _sm:
+                print(f"  📂 從統一快取載入 {len(_sm)} 檔股票的 sector 映射")
+                return _sm
+        except Exception:
+            pass
+    # fallback 到 Wikipedia
     sp = fetch_sp500_sectors()
     hsi = fetch_hsi_sectors()
     combined = pd.concat([sp, hsi], ignore_index=True)
@@ -202,21 +241,26 @@ def build_pattern_index(df):
         except Exception:
             pass
 
-    # ✨ 新增：延續形態檢測
-    for detector in [detect_cup_handle, detect_pullback_ema_support, detect_consolidation_breakout]:
-        try:
-            patterns = detector(df)
-            for p in patterns:
-                if p.confidence < MIN_PATTERN_CONFIDENCE:
-                    continue
-                pi = PatternIndex(p)
-                for i in p.indices:
+    # ✨ 新增：延續形態檢測（滾動窗口，每根K線都檢測）
+    # 這些形態只檢查 df 的最後 N 根 K 線，所以需要逐窗口調用
+    # 優化：使用視圖而非複製，避免 reset_index 開銷
+    for idx in range(40, len(df)):
+        for detector in [detect_cup_handle, detect_pullback_ema_support, detect_consolidation_breakout]:
+            try:
+                # 只傳入到當前 idx 為止的切片（視圖，不複製）
+                slice_df = df.iloc[:idx+1]
+                patterns = detector(slice_df)
+                for p in patterns:
+                    if p.confidence < MIN_PATTERN_CONFIDENCE:
+                        continue
+                    pi = PatternIndex(p)
+                    # 切片中的最後一根K線 = idx
                     if p.direction == 'bullish' and p.name in BULLISH_PATTERNS:
-                        bullish_index[i].append(pi)
+                        bullish_index[idx].append(pi)
                     elif p.direction == 'bearish' and p.name in BEARISH_PATTERNS:
-                        bearish_index[i].append(pi)
-        except Exception:
-            pass
+                        bearish_index[idx].append(pi)
+            except Exception:
+                pass
 
     return bullish_index, bearish_index, df
 
@@ -226,14 +270,17 @@ def build_pattern_index(df):
 def load_stock_data(symbol):
     db_path = Path(__file__).parent / 'data' / 'prices.ddb'
     conn = duckdb.connect(str(db_path), read_only=True)
+    # 加載 WARMUP_DAYS 前的數據，確保指標計算有足夠的歷史
+    data_start = pd.Timestamp(BACKTEST_START) - pd.Timedelta(days=WARMUP_DAYS)
     df = pd.read_sql_query("""
         SELECT trade_date as date, symbol, open, high, low, close, volume
-        FROM stock_prices WHERE symbol = ? ORDER BY trade_date ASC
-    """, conn, params=(symbol,))
+        FROM stock_prices
+        WHERE symbol = ? AND trade_date >= ? AND trade_date <= ?
+        ORDER BY trade_date ASC
+    """, conn, params=(symbol, data_start.date(), pd.Timestamp(BACKTEST_END).date()))
     conn.close()
     if df.empty:
         return df
-    # 保持 integer index，讓 build_pattern_index 的鍵與 scan_ticker 一致
     df['date'] = pd.to_datetime(df['date'])
     return df
 
@@ -252,6 +299,13 @@ def backtest_stock(symbol, sector):
     trades = []
 
     for idx in range(30, len(df)):
+        # 只回測 BACKTEST_START → BACKTEST_END 區間內的信號
+        signal_date = df['date'].iloc[idx]
+        cutoff_start = pd.Timestamp(BACKTEST_START)
+        cutoff_end = pd.Timestamp(BACKTEST_END)
+        if signal_date < cutoff_start or signal_date > cutoff_end:
+            continue
+
         # 成交量確認
         vol_today_ok = vol_next_ok = False
         if idx + 1 < len(df):
@@ -334,6 +388,8 @@ def backtest_stock(symbol, sector):
 def main():
     print("=" * 80)
     print("🔍 四維回測：Sector × Signal × Pattern確認 × 成交量確認")
+    print(f"📅 回測窗口：{BACKTEST_START} → {BACKTEST_END}（3年滾動）")
+    print(f"📦 預熱天數：{WARMUP_DAYS}天（用於指標計算）")
     print("=" * 80)
 
     sector_map = get_sector_map()
@@ -341,10 +397,14 @@ def main():
 
     all_trades = []
 
-    for market in ['sp500', 'hsi']:
+    for market in ['sp500', 'us-extended', 'hsi']:
         tickers = load_constituents(market)
-        market_name = 'S&P 500' if market == 'sp500' else 'HSI'
+        market_name = '美股擴展宇宙' if market == 'us-extended' else ('S&P 500' if market == 'sp500' else 'HSI')
         print(f"\n📂 回測 {market_name} ({len(tickers)} 檔)...")
+        if market == 'us-extended':
+            print(f"   (新增 {len(tickers)} 隻全量 US 股票 — 含擴展宇宙)")
+        if not tickers:
+            print(f"  ⏭️  {market_name} 無股票，跳過")
 
         for i, sym in enumerate(tickers):
             sector = sector_map.get(sym, 'Unknown')
@@ -400,17 +460,21 @@ def main():
 
     stock_df = pd.DataFrame(stock_rows)
     if not stock_df.empty:
+        # 建立 base 查找表（symbol × signal → win_rate），避免 O(n²) 循環查詢
+        base_lookup = {}
+        base_df = stock_df[
+            (stock_df['matched_pattern'] == 'None') &
+            (stock_df['has_pattern'] == False) &
+            (stock_df['volume_confirmed'] == False)
+        ]
+        for _, br in base_df.iterrows():
+            base_lookup[(br['symbol'], br['signal'])] = br['win_rate']
+
         stock_df['improvement'] = 0.0
         for idx, row in stock_df.iterrows():
-            base = stock_df[
-                (stock_df['symbol'] == row['symbol']) &
-                (stock_df['signal'] == row['signal']) &
-                (stock_df['matched_pattern'] == 'None') &
-                (stock_df['has_pattern'] == False) &
-                (stock_df['volume_confirmed'] == False)
-            ]
-            if not base.empty:
-                stock_df.loc[idx, 'improvement'] = row['win_rate'] - base.iloc[0]['win_rate']
+            base_wr = base_lookup.get((row['symbol'], row['signal']))
+            if base_wr is not None:
+                stock_df.loc[idx, 'improvement'] = row['win_rate'] - base_wr
         stock_path = Path(__file__).parent / 'backtest_4way_results.csv'
         stock_df.to_csv(stock_path, index=False)
         print(f"💾 [個股級] 已保存：{stock_path}（{len(stock_df)} 組合）")
@@ -437,17 +501,21 @@ def main():
 
     sector_df2 = pd.DataFrame(sector_rows2)
     if not sector_df2.empty:
+        # 建立 Sector 級 base 查找表（sector × signal → win_rate）
+        s_base_lookup = {}
+        s_base_df = sector_df2[
+            (sector_df2['matched_pattern'] == 'None') &
+            (sector_df2['has_pattern'] == False) &
+            (sector_df2['volume_confirmed'] == False)
+        ]
+        for _, br in s_base_df.iterrows():
+            s_base_lookup[(br['sector'], br['signal'])] = br['win_rate']
+
         sector_df2['improvement'] = 0.0
         for idx, row in sector_df2.iterrows():
-            base = sector_df2[
-                (sector_df2['signal'] == row['signal']) &
-                (sector_df2['matched_pattern'] == 'None') &
-                (sector_df2['has_pattern'] == False) &
-                (sector_df2['volume_confirmed'] == False) &
-                (sector_df2['sector'] == row['sector'])
-            ]
-            if not base.empty:
-                sector_df2.loc[idx, 'improvement'] = row['win_rate'] - base.iloc[0]['win_rate']
+            base_wr = s_base_lookup.get((row['sector'], row['signal']))
+            if base_wr is not None:
+                sector_df2.loc[idx, 'improvement'] = row['win_rate'] - base_wr
         sector_path2 = Path(__file__).parent / 'backtest_sector_results.csv'
         sector_df2.to_csv(sector_path2, index=False)
         print(f"💾 [Sector 級] 已保存：{sector_path2}（{len(sector_df2)} 組合）")

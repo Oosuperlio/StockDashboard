@@ -1,0 +1,2983 @@
+{
+  "metadata": {
+    "backtest_type": "ATR Multiplier Optimization",
+    "atr_period": 14,
+    "multipliers_tested": [
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0
+    ],
+    "start_date": "2023-07-05",
+    "end_date": "2026-07-05",
+    "stocks": [
+      "ACN",
+      "CBRE",
+      "CME",
+      "CRWD",
+      "MPWR",
+      "SSNC",
+      "VTRS"
+    ],
+    "strategy": "Monthly buy 1 share at open on 1st trading day; sell if close < entry_price - ATR(entry) * mult, otherwise sell at month-end close",
+    "generated_at": "2026-07-05T05:27:23.416057",
+    "risk_free_rate_annual": 0.05
+  },
+  "results": {
+    "ACN": {
+      "ticker": "ACN",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.2432,
+          "trades_won": 9,
+          "trades_lost": 28,
+          "avg_win_pct": 5.6582,
+          "avg_loss_pct": -2.7468,
+          "avg_win_loss_ratio": 2.06,
+          "profit_factor": 0.6235,
+          "total_return_pct": -0.7651,
+          "total_pnl": -82.0,
+          "max_drawdown_pct": 2.631,
+          "max_drawdown_amount": 2.63,
+          "sharpe_ratio": -0.9357,
+          "best_trade_pct": 11.7282,
+          "worst_trade_pct": -8.4731,
+          "avg_trade_return_pct": -0.7023,
+          "median_trade_return_pct": -2.1191,
+          "std_trade_return_pct": 4.1425,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 301.4567,
+              "exit_price": 303.124,
+              "stop_price": 296.0388,
+              "pnl": 1.6673,
+              "return": 0.005531,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-08",
+              "entry_price": 302.252,
+              "exit_price": 301.9742,
+              "stop_price": 296.6929,
+              "pnl": -0.2779,
+              "return": -0.000919,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-12",
+              "entry_price": 312.4184,
+              "exit_price": 301.725,
+              "stop_price": 307.8154,
+              "pnl": -10.6934,
+              "return": -0.034228,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 294.7111,
+              "exit_price": 285.7633,
+              "stop_price": 288.5566,
+              "pnl": -8.9478,
+              "return": -0.030361,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 286.889,
+              "exit_price": 320.5359,
+              "stop_price": 281.6095,
+              "pnl": 33.6469,
+              "return": 0.117282,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.2703,
+          "trades_won": 10,
+          "trades_lost": 27,
+          "avg_win_pct": 6.0408,
+          "avg_loss_pct": -4.1554,
+          "avg_win_loss_ratio": 1.4537,
+          "profit_factor": 0.5273,
+          "total_return_pct": -1.4096,
+          "total_pnl": -151.07,
+          "max_drawdown_pct": 2.9618,
+          "max_drawdown_amount": 2.96,
+          "sharpe_ratio": -1.2017,
+          "best_trade_pct": 11.7282,
+          "worst_trade_pct": -9.0106,
+          "avg_trade_return_pct": -1.3997,
+          "median_trade_return_pct": -2.7294,
+          "std_trade_return_pct": 5.2361,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 301.4567,
+              "exit_price": 303.124,
+              "stop_price": 293.3298,
+              "pnl": 1.6673,
+              "return": 0.005531,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-11",
+              "entry_price": 302.252,
+              "exit_price": 296.1292,
+              "stop_price": 293.9133,
+              "pnl": -6.1229,
+              "return": -0.020258,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-12",
+              "entry_price": 312.4184,
+              "exit_price": 301.725,
+              "stop_price": 305.514,
+              "pnl": -10.6934,
+              "return": -0.034228,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 294.7111,
+              "exit_price": 285.7633,
+              "stop_price": 285.4794,
+              "pnl": -8.9478,
+              "return": -0.030361,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 286.889,
+              "exit_price": 320.5359,
+              "stop_price": 278.9697,
+              "pnl": 33.6469,
+              "return": 0.117282,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3784,
+          "trades_won": 14,
+          "trades_lost": 23,
+          "avg_win_pct": 5.3893,
+          "avg_loss_pct": -5.7773,
+          "avg_win_loss_ratio": 0.9328,
+          "profit_factor": 0.5699,
+          "total_return_pct": -1.5006,
+          "total_pnl": -160.83,
+          "max_drawdown_pct": 3.37,
+          "max_drawdown_amount": 3.37,
+          "sharpe_ratio": -1.1143,
+          "best_trade_pct": 11.7282,
+          "worst_trade_pct": -11.9471,
+          "avg_trade_return_pct": -1.5521,
+          "median_trade_return_pct": -3.3863,
+          "std_trade_return_pct": 6.1205,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 301.4567,
+              "exit_price": 303.124,
+              "stop_price": 290.6208,
+              "pnl": 1.6673,
+              "return": 0.005531,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-18",
+              "entry_price": 302.252,
+              "exit_price": 290.2746,
+              "stop_price": 291.1337,
+              "pnl": -11.9774,
+              "return": -0.039627,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-12",
+              "entry_price": 312.4184,
+              "exit_price": 301.725,
+              "stop_price": 303.2125,
+              "pnl": -10.6934,
+              "return": -0.034228,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-25",
+              "entry_price": 294.7111,
+              "exit_price": 281.6067,
+              "stop_price": 282.4021,
+              "pnl": -13.1044,
+              "return": -0.044465,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 286.889,
+              "exit_price": 320.5359,
+              "stop_price": 276.3299,
+              "pnl": 33.6469,
+              "return": 0.117282,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.4324,
+          "trades_won": 16,
+          "trades_lost": 21,
+          "avg_win_pct": 5.1862,
+          "avg_loss_pct": -6.3118,
+          "avg_win_loss_ratio": 0.8217,
+          "profit_factor": 0.6406,
+          "total_return_pct": -1.2429,
+          "total_pnl": -133.21,
+          "max_drawdown_pct": 3.766,
+          "max_drawdown_amount": 3.77,
+          "sharpe_ratio": -0.9534,
+          "best_trade_pct": 11.7282,
+          "worst_trade_pct": -11.9471,
+          "avg_trade_return_pct": -1.3397,
+          "median_trade_return_pct": -3.0267,
+          "std_trade_return_pct": 6.3818,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 301.4567,
+              "exit_price": 303.124,
+              "stop_price": 287.9119,
+              "pnl": 1.6673,
+              "return": 0.005531,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 302.252,
+              "exit_price": 310.2337,
+              "stop_price": 288.3541,
+              "pnl": 7.9817,
+              "return": 0.026407,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-12",
+              "entry_price": 312.4184,
+              "exit_price": 301.725,
+              "stop_price": 300.911,
+              "pnl": -10.6934,
+              "return": -0.034228,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-27",
+              "entry_price": 294.7111,
+              "exit_price": 279.0666,
+              "stop_price": 279.3249,
+              "pnl": -15.6445,
+              "return": -0.053084,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 286.889,
+              "exit_price": 320.5359,
+              "stop_price": 273.6901,
+              "pnl": 33.6469,
+              "return": 0.117282,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.4324,
+          "trades_won": 16,
+          "trades_lost": 21,
+          "avg_win_pct": 5.1862,
+          "avg_loss_pct": -6.5516,
+          "avg_win_loss_ratio": 0.7916,
+          "profit_factor": 0.6145,
+          "total_return_pct": -1.39,
+          "total_pnl": -148.97,
+          "max_drawdown_pct": 4.0953,
+          "max_drawdown_amount": 4.1,
+          "sharpe_ratio": -1.0086,
+          "best_trade_pct": 11.7282,
+          "worst_trade_pct": -11.9471,
+          "avg_trade_return_pct": -1.4758,
+          "median_trade_return_pct": -3.0068,
+          "std_trade_return_pct": 6.4998,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 301.4567,
+              "exit_price": 303.124,
+              "stop_price": 285.2029,
+              "pnl": 1.6673,
+              "return": 0.005531,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 302.252,
+              "exit_price": 310.2337,
+              "stop_price": 285.5745,
+              "pnl": 7.9817,
+              "return": 0.026407,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-15",
+              "entry_price": 312.4184,
+              "exit_price": 299.4637,
+              "stop_price": 298.6095,
+              "pnl": -12.9548,
+              "return": -0.041466,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 294.7111,
+              "exit_price": 285.8499,
+              "stop_price": 276.2476,
+              "pnl": -8.8612,
+              "return": -0.030068,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 286.889,
+              "exit_price": 320.5359,
+              "stop_price": 271.0503,
+              "pnl": 33.6469,
+              "return": 0.117282,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 1.0,
+        "score": -1.0684,
+        "reason": "Best Sharpe & composite score. Score: -1.07",
+        "ranking": [
+          [
+            1.0,
+            -1.0684
+          ],
+          [
+            2.5,
+            -1.7592
+          ],
+          [
+            3.0,
+            -1.9235
+          ],
+          [
+            1.5,
+            -1.9642
+          ],
+          [
+            2.0,
+            -2.0268
+          ]
+        ]
+      }
+    },
+    "CBRE": {
+      "ticker": "CBRE",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3243,
+          "trades_won": 12,
+          "trades_lost": 25,
+          "avg_win_pct": 7.3106,
+          "avg_loss_pct": -2.5915,
+          "avg_win_loss_ratio": 2.821,
+          "profit_factor": 1.2274,
+          "total_return_pct": 0.3907,
+          "total_pnl": 17.43,
+          "max_drawdown_pct": 3.7249,
+          "max_drawdown_amount": 3.72,
+          "sharpe_ratio": 0.1269,
+          "best_trade_pct": 17.5824,
+          "worst_trade_pct": -7.4339,
+          "avg_trade_return_pct": 0.62,
+          "median_trade_return_pct": -1.2546,
+          "std_trade_return_pct": 5.5476,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-27",
+              "entry_price": 87.85,
+              "exit_price": 83.25,
+              "stop_price": 86.3119,
+              "pnl": -4.6,
+              "return": -0.052362,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 81.58,
+              "exit_price": 85.05,
+              "stop_price": 79.7419,
+              "pnl": 3.47,
+              "return": 0.042535,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-13",
+              "entry_price": 85.42,
+              "exit_price": 79.07,
+              "stop_price": 83.7144,
+              "pnl": -6.35,
+              "return": -0.074339,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-04",
+              "entry_price": 72.69,
+              "exit_price": 71.17,
+              "stop_price": 70.8241,
+              "pnl": -1.52,
+              "return": -0.020911,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 69.53,
+              "exit_price": 78.96,
+              "stop_price": 67.7704,
+              "pnl": 9.43,
+              "return": 0.135625,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.4865,
+          "trades_won": 18,
+          "trades_lost": 19,
+          "avg_win_pct": 6.7883,
+          "avg_loss_pct": -4.2069,
+          "avg_win_loss_ratio": 1.6136,
+          "profit_factor": 1.486,
+          "total_return_pct": 1.0301,
+          "total_pnl": 45.95,
+          "max_drawdown_pct": 3.2069,
+          "max_drawdown_amount": 3.21,
+          "sharpe_ratio": 0.3867,
+          "best_trade_pct": 17.5824,
+          "worst_trade_pct": -7.9953,
+          "avg_trade_return_pct": 1.1421,
+          "median_trade_return_pct": -1.0799,
+          "std_trade_return_pct": 6.4981,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-27",
+              "entry_price": 87.85,
+              "exit_price": 83.25,
+              "stop_price": 85.5428,
+              "pnl": -4.6,
+              "return": -0.052362,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 81.58,
+              "exit_price": 85.05,
+              "stop_price": 78.8229,
+              "pnl": 3.47,
+              "return": 0.042535,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-13",
+              "entry_price": 85.42,
+              "exit_price": 79.07,
+              "stop_price": 82.8617,
+              "pnl": -6.35,
+              "return": -0.074339,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-18",
+              "entry_price": 72.69,
+              "exit_price": 69.8,
+              "stop_price": 69.8911,
+              "pnl": -2.89,
+              "return": -0.039758,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 69.53,
+              "exit_price": 78.96,
+              "stop_price": 66.8906,
+              "pnl": 9.43,
+              "return": 0.135625,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 8.1708,
+          "avg_loss_pct": -4.7797,
+          "avg_win_loss_ratio": 1.7095,
+          "profit_factor": 1.6185,
+          "total_return_pct": 1.4505,
+          "total_pnl": 64.7,
+          "max_drawdown_pct": 2.9936,
+          "max_drawdown_amount": 2.99,
+          "sharpe_ratio": 0.628,
+          "best_trade_pct": 26.9686,
+          "worst_trade_pct": -10.0343,
+          "avg_trade_return_pct": 1.8706,
+          "median_trade_return_pct": 0.362,
+          "std_trade_return_pct": 8.0198,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-27",
+              "entry_price": 87.85,
+              "exit_price": 83.25,
+              "stop_price": 84.7737,
+              "pnl": -4.6,
+              "return": -0.052362,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 81.58,
+              "exit_price": 85.05,
+              "stop_price": 77.9038,
+              "pnl": 3.47,
+              "return": 0.042535,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-13",
+              "entry_price": 85.42,
+              "exit_price": 79.07,
+              "stop_price": 82.0089,
+              "pnl": -6.35,
+              "return": -0.074339,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-19",
+              "entry_price": 72.69,
+              "exit_price": 68.32,
+              "stop_price": 68.9582,
+              "pnl": -4.37,
+              "return": -0.060118,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 69.53,
+              "exit_price": 78.96,
+              "stop_price": 66.0108,
+              "pnl": 9.43,
+              "return": 0.135625,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.5405,
+          "trades_won": 20,
+          "trades_lost": 17,
+          "avg_win_pct": 7.7888,
+          "avg_loss_pct": -6.0238,
+          "avg_win_loss_ratio": 1.293,
+          "profit_factor": 1.3207,
+          "total_return_pct": 0.9241,
+          "total_pnl": 41.22,
+          "max_drawdown_pct": 3.3262,
+          "max_drawdown_amount": 3.33,
+          "sharpe_ratio": 0.419,
+          "best_trade_pct": 26.9686,
+          "worst_trade_pct": -12.1164,
+          "avg_trade_return_pct": 1.4425,
+          "median_trade_return_pct": 0.5302,
+          "std_trade_return_pct": 8.4813,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-27",
+              "entry_price": 87.85,
+              "exit_price": 83.25,
+              "stop_price": 84.0047,
+              "pnl": -4.6,
+              "return": -0.052362,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 81.58,
+              "exit_price": 85.05,
+              "stop_price": 76.9848,
+              "pnl": 3.47,
+              "return": 0.042535,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-13",
+              "entry_price": 85.42,
+              "exit_price": 79.07,
+              "stop_price": 81.1561,
+              "pnl": -6.35,
+              "return": -0.074339,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 72.69,
+              "exit_price": 67.49,
+              "stop_price": 68.0252,
+              "pnl": -5.2,
+              "return": -0.071537,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 69.53,
+              "exit_price": 78.96,
+              "stop_price": 65.131,
+              "pnl": 9.43,
+              "return": 0.135625,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5946,
+          "trades_won": 22,
+          "trades_lost": 15,
+          "avg_win_pct": 7.3949,
+          "avg_loss_pct": -6.3614,
+          "avg_win_loss_ratio": 1.1625,
+          "profit_factor": 1.4764,
+          "total_return_pct": 1.2888,
+          "total_pnl": 57.49,
+          "max_drawdown_pct": 3.2043,
+          "max_drawdown_amount": 3.2,
+          "sharpe_ratio": 0.575,
+          "best_trade_pct": 26.9686,
+          "worst_trade_pct": -12.1164,
+          "avg_trade_return_pct": 1.818,
+          "median_trade_return_pct": 1.7581,
+          "std_trade_return_pct": 8.4424,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-27",
+              "entry_price": 87.85,
+              "exit_price": 83.25,
+              "stop_price": 83.2356,
+              "pnl": -4.6,
+              "return": -0.052362,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 81.58,
+              "exit_price": 85.05,
+              "stop_price": 76.0657,
+              "pnl": 3.47,
+              "return": 0.042535,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-13",
+              "entry_price": 85.42,
+              "exit_price": 79.07,
+              "stop_price": 80.3034,
+              "pnl": -6.35,
+              "return": -0.074339,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 72.69,
+              "exit_price": 67.49,
+              "stop_price": 67.0922,
+              "pnl": -5.2,
+              "return": -0.071537,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 69.53,
+              "exit_price": 78.96,
+              "stop_price": 64.2512,
+              "pnl": 9.43,
+              "return": 0.135625,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 2.0,
+        "score": 1.9239,
+        "reason": "Sharpe similar: mult 2.0 (score 1.92) vs 3.0 (score 1.58). Chose more conservative (2.0x).",
+        "ranking": [
+          [
+            2.0,
+            1.9239
+          ],
+          [
+            3.0,
+            1.5833
+          ],
+          [
+            1.5,
+            1.4211
+          ],
+          [
+            1.0,
+            1.3387
+          ],
+          [
+            2.5,
+            1.2683
+          ]
+        ]
+      }
+    },
+    "CME": {
+      "ticker": "CME",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3784,
+          "trades_won": 14,
+          "trades_lost": 23,
+          "avg_win_pct": 5.0246,
+          "avg_loss_pct": -2.0523,
+          "avg_win_loss_ratio": 2.4483,
+          "profit_factor": 1.3104,
+          "total_return_pct": 0.4182,
+          "total_pnl": 35.24,
+          "max_drawdown_pct": 4.8835,
+          "max_drawdown_amount": 4.88,
+          "sharpe_ratio": 0.1709,
+          "best_trade_pct": 11.0859,
+          "worst_trade_pct": -7.9441,
+          "avg_trade_return_pct": 0.6254,
+          "median_trade_return_pct": -0.6697,
+          "std_trade_return_pct": 4.2326,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 166.4226,
+              "exit_price": 174.9614,
+              "stop_price": 163.8396,
+              "pnl": 8.5388,
+              "return": 0.051308,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 175.2692,
+              "exit_price": 178.2327,
+              "stop_price": 172.5976,
+              "pnl": 2.9635,
+              "return": 0.016908,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-26",
+              "entry_price": 178.3382,
+              "exit_price": 176.6808,
+              "stop_price": 175.9561,
+              "pnl": -1.6575,
+              "return": -0.009294,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 176.5039,
+              "exit_price": 188.7318,
+              "stop_price": 174.2678,
+              "pnl": 12.2279,
+              "return": 0.069278,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-02",
+              "entry_price": 189.9608,
+              "exit_price": 187.9449,
+              "stop_price": 186.6396,
+              "pnl": -2.0159,
+              "return": -0.010612,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.3784,
+          "trades_won": 14,
+          "trades_lost": 23,
+          "avg_win_pct": 5.3207,
+          "avg_loss_pct": -2.6189,
+          "avg_win_loss_ratio": 2.0317,
+          "profit_factor": 1.0899,
+          "total_return_pct": 0.1552,
+          "total_pnl": 13.08,
+          "max_drawdown_pct": 5.186,
+          "max_drawdown_amount": 5.19,
+          "sharpe_ratio": -0.0242,
+          "best_trade_pct": 11.0859,
+          "worst_trade_pct": -7.9441,
+          "avg_trade_return_pct": 0.3853,
+          "median_trade_return_pct": -1.5052,
+          "std_trade_return_pct": 4.4905,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 166.4226,
+              "exit_price": 174.9614,
+              "stop_price": 162.5482,
+              "pnl": 8.5388,
+              "return": 0.051308,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 175.2692,
+              "exit_price": 178.2327,
+              "stop_price": 171.2618,
+              "pnl": 2.9635,
+              "return": 0.016908,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 178.3382,
+              "exit_price": 177.0255,
+              "stop_price": 174.7651,
+              "pnl": -1.3127,
+              "return": -0.007361,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 176.5039,
+              "exit_price": 188.7318,
+              "stop_price": 173.1498,
+              "pnl": 12.2279,
+              "return": 0.069278,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-03",
+              "entry_price": 189.9608,
+              "exit_price": 184.4525,
+              "stop_price": 184.9791,
+              "pnl": -5.5083,
+              "return": -0.028997,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.4324,
+          "trades_won": 16,
+          "trades_lost": 21,
+          "avg_win_pct": 5.0752,
+          "avg_loss_pct": -3.1722,
+          "avg_win_loss_ratio": 1.5999,
+          "profit_factor": 1.1002,
+          "total_return_pct": 0.1905,
+          "total_pnl": 16.06,
+          "max_drawdown_pct": 5.5011,
+          "max_drawdown_amount": 5.5,
+          "sharpe_ratio": -0.0165,
+          "best_trade_pct": 11.0859,
+          "worst_trade_pct": -7.9441,
+          "avg_trade_return_pct": 0.3942,
+          "median_trade_return_pct": -1.7376,
+          "std_trade_return_pct": 4.6987,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 166.4226,
+              "exit_price": 174.9614,
+              "stop_price": 161.2567,
+              "pnl": 8.5388,
+              "return": 0.051308,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 175.2692,
+              "exit_price": 178.2327,
+              "stop_price": 169.926,
+              "pnl": 2.9635,
+              "return": 0.016908,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 178.3382,
+              "exit_price": 177.0255,
+              "stop_price": 173.5741,
+              "pnl": -1.3127,
+              "return": -0.007361,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 176.5039,
+              "exit_price": 188.7318,
+              "stop_price": 172.0317,
+              "pnl": 12.2279,
+              "return": 0.069278,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-03",
+              "entry_price": 189.9608,
+              "exit_price": 184.4525,
+              "stop_price": 183.3185,
+              "pnl": -5.5083,
+              "return": -0.028997,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 4.776,
+          "avg_loss_pct": -3.8574,
+          "avg_win_loss_ratio": 1.2381,
+          "profit_factor": 1.1556,
+          "total_return_pct": 0.3188,
+          "total_pnl": 26.86,
+          "max_drawdown_pct": 5.2664,
+          "max_drawdown_amount": 5.27,
+          "sharpe_ratio": 0.1103,
+          "best_trade_pct": 11.0859,
+          "worst_trade_pct": -7.9441,
+          "avg_trade_return_pct": 0.576,
+          "median_trade_return_pct": 0.2305,
+          "std_trade_return_pct": 5.0026,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 166.4226,
+              "exit_price": 174.9614,
+              "stop_price": 159.9652,
+              "pnl": 8.5388,
+              "return": 0.051308,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 175.2692,
+              "exit_price": 178.2327,
+              "stop_price": 168.5902,
+              "pnl": 2.9635,
+              "return": 0.016908,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 178.3382,
+              "exit_price": 177.0255,
+              "stop_price": 172.383,
+              "pnl": -1.3127,
+              "return": -0.007361,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 176.5039,
+              "exit_price": 188.7318,
+              "stop_price": 170.9137,
+              "pnl": 12.2279,
+              "return": 0.069278,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 189.9608,
+              "exit_price": 193.0642,
+              "stop_price": 181.658,
+              "pnl": 3.1034,
+              "return": 0.016337,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 4.776,
+          "avg_loss_pct": -3.7658,
+          "avg_win_loss_ratio": 1.2682,
+          "profit_factor": 1.1772,
+          "total_return_pct": 0.3564,
+          "total_pnl": 30.03,
+          "max_drawdown_pct": 5.1373,
+          "max_drawdown_amount": 5.14,
+          "sharpe_ratio": 0.1418,
+          "best_trade_pct": 11.0859,
+          "worst_trade_pct": -7.9441,
+          "avg_trade_return_pct": 0.6205,
+          "median_trade_return_pct": 0.2305,
+          "std_trade_return_pct": 4.9812,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 166.4226,
+              "exit_price": 174.9614,
+              "stop_price": 158.6737,
+              "pnl": 8.5388,
+              "return": 0.051308,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 175.2692,
+              "exit_price": 178.2327,
+              "stop_price": 167.2544,
+              "pnl": 2.9635,
+              "return": 0.016908,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 178.3382,
+              "exit_price": 177.0255,
+              "stop_price": 171.192,
+              "pnl": -1.3127,
+              "return": -0.007361,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 176.5039,
+              "exit_price": 188.7318,
+              "stop_price": 169.7957,
+              "pnl": 12.2279,
+              "return": 0.069278,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 189.9608,
+              "exit_price": 193.0642,
+              "stop_price": 179.9974,
+              "pnl": 3.1034,
+              "return": 0.016337,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 1.0,
+        "score": 1.2444,
+        "reason": "Best Sharpe & composite score. Score: 1.24",
+        "ranking": [
+          [
+            1.0,
+            1.2444
+          ],
+          [
+            3.0,
+            0.6684
+          ],
+          [
+            1.5,
+            0.6027
+          ],
+          [
+            2.5,
+            0.5764
+          ],
+          [
+            2.0,
+            0.4143
+          ]
+        ]
+      }
+    },
+    "CRWD": {
+      "ticker": "CRWD",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3514,
+          "trades_won": 13,
+          "trades_lost": 24,
+          "avg_win_pct": 14.5633,
+          "avg_loss_pct": -3.7805,
+          "avg_win_loss_ratio": 3.8522,
+          "profit_factor": 1.9563,
+          "total_return_pct": 2.3387,
+          "total_pnl": 79.71,
+          "max_drawdown_pct": 7.6954,
+          "max_drawdown_amount": 7.7,
+          "sharpe_ratio": 0.605,
+          "best_trade_pct": 60.7689,
+          "worst_trade_pct": -10.3945,
+          "avg_trade_return_pct": 2.6646,
+          "median_trade_return_pct": -2.2723,
+          "std_trade_return_pct": 12.8714,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 37.7425,
+              "exit_price": 40.415,
+              "stop_price": 36.5819,
+              "pnl": 2.6725,
+              "return": 0.070809,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-02",
+              "entry_price": 40.25,
+              "exit_price": 38.6825,
+              "stop_price": 38.954,
+              "pnl": -1.5675,
+              "return": -0.038944,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 40.78,
+              "exit_price": 41.845,
+              "stop_price": 39.1773,
+              "pnl": 1.065,
+              "return": 0.026116,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 42.0,
+              "exit_price": 40.5075,
+              "stop_price": 40.7166,
+              "pnl": -1.4925,
+              "return": -0.035536,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 44.53,
+              "exit_price": 59.2475,
+              "stop_price": 43.0697,
+              "pnl": 14.7175,
+              "return": 0.330508,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.4595,
+          "trades_won": 17,
+          "trades_lost": 20,
+          "avg_win_pct": 13.2039,
+          "avg_loss_pct": -4.3244,
+          "avg_win_loss_ratio": 3.0533,
+          "profit_factor": 2.3041,
+          "total_return_pct": 3.1859,
+          "total_pnl": 108.59,
+          "max_drawdown_pct": 7.8037,
+          "max_drawdown_amount": 7.8,
+          "sharpe_ratio": 0.8705,
+          "best_trade_pct": 60.7689,
+          "worst_trade_pct": -10.3945,
+          "avg_trade_return_pct": 3.7291,
+          "median_trade_return_pct": -1.2764,
+          "std_trade_return_pct": 13.1817,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 37.7425,
+              "exit_price": 40.415,
+              "stop_price": 36.0016,
+              "pnl": 2.6725,
+              "return": 0.070809,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-02",
+              "entry_price": 40.25,
+              "exit_price": 38.6825,
+              "stop_price": 38.3059,
+              "pnl": -1.5675,
+              "return": -0.038944,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 40.78,
+              "exit_price": 41.845,
+              "stop_price": 38.376,
+              "pnl": 1.065,
+              "return": 0.026116,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 42.0,
+              "exit_price": 44.1925,
+              "stop_price": 40.0749,
+              "pnl": 2.1925,
+              "return": 0.052202,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 44.53,
+              "exit_price": 59.2475,
+              "stop_price": 42.3396,
+              "pnl": 14.7175,
+              "return": 0.330508,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5405,
+          "trades_won": 20,
+          "trades_lost": 17,
+          "avg_win_pct": 13.2233,
+          "avg_loss_pct": -5.7423,
+          "avg_win_loss_ratio": 2.3028,
+          "profit_factor": 2.4182,
+          "total_return_pct": 3.8716,
+          "total_pnl": 131.96,
+          "max_drawdown_pct": 7.3611,
+          "max_drawdown_amount": 7.36,
+          "sharpe_ratio": 1.0298,
+          "best_trade_pct": 60.7689,
+          "worst_trade_pct": -10.657,
+          "avg_trade_return_pct": 4.5094,
+          "median_trade_return_pct": 0.7016,
+          "std_trade_return_pct": 13.768,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 37.7425,
+              "exit_price": 40.415,
+              "stop_price": 35.4212,
+              "pnl": 2.6725,
+              "return": 0.070809,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-04",
+              "entry_price": 40.25,
+              "exit_price": 37.6225,
+              "stop_price": 37.6579,
+              "pnl": -2.6275,
+              "return": -0.065279,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 40.78,
+              "exit_price": 41.845,
+              "stop_price": 37.5746,
+              "pnl": 1.065,
+              "return": 0.026116,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 42.0,
+              "exit_price": 44.1925,
+              "stop_price": 39.4332,
+              "pnl": 2.1925,
+              "return": 0.052202,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 44.53,
+              "exit_price": 59.2475,
+              "stop_price": 41.6094,
+              "pnl": 14.7175,
+              "return": 0.330508,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.5946,
+          "trades_won": 22,
+          "trades_lost": 15,
+          "avg_win_pct": 12.7819,
+          "avg_loss_pct": -7.3783,
+          "avg_win_loss_ratio": 1.7324,
+          "profit_factor": 2.0312,
+          "total_return_pct": 3.5093,
+          "total_pnl": 119.61,
+          "max_drawdown_pct": 8.2088,
+          "max_drawdown_amount": 8.21,
+          "sharpe_ratio": 1.0153,
+          "best_trade_pct": 60.7689,
+          "worst_trade_pct": -14.2818,
+          "avg_trade_return_pct": 4.6089,
+          "median_trade_return_pct": 2.6116,
+          "std_trade_return_pct": 14.304,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 37.7425,
+              "exit_price": 40.415,
+              "stop_price": 34.8409,
+              "pnl": 2.6725,
+              "return": 0.070809,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-07",
+              "entry_price": 40.25,
+              "exit_price": 37.7425,
+              "stop_price": 37.0099,
+              "pnl": -2.5075,
+              "return": -0.062298,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 40.78,
+              "exit_price": 41.845,
+              "stop_price": 36.7733,
+              "pnl": 1.065,
+              "return": 0.026116,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 42.0,
+              "exit_price": 44.1925,
+              "stop_price": 38.7915,
+              "pnl": 2.1925,
+              "return": 0.052202,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 44.53,
+              "exit_price": 59.2475,
+              "stop_price": 40.8793,
+              "pnl": 14.7175,
+              "return": 0.330508,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.6486,
+          "trades_won": 24,
+          "trades_lost": 13,
+          "avg_win_pct": 12.1817,
+          "avg_loss_pct": -8.8659,
+          "avg_win_loss_ratio": 1.374,
+          "profit_factor": 1.9177,
+          "total_return_pct": 3.4226,
+          "total_pnl": 116.65,
+          "max_drawdown_pct": 8.5009,
+          "max_drawdown_amount": 8.5,
+          "sharpe_ratio": 1.047,
+          "best_trade_pct": 60.7689,
+          "worst_trade_pct": -14.2818,
+          "avg_trade_return_pct": 4.7866,
+          "median_trade_return_pct": 3.8601,
+          "std_trade_return_pct": 14.4588,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 37.7425,
+              "exit_price": 40.415,
+              "stop_price": 34.2606,
+              "pnl": 2.6725,
+              "return": 0.070809,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-08",
+              "entry_price": 40.25,
+              "exit_price": 36.47,
+              "stop_price": 36.3619,
+              "pnl": -3.78,
+              "return": -0.093913,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-29",
+              "entry_price": 40.78,
+              "exit_price": 41.845,
+              "stop_price": 35.9719,
+              "pnl": 1.065,
+              "return": 0.026116,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-31",
+              "entry_price": 42.0,
+              "exit_price": 44.1925,
+              "stop_price": 38.1498,
+              "pnl": 2.1925,
+              "return": 0.052202,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 44.53,
+              "exit_price": 59.2475,
+              "stop_price": 40.1491,
+              "pnl": 14.7175,
+              "return": 0.330508,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 1.5,
+        "score": 2.327,
+        "reason": "Sharpe similar: mult 2.0 (score 2.33) vs 1.5 (score 2.29). Chose more conservative (1.5x).",
+        "ranking": [
+          [
+            2.0,
+            2.327
+          ],
+          [
+            1.5,
+            2.2877
+          ],
+          [
+            1.0,
+            2.0744
+          ],
+          [
+            2.5,
+            1.9553
+          ],
+          [
+            3.0,
+            1.8566
+          ]
+        ]
+      }
+    },
+    "MPWR": {
+      "ticker": "MPWR",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3784,
+          "trades_won": 14,
+          "trades_lost": 23,
+          "avg_win_pct": 14.9804,
+          "avg_loss_pct": -4.6677,
+          "avg_win_loss_ratio": 3.2094,
+          "profit_factor": 1.896,
+          "total_return_pct": 2.6084,
+          "total_pnl": 758.58,
+          "max_drawdown_pct": 6.8002,
+          "max_drawdown_amount": 6.8,
+          "sharpe_ratio": 0.6848,
+          "best_trade_pct": 46.6645,
+          "worst_trade_pct": -15.519,
+          "avg_trade_return_pct": 2.7668,
+          "median_trade_return_pct": -2.0844,
+          "std_trade_return_pct": 11.8878,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 518.573,
+              "exit_price": 547.0554,
+              "stop_price": 500.0393,
+              "pnl": 28.4825,
+              "return": 0.054925,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-17",
+              "entry_price": 500.6307,
+              "exit_price": 474.5633,
+              "stop_price": 477.7532,
+              "pnl": -26.0674,
+              "return": -0.052069,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-07",
+              "entry_price": 513.8502,
+              "exit_price": 494.8913,
+              "stop_price": 494.3938,
+              "pnl": -18.9589,
+              "return": -0.036896,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-05",
+              "entry_price": 452.1411,
+              "exit_price": 442.7233,
+              "stop_price": 436.4377,
+              "pnl": -9.4178,
+              "return": -0.020829,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 431.228,
+              "exit_price": 537.7438,
+              "stop_price": 412.1127,
+              "pnl": 106.5158,
+              "return": 0.247006,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.4324,
+          "trades_won": 16,
+          "trades_lost": 21,
+          "avg_win_pct": 14.0936,
+          "avg_loss_pct": -5.3469,
+          "avg_win_loss_ratio": 2.6359,
+          "profit_factor": 1.9207,
+          "total_return_pct": 2.8242,
+          "total_pnl": 821.34,
+          "max_drawdown_pct": 7.84,
+          "max_drawdown_amount": 7.84,
+          "sharpe_ratio": 0.759,
+          "best_trade_pct": 46.6645,
+          "worst_trade_pct": -15.519,
+          "avg_trade_return_pct": 3.0598,
+          "median_trade_return_pct": -0.6924,
+          "std_trade_return_pct": 12.0631,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 518.573,
+              "exit_price": 547.0554,
+              "stop_price": 490.7724,
+              "pnl": 28.4825,
+              "return": 0.054925,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-18",
+              "entry_price": 500.6307,
+              "exit_price": 471.5713,
+              "stop_price": 466.3145,
+              "pnl": -29.0594,
+              "return": -0.058046,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-07",
+              "entry_price": 513.8502,
+              "exit_price": 494.8913,
+              "stop_price": 484.6656,
+              "pnl": -18.9589,
+              "return": -0.036896,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-19",
+              "entry_price": 452.1411,
+              "exit_price": 425.0736,
+              "stop_price": 428.586,
+              "pnl": -27.0675,
+              "return": -0.059865,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 431.228,
+              "exit_price": 537.7438,
+              "stop_price": 402.555,
+              "pnl": 106.5158,
+              "return": 0.247006,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.4865,
+          "trades_won": 18,
+          "trades_lost": 19,
+          "avg_win_pct": 13.0072,
+          "avg_loss_pct": -7.4915,
+          "avg_win_loss_ratio": 1.7363,
+          "profit_factor": 1.4991,
+          "total_return_pct": 2.0342,
+          "total_pnl": 591.57,
+          "max_drawdown_pct": 7.584,
+          "max_drawdown_amount": 7.58,
+          "sharpe_ratio": 0.556,
+          "best_trade_pct": 46.6645,
+          "worst_trade_pct": -17.5874,
+          "avg_trade_return_pct": 2.4808,
+          "median_trade_return_pct": -0.091,
+          "std_trade_return_pct": 12.8614,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 518.573,
+              "exit_price": 547.0554,
+              "stop_price": 481.5056,
+              "pnl": 28.4825,
+              "return": 0.054925,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 500.6307,
+              "exit_price": 509.6263,
+              "stop_price": 454.8758,
+              "pnl": 8.9956,
+              "return": 0.017969,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-11",
+              "entry_price": 513.8502,
+              "exit_price": 475.3552,
+              "stop_price": 474.9374,
+              "pnl": -38.495,
+              "return": -0.074915,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 452.1411,
+              "exit_price": 411.6378,
+              "stop_price": 420.7343,
+              "pnl": -40.5032,
+              "return": -0.089581,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 431.228,
+              "exit_price": 537.7438,
+              "stop_price": 392.9973,
+              "pnl": 106.5158,
+              "return": 0.247006,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 12.3281,
+          "avg_loss_pct": -8.2211,
+          "avg_win_loss_ratio": 1.4996,
+          "profit_factor": 1.455,
+          "total_return_pct": 1.9122,
+          "total_pnl": 556.1,
+          "max_drawdown_pct": 8.1858,
+          "max_drawdown_amount": 8.19,
+          "sharpe_ratio": 0.5053,
+          "best_trade_pct": 46.6645,
+          "worst_trade_pct": -17.5874,
+          "avg_trade_return_pct": 2.3312,
+          "median_trade_return_pct": 0.1055,
+          "std_trade_return_pct": 13.1248,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 518.573,
+              "exit_price": 547.0554,
+              "stop_price": 472.2387,
+              "pnl": 28.4825,
+              "return": 0.054925,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 500.6307,
+              "exit_price": 509.6263,
+              "stop_price": 443.4371,
+              "pnl": 8.9956,
+              "return": 0.017969,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-12",
+              "entry_price": 513.8502,
+              "exit_price": 463.4069,
+              "stop_price": 465.2092,
+              "pnl": -50.4433,
+              "return": -0.098167,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 452.1411,
+              "exit_price": 411.6378,
+              "stop_price": 412.8825,
+              "pnl": -40.5032,
+              "return": -0.089581,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 431.228,
+              "exit_price": 537.7438,
+              "stop_price": 383.4397,
+              "pnl": 106.5158,
+              "return": 0.247006,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5676,
+          "trades_won": 21,
+          "trades_lost": 16,
+          "avg_win_pct": 11.7078,
+          "avg_loss_pct": -8.9503,
+          "avg_win_loss_ratio": 1.3081,
+          "profit_factor": 1.6305,
+          "total_return_pct": 2.4936,
+          "total_pnl": 725.2,
+          "max_drawdown_pct": 8.9874,
+          "max_drawdown_amount": 8.99,
+          "sharpe_ratio": 0.6145,
+          "best_trade_pct": 46.6645,
+          "worst_trade_pct": -17.5874,
+          "avg_trade_return_pct": 2.7746,
+          "median_trade_return_pct": 1.7969,
+          "std_trade_return_pct": 13.2923,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 518.573,
+              "exit_price": 547.0554,
+              "stop_price": 462.9719,
+              "pnl": 28.4825,
+              "return": 0.054925,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 500.6307,
+              "exit_price": 509.6263,
+              "stop_price": 431.9984,
+              "pnl": 8.9956,
+              "return": 0.017969,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-15",
+              "entry_price": 513.8502,
+              "exit_price": 453.9127,
+              "stop_price": 455.481,
+              "pnl": -59.9376,
+              "return": -0.116644,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-23",
+              "entry_price": 452.1411,
+              "exit_price": 405.2188,
+              "stop_price": 405.0308,
+              "pnl": -46.9223,
+              "return": -0.103778,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 431.228,
+              "exit_price": 537.7438,
+              "stop_price": 373.882,
+              "pnl": 106.5158,
+              "return": 0.247006,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 1.0,
+        "score": 2.0783,
+        "reason": "Sharpe similar: mult 1.0 (score 2.08) vs 1.5 (score 1.88). Chose more conservative (1.0x).",
+        "ranking": [
+          [
+            1.0,
+            2.0783
+          ],
+          [
+            1.5,
+            1.8812
+          ],
+          [
+            2.0,
+            1.0652
+          ],
+          [
+            3.0,
+            0.8873
+          ],
+          [
+            2.5,
+            0.7991
+          ]
+        ]
+      }
+    },
+    "SSNC": {
+      "ticker": "SSNC",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3514,
+          "trades_won": 13,
+          "trades_lost": 24,
+          "avg_win_pct": 5.7875,
+          "avg_loss_pct": -2.3884,
+          "avg_win_loss_ratio": 2.4232,
+          "profit_factor": 1.2924,
+          "total_return_pct": 0.4468,
+          "total_pnl": 11.65,
+          "max_drawdown_pct": 1.7875,
+          "max_drawdown_amount": 1.79,
+          "sharpe_ratio": 0.0486,
+          "best_trade_pct": 12.6663,
+          "worst_trade_pct": -10.6939,
+          "avg_trade_return_pct": 0.4842,
+          "median_trade_return_pct": -1.1445,
+          "std_trade_return_pct": 4.8117,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-28",
+              "entry_price": 59.3662,
+              "exit_price": 55.0934,
+              "stop_price": 58.6105,
+              "pnl": -4.2727,
+              "return": -0.071973,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-02",
+              "entry_price": 55.8152,
+              "exit_price": 54.5353,
+              "stop_price": 54.7602,
+              "pnl": -1.2799,
+              "return": -0.022931,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-05",
+              "entry_price": 55.8549,
+              "exit_price": 54.328,
+              "stop_price": 54.965,
+              "pnl": -1.5268,
+              "return": -0.027336,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 50.6946,
+              "exit_price": 49.8635,
+              "stop_price": 49.8597,
+              "pnl": -0.8311,
+              "return": -0.016394,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 48.4623,
+              "exit_price": 54.6007,
+              "stop_price": 47.3935,
+              "pnl": 6.1384,
+              "return": 0.126663,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.3514,
+          "trades_won": 13,
+          "trades_lost": 24,
+          "avg_win_pct": 6.209,
+          "avg_loss_pct": -3.2177,
+          "avg_win_loss_ratio": 1.9296,
+          "profit_factor": 1.0078,
+          "total_return_pct": 0.0164,
+          "total_pnl": 0.43,
+          "max_drawdown_pct": 2.1487,
+          "max_drawdown_amount": 2.15,
+          "sharpe_ratio": -0.212,
+          "best_trade_pct": 12.6663,
+          "worst_trade_pct": -10.6939,
+          "avg_trade_return_pct": 0.0944,
+          "median_trade_return_pct": -1.6514,
+          "std_trade_return_pct": 5.2664,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-28",
+              "entry_price": 59.3662,
+              "exit_price": 55.0934,
+              "stop_price": 58.2326,
+              "pnl": -4.2727,
+              "return": -0.071973,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-02",
+              "entry_price": 55.8152,
+              "exit_price": 54.5353,
+              "stop_price": 54.2328,
+              "pnl": -1.2799,
+              "return": -0.022931,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-05",
+              "entry_price": 55.8549,
+              "exit_price": 54.328,
+              "stop_price": 54.52,
+              "pnl": -1.5268,
+              "return": -0.027336,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 50.6946,
+              "exit_price": 49.8635,
+              "stop_price": 49.4422,
+              "pnl": -0.8311,
+              "return": -0.016394,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 48.4623,
+              "exit_price": 54.6007,
+              "stop_price": 46.8591,
+              "pnl": 6.1384,
+              "return": 0.126663,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.4865,
+          "trades_won": 18,
+          "trades_lost": 19,
+          "avg_win_pct": 5.8294,
+          "avg_loss_pct": -4.6149,
+          "avg_win_loss_ratio": 1.2632,
+          "profit_factor": 1.1011,
+          "total_return_pct": 0.247,
+          "total_pnl": 6.44,
+          "max_drawdown_pct": 1.7333,
+          "max_drawdown_amount": 1.73,
+          "sharpe_ratio": 0.0272,
+          "best_trade_pct": 16.664,
+          "worst_trade_pct": -10.6939,
+          "avg_trade_return_pct": 0.4661,
+          "median_trade_return_pct": -0.3369,
+          "std_trade_return_pct": 6.2896,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-28",
+              "entry_price": 59.3662,
+              "exit_price": 55.0934,
+              "stop_price": 57.8548,
+              "pnl": -4.2727,
+              "return": -0.071973,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-08",
+              "entry_price": 55.8152,
+              "exit_price": 53.8905,
+              "stop_price": 53.7053,
+              "pnl": -1.9247,
+              "return": -0.034483,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-06",
+              "entry_price": 55.8549,
+              "exit_price": 54.0285,
+              "stop_price": 54.0751,
+              "pnl": -1.8264,
+              "return": -0.032699,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-19",
+              "entry_price": 50.6946,
+              "exit_price": 49.0711,
+              "stop_price": 49.0247,
+              "pnl": -1.6235,
+              "return": -0.032024,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 48.4623,
+              "exit_price": 54.6007,
+              "stop_price": 46.3247,
+              "pnl": 6.1384,
+              "return": 0.126663,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.5405,
+          "trades_won": 20,
+          "trades_lost": 17,
+          "avg_win_pct": 5.3516,
+          "avg_loss_pct": -5.8033,
+          "avg_win_loss_ratio": 0.9222,
+          "profit_factor": 0.999,
+          "total_return_pct": -0.0028,
+          "total_pnl": -0.07,
+          "max_drawdown_pct": 1.8745,
+          "max_drawdown_amount": 1.87,
+          "sharpe_ratio": -0.0991,
+          "best_trade_pct": 16.664,
+          "worst_trade_pct": -10.8193,
+          "avg_trade_return_pct": 0.2264,
+          "median_trade_return_pct": 0.7762,
+          "std_trade_return_pct": 6.652,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-28",
+              "entry_price": 59.3662,
+              "exit_price": 55.0934,
+              "stop_price": 57.4769,
+              "pnl": -4.2727,
+              "return": -0.071973,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-08",
+              "entry_price": 55.8152,
+              "exit_price": 53.8905,
+              "stop_price": 53.1779,
+              "pnl": -1.9247,
+              "return": -0.034483,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-07",
+              "entry_price": 55.8549,
+              "exit_price": 53.5163,
+              "stop_price": 53.6301,
+              "pnl": -2.3386,
+              "return": -0.041869,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-20",
+              "entry_price": 50.6946,
+              "exit_price": 48.3947,
+              "stop_price": 48.6073,
+              "pnl": -2.2999,
+              "return": -0.045368,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 48.4623,
+              "exit_price": 54.6007,
+              "stop_price": 45.7903,
+              "pnl": 6.1384,
+              "return": 0.126663,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5676,
+          "trades_won": 21,
+          "trades_lost": 16,
+          "avg_win_pct": 5.2384,
+          "avg_loss_pct": -5.8851,
+          "avg_win_loss_ratio": 0.8901,
+          "profit_factor": 1.0835,
+          "total_return_pct": 0.2182,
+          "total_pnl": 5.69,
+          "max_drawdown_pct": 1.9751,
+          "max_drawdown_amount": 1.98,
+          "sharpe_ratio": 0.006,
+          "best_trade_pct": 16.664,
+          "worst_trade_pct": -10.8193,
+          "avg_trade_return_pct": 0.4283,
+          "median_trade_return_pct": 0.8776,
+          "std_trade_return_pct": 6.6563,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-28",
+              "entry_price": 59.3662,
+              "exit_price": 55.0934,
+              "stop_price": 57.099,
+              "pnl": -4.2727,
+              "return": -0.071973,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-17",
+              "entry_price": 55.8152,
+              "exit_price": 52.5914,
+              "stop_price": 52.6504,
+              "pnl": -3.2238,
+              "return": -0.057759,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-12",
+              "entry_price": 55.8549,
+              "exit_price": 53.0911,
+              "stop_price": 53.1852,
+              "pnl": -2.7638,
+              "return": -0.049481,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-23",
+              "entry_price": 50.6946,
+              "exit_price": 48.0758,
+              "stop_price": 48.1898,
+              "pnl": -2.6188,
+              "return": -0.051659,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 48.4623,
+              "exit_price": 54.6007,
+              "stop_price": 45.2559,
+              "pnl": 6.1384,
+              "return": 0.126663,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 1.0,
+        "score": 1.2409,
+        "reason": "Best Sharpe & composite score. Score: 1.24",
+        "ranking": [
+          [
+            1.0,
+            1.2409
+          ],
+          [
+            2.0,
+            0.6847
+          ],
+          [
+            3.0,
+            0.4943
+          ],
+          [
+            1.5,
+            0.414
+          ],
+          [
+            2.5,
+            0.2834
+          ]
+        ]
+      }
+    },
+    "VTRS": {
+      "ticker": "VTRS",
+      "data_range": {
+        "start": "2023-07-24",
+        "end": "2026-07-02",
+        "trading_days": 739
+      },
+      "multiplier_results": {
+        "atr_1.0x": {
+          "total_trades": 37,
+          "win_rate": 0.3514,
+          "trades_won": 13,
+          "trades_lost": 24,
+          "avg_win_pct": 9.0143,
+          "avg_loss_pct": -2.7964,
+          "avg_win_loss_ratio": 3.2235,
+          "profit_factor": 1.6433,
+          "total_return_pct": 1.1878,
+          "total_pnl": 4.69,
+          "max_drawdown_pct": 4.1407,
+          "max_drawdown_amount": 4.14,
+          "sharpe_ratio": 0.4621,
+          "best_trade_pct": 22.3598,
+          "worst_trade_pct": -6.3146,
+          "avg_trade_return_pct": 1.3533,
+          "median_trade_return_pct": -1.6351,
+          "std_trade_return_pct": 7.0218,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 9.1908,
+              "exit_price": 9.2523,
+              "stop_price": 8.9793,
+              "pnl": 0.0615,
+              "return": 0.006692,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-02",
+              "entry_price": 9.2348,
+              "exit_price": 9.1645,
+              "stop_price": 9.0246,
+              "pnl": -0.0703,
+              "return": -0.007612,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-05",
+              "entry_price": 9.6283,
+              "exit_price": 9.4329,
+              "stop_price": 9.4317,
+              "pnl": -0.1954,
+              "return": -0.020295,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 9.1397,
+              "exit_price": 8.5713,
+              "stop_price": 8.9223,
+              "pnl": -0.5685,
+              "return": -0.062196,
+              "stop_triggered": true,
+              "multiplier": 1.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 7.8696,
+              "exit_price": 8.2595,
+              "stop_price": 7.6663,
+              "pnl": 0.3899,
+              "return": 0.049544,
+              "stop_triggered": false,
+              "multiplier": 1.0
+            }
+          ]
+        },
+        "atr_1.5x": {
+          "total_trades": 37,
+          "win_rate": 0.4324,
+          "trades_won": 16,
+          "trades_lost": 21,
+          "avg_win_pct": 9.2176,
+          "avg_loss_pct": -3.7415,
+          "avg_win_loss_ratio": 2.4636,
+          "profit_factor": 1.8426,
+          "total_return_pct": 1.7988,
+          "total_pnl": 7.1,
+          "max_drawdown_pct": 3.9407,
+          "max_drawdown_amount": 3.94,
+          "sharpe_ratio": 0.6539,
+          "best_trade_pct": 22.3598,
+          "worst_trade_pct": -6.642,
+          "avg_trade_return_pct": 1.8624,
+          "median_trade_return_pct": -2.1277,
+          "std_trade_return_pct": 7.6584,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 9.1908,
+              "exit_price": 9.2523,
+              "stop_price": 8.8736,
+              "pnl": 0.0615,
+              "return": 0.006692,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-02",
+              "entry_price": 9.2348,
+              "exit_price": 9.1645,
+              "stop_price": 8.9195,
+              "pnl": -0.0703,
+              "return": -0.007612,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-06",
+              "entry_price": 9.6283,
+              "exit_price": 8.9887,
+              "stop_price": 9.3335,
+              "pnl": -0.6395,
+              "return": -0.06642,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 9.1397,
+              "exit_price": 8.5713,
+              "stop_price": 8.8136,
+              "pnl": -0.5685,
+              "return": -0.062196,
+              "stop_triggered": true,
+              "multiplier": 1.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 7.8696,
+              "exit_price": 8.2595,
+              "stop_price": 7.5647,
+              "pnl": 0.3899,
+              "return": 0.049544,
+              "stop_triggered": false,
+              "multiplier": 1.5
+            }
+          ]
+        },
+        "atr_2.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 8.8734,
+          "avg_loss_pct": -5.0098,
+          "avg_win_loss_ratio": 1.7712,
+          "profit_factor": 1.8256,
+          "total_return_pct": 2.0148,
+          "total_pnl": 7.96,
+          "max_drawdown_pct": 4.2748,
+          "max_drawdown_amount": 4.27,
+          "sharpe_ratio": 0.7122,
+          "best_trade_pct": 22.3598,
+          "worst_trade_pct": -12.5144,
+          "avg_trade_return_pct": 2.1194,
+          "median_trade_return_pct": 0.6692,
+          "std_trade_return_pct": 8.2824,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 9.1908,
+              "exit_price": 9.2523,
+              "stop_price": 8.7678,
+              "pnl": 0.0615,
+              "return": 0.006692,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 9.2348,
+              "exit_price": 9.5483,
+              "stop_price": 8.8144,
+              "pnl": 0.3135,
+              "return": 0.033953,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-06",
+              "entry_price": 9.6283,
+              "exit_price": 8.9887,
+              "stop_price": 9.2352,
+              "pnl": -0.6395,
+              "return": -0.06642,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 9.1397,
+              "exit_price": 8.5713,
+              "stop_price": 8.7049,
+              "pnl": -0.5685,
+              "return": -0.062196,
+              "stop_triggered": true,
+              "multiplier": 2.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 7.8696,
+              "exit_price": 8.2595,
+              "stop_price": 7.463,
+              "pnl": 0.3899,
+              "return": 0.049544,
+              "stop_triggered": false,
+              "multiplier": 2.0
+            }
+          ]
+        },
+        "atr_2.5x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 8.8734,
+          "avg_loss_pct": -6.2477,
+          "avg_win_loss_ratio": 1.4203,
+          "profit_factor": 1.4524,
+          "total_return_pct": 1.3878,
+          "total_pnl": 5.48,
+          "max_drawdown_pct": 4.5632,
+          "max_drawdown_amount": 4.56,
+          "sharpe_ratio": 0.426,
+          "best_trade_pct": 22.3598,
+          "worst_trade_pct": -14.7585,
+          "avg_trade_return_pct": 1.5172,
+          "median_trade_return_pct": 0.6692,
+          "std_trade_return_pct": 8.9482,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 9.1908,
+              "exit_price": 9.2523,
+              "stop_price": 8.6621,
+              "pnl": 0.0615,
+              "return": 0.006692,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 9.2348,
+              "exit_price": 9.5483,
+              "stop_price": 8.7093,
+              "pnl": 0.3135,
+              "return": 0.033953,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-06",
+              "entry_price": 9.6283,
+              "exit_price": 8.9887,
+              "stop_price": 9.1369,
+              "pnl": -0.6395,
+              "return": -0.06642,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 9.1397,
+              "exit_price": 8.5713,
+              "stop_price": 8.5962,
+              "pnl": -0.5685,
+              "return": -0.062196,
+              "stop_triggered": true,
+              "multiplier": 2.5
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 7.8696,
+              "exit_price": 8.2595,
+              "stop_price": 7.3614,
+              "pnl": 0.3899,
+              "return": 0.049544,
+              "stop_triggered": false,
+              "multiplier": 2.5
+            }
+          ]
+        },
+        "atr_3.0x": {
+          "total_trades": 37,
+          "win_rate": 0.5135,
+          "trades_won": 19,
+          "trades_lost": 18,
+          "avg_win_pct": 8.8734,
+          "avg_loss_pct": -6.2717,
+          "avg_win_loss_ratio": 1.4148,
+          "profit_factor": 1.4578,
+          "total_return_pct": 1.3991,
+          "total_pnl": 5.53,
+          "max_drawdown_pct": 4.7694,
+          "max_drawdown_amount": 4.77,
+          "sharpe_ratio": 0.4171,
+          "best_trade_pct": 22.3598,
+          "worst_trade_pct": -14.7585,
+          "avg_trade_return_pct": 1.5055,
+          "median_trade_return_pct": 0.6692,
+          "std_trade_return_pct": 9.0438,
+          "sample_trades": [
+            {
+              "entry_date": "2023-07-24",
+              "exit_date": "2023-07-31",
+              "entry_price": 9.1908,
+              "exit_price": 9.2523,
+              "stop_price": 8.5564,
+              "pnl": 0.0615,
+              "return": 0.006692,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-08-01",
+              "exit_date": "2023-08-31",
+              "entry_price": 9.2348,
+              "exit_price": 9.5483,
+              "stop_price": 8.6043,
+              "pnl": 0.3135,
+              "return": 0.033953,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-09-01",
+              "exit_date": "2023-09-06",
+              "entry_price": 9.6283,
+              "exit_price": 8.9887,
+              "stop_price": 9.0387,
+              "pnl": -0.6395,
+              "return": -0.06642,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-10-02",
+              "exit_date": "2023-10-03",
+              "entry_price": 9.1397,
+              "exit_price": 8.5713,
+              "stop_price": 8.4874,
+              "pnl": -0.5685,
+              "return": -0.062196,
+              "stop_triggered": true,
+              "multiplier": 3.0
+            },
+            {
+              "entry_date": "2023-11-01",
+              "exit_date": "2023-11-30",
+              "entry_price": 7.8696,
+              "exit_price": 8.2595,
+              "stop_price": 7.2597,
+              "pnl": 0.3899,
+              "return": 0.049544,
+              "stop_triggered": false,
+              "multiplier": 3.0
+            }
+          ]
+        }
+      },
+      "recommendation": {
+        "recommended_multiplier": 1.0,
+        "score": 2.195,
+        "reason": "Sharpe similar: mult 1.5 (score 2.20) vs 1.0 (score 2.12). Chose more conservative (1.0x).",
+        "ranking": [
+          [
+            1.5,
+            2.195
+          ],
+          [
+            1.0,
+            2.1222
+          ],
+          [
+            2.0,
+            1.9819
+          ],
+          [
+            2.5,
+            1.1719
+          ],
+          [
+            3.0,
+            1.126
+          ]
+        ]
+      }
+    }
+  }
+}

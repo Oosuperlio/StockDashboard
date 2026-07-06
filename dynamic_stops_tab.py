@@ -165,7 +165,7 @@ def render_dynamic_stops_tab():
             "trend_emoji": trend_emoji,
             "trend_label": trend_label,
             "stop_price": stop_price,
-            "stop_pct": sl["pct_from_price"],
+            "stop_pct": (stop_price - price) / price * 100 if price > 0 else sl["pct_from_price"],
             "stop_method": sl["method"],
             "dist_to_stop": dist_to_stop,
             "trailing_active": trailing_active,

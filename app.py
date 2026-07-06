@@ -316,6 +316,7 @@ from pathlib import Path
 
 # ── Portfolio data engine ──
 from database.portfolio import PortfolioManager, Trade
+from dynamic_stops_tab import render_dynamic_stops_tab
 
 SIGNALS_DIR = Path(__file__).resolve().parent / "data" / "signals"
 
@@ -1214,8 +1215,11 @@ if st.sidebar.button("📡 信號看板", use_container_width=True, key="nav_sig
 if st.sidebar.button("🗂️ 持倉管理", use_container_width=True, key="nav_prt", type="primary"):
     st.session_state["app_page"] = "portfolio"
     st.rerun()
+if st.sidebar.button("🛡️ 止損監控", use_container_width=True, key="nav_stop", type="secondary"):
+    st.session_state["app_page"] = "stops"
+    st.rerun()
 page = st.session_state.get("app_page", "signal")
-page_label = "📡 信號看板" if page == "signal" else "🗂️ 持倉管理"
+page_label = "📡 信號看板" if page == "signal" else ("🗂️ 持倉管理" if page == "portfolio" else "🛡️ 止損監控")
 
 # ── 側邊欄：股票搜尋（僅在信號看板頁面顯示）──
 if page == "signal":
@@ -1492,6 +1496,12 @@ def _render_date_range_form(pm: PortfolioManager):
 # ── 持倉管理（當選擇持倉管理頁面時）──
 if page == "portfolio":
     _render_portfolio_tab()
+    st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    st.stop()
+
+# ── 動態止損監控（當選擇止損監控頁面時）──
+if page == "stops":
+    render_dynamic_stops_tab()
     st.caption(f"最後更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     st.stop()
 

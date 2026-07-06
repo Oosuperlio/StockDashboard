@@ -119,7 +119,7 @@ LOG_DIR.mkdir(exist_ok=True)
 parser = argparse.ArgumentParser(description="後台歷史數據下載器")
 parser.add_argument("--days",    type=int, default=365,  help="下載多少天歷史（默認365）")
 parser.add_argument("--workers", type=int, default=8,   help="並發下載綫程數（默認8）")
-parser.add_argument("--index",   type=str, default="all", help="只下載某指數：sp500 / nasdaq100 / hsi / all")
+parser.add_argument("--index",   type=str, default="all", help="只下載某指數：sp500 / nasdaq100 / hsi / over10b / all")
 parser.add_argument("--resume",  action="store_true",    help="從 checkpoint 恢復中斷的下載")
 parser.add_argument("--batch-size", type=int, default=30, help="每批次休息幾秒（防Yahoo限速）")
 parser.add_argument("--log-file", type=str, default=None, help="日誌文件路徑")
@@ -146,7 +146,8 @@ def load_tickers(index_name: str) -> list[str]:
         return (
             read_file(DATA_DIR / "constituents_sp500.txt") +
             read_file(DATA_DIR / "constituents_nasdaq100.txt") +
-            read_file(DATA_DIR / "constituents_hsi.txt")
+            read_file(DATA_DIR / "constituents_hsi.txt") +
+            read_file(DATA_DIR / "constituents_over10b.txt")  # >$100億 全宇宙
         )
     return read_file(DATA_DIR / f"constituents_{index_name}.txt")
 

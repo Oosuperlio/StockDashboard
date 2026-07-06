@@ -1,0 +1,589 @@
+{
+  "metadata": {
+    "generated_at": "2026-07-05T05:27:38.190181",
+    "period": {
+      "start": "2023-07-05",
+      "end": "2026-07-05"
+    },
+    "stocks": [
+      "ACN",
+      "CBRE",
+      "CME",
+      "CRWD",
+      "MPWR",
+      "SSNC",
+      "VTRS"
+    ],
+    "method": "Pivot Points + Volume Profile + Integer Levels + Fibonacci",
+    "pivot_order": 7
+  },
+  "results": {
+    "ACN": {
+      "ticker": "ACN",
+      "current_price": 137.35,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 135,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S2",
+          "price": 130,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S3",
+          "price": 125,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 140,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R2",
+          "price": 145,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R3",
+          "price": 150,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 163.58,
+        "swing_high": 198.0,
+        "0.382": 184.85,
+        "0.500": 180.79,
+        "0.618": 176.73,
+        "1.272": 207.36,
+        "1.382": 211.15,
+        "1.618": 219.27
+      },
+      "volume_clusters": [
+        {
+          "low": 295.56,
+          "high": 309.21,
+          "volume": 306304400,
+          "mid": 301.83
+        },
+        {
+          "low": 281.92,
+          "high": 295.56,
+          "volume": 241345800,
+          "mid": 290.28
+        },
+        {
+          "low": 240.98,
+          "high": 254.62,
+          "volume": 240462100,
+          "mid": 246.57
+        }
+      ],
+      "pivot_high_count": 31,
+      "pivot_low_count": 36,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    },
+    "CBRE": {
+      "ticker": "CBRE",
+      "current_price": 141.58,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 140,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S2",
+          "price": 138.77,
+          "label": "成交量密集區 ($135.90-$141.38)",
+          "source": "volume_profile"
+        },
+        {
+          "level": "S3",
+          "price": 135.44,
+          "label": "前低樞紐點 (Vol:1,584,600)",
+          "source": "pivot"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 141.76,
+          "label": "斐波那契 1.382 延伸",
+          "source": "fibonacci"
+        },
+        {
+          "level": "R2",
+          "price": 144.02,
+          "label": "斐波那契 1.618 延伸",
+          "source": "fibonacci"
+        },
+        {
+          "level": "R3",
+          "price": 144.15,
+          "label": "前高樞紐點 (Vol:721,400)",
+          "source": "pivot"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 128.55,
+        "swing_high": 138.11,
+        "0.382": 134.46,
+        "0.500": 133.33,
+        "0.618": 132.2,
+        "1.272": 140.71,
+        "1.382": 141.76,
+        "1.618": 144.02
+      },
+      "volume_clusters": [
+        {
+          "low": 130.41,
+          "high": 135.9,
+          "volume": 164440300,
+          "mid": 132.89
+        },
+        {
+          "low": 86.56,
+          "high": 92.04,
+          "volume": 145272400,
+          "mid": 88.61
+        },
+        {
+          "low": 135.9,
+          "high": 141.38,
+          "volume": 134105400,
+          "mid": 138.77
+        }
+      ],
+      "pivot_high_count": 35,
+      "pivot_low_count": 33,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    },
+    "CME": {
+      "ticker": "CME",
+      "current_price": 236.6,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 235,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S2",
+          "price": 230,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S3",
+          "price": 225,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 240,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R2",
+          "price": 245,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R3",
+          "price": 250,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 218.31,
+        "swing_high": 270.0,
+        "0.382": 250.25,
+        "0.500": 244.15,
+        "0.618": 238.06,
+        "1.272": 284.06,
+        "1.382": 289.75,
+        "1.618": 301.94
+      },
+      "volume_clusters": [
+        {
+          "low": 255.24,
+          "high": 263.32,
+          "volume": 188890900,
+          "mid": 259.76
+        },
+        {
+          "low": 182.6,
+          "high": 190.67,
+          "volume": 186395000,
+          "mid": 186.88
+        },
+        {
+          "low": 263.32,
+          "high": 271.39,
+          "volume": 155856900,
+          "mid": 266.86
+        }
+      ],
+      "pivot_high_count": 35,
+      "pivot_low_count": 36,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    },
+    "CRWD": {
+      "ticker": "CRWD",
+      "current_price": 193.98,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 190,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S2",
+          "price": 185,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S3",
+          "price": 180,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 195,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R2",
+          "price": 196.41,
+          "label": "前高樞紐點 (Vol:18,361,200)",
+          "source": "pivot"
+        },
+        {
+          "level": "R3",
+          "price": 200,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 165.23,
+        "swing_high": 178.04,
+        "0.382": 173.15,
+        "0.500": 171.64,
+        "0.618": 170.13,
+        "1.272": 181.53,
+        "1.382": 182.94,
+        "1.618": 185.96
+      },
+      "volume_clusters": [
+        {
+          "low": 84.25,
+          "high": 92.48,
+          "volume": 1419686000,
+          "mid": 88.79
+        },
+        {
+          "low": 92.48,
+          "high": 100.72,
+          "volume": 1418732000,
+          "mid": 96.65
+        },
+        {
+          "low": 67.78,
+          "high": 76.01,
+          "volume": 1303695200,
+          "mid": 72.94
+        }
+      ],
+      "pivot_high_count": 34,
+      "pivot_low_count": 33,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    },
+    "MPWR": {
+      "ticker": "MPWR",
+      "current_price": 1288.16,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 1285,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S2",
+          "price": 1280,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "S3",
+          "price": 1275,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 1290,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R2",
+          "price": 1295,
+          "label": "整數關口",
+          "source": "integer"
+        },
+        {
+          "level": "R3",
+          "price": 1300,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 1402.86,
+        "swing_high": 1664.1,
+        "0.382": 1564.31,
+        "0.500": 1533.48,
+        "0.618": 1502.65,
+        "1.272": 1735.16,
+        "1.382": 1763.9,
+        "1.618": 1825.55
+      },
+      "volume_clusters": [
+        {
+          "low": 583.34,
+          "high": 649.7,
+          "volume": 80365900,
+          "mid": 614.17
+        },
+        {
+          "low": 516.98,
+          "high": 583.34,
+          "volume": 60498800,
+          "mid": 555.93
+        },
+        {
+          "low": 649.7,
+          "high": 716.06,
+          "volume": 57782600,
+          "mid": 687.06
+        }
+      ],
+      "pivot_high_count": 33,
+      "pivot_low_count": 31,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    },
+    "SSNC": {
+      "ticker": "SSNC",
+      "current_price": 65.52,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 65.17,
+          "label": "斐波那契 0.382 回調",
+          "source": "fibonacci"
+        },
+        {
+          "level": "S2",
+          "price": 65.05,
+          "label": "前低樞紐點 (Vol:2,536,600)",
+          "source": "pivot"
+        },
+        {
+          "level": "S3",
+          "price": 64.51,
+          "label": "前低樞紐點 (Vol:2,784,600)",
+          "source": "pivot"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 68.65,
+          "label": "成交量密集區 ($67.61-$69.87)",
+          "source": "volume_profile"
+        },
+        {
+          "level": "R2",
+          "price": 69.16,
+          "label": "斐波那契 1.272 延伸",
+          "source": "fibonacci"
+        },
+        {
+          "level": "R3",
+          "price": 69.83,
+          "label": "斐波那契 1.382 延伸",
+          "source": "fibonacci"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 61.4,
+        "swing_high": 67.5,
+        "0.382": 65.17,
+        "0.500": 64.45,
+        "0.618": 63.73,
+        "1.272": 69.16,
+        "1.382": 69.83,
+        "1.618": 71.27
+      },
+      "volume_clusters": [
+        {
+          "low": 72.13,
+          "high": 74.38,
+          "volume": 105226000,
+          "mid": 73.32
+        },
+        {
+          "low": 69.87,
+          "high": 72.13,
+          "volume": 100683800,
+          "mid": 71.36
+        },
+        {
+          "low": 67.61,
+          "high": 69.87,
+          "volume": 94565100,
+          "mid": 68.65
+        }
+      ],
+      "pivot_high_count": 35,
+      "pivot_low_count": 33,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    },
+    "VTRS": {
+      "ticker": "VTRS",
+      "current_price": 16.7,
+      "supports": [
+        {
+          "level": "S1",
+          "price": 15.5,
+          "label": "前低樞紐點 (Vol:6,971,600)",
+          "source": "pivot"
+        },
+        {
+          "level": "S2",
+          "price": 15.34,
+          "label": "斐波那契 0.382 回調",
+          "source": "fibonacci"
+        },
+        {
+          "level": "S3",
+          "price": 15,
+          "label": "整數關口",
+          "source": "integer"
+        }
+      ],
+      "resistances": [
+        {
+          "level": "R1",
+          "price": 17.4,
+          "label": "前高樞紐點 (Vol:7,842,200)",
+          "source": "pivot"
+        },
+        {
+          "level": "R2",
+          "price": 18.87,
+          "label": "斐波那契 1.272 延伸",
+          "source": "fibonacci"
+        },
+        {
+          "level": "R3",
+          "price": 19.47,
+          "label": "斐波那契 1.382 延伸",
+          "source": "fibonacci"
+        }
+      ],
+      "fibonacci_reference": {
+        "swing_low": 12.0,
+        "swing_high": 17.4,
+        "0.382": 15.34,
+        "0.500": 14.7,
+        "0.618": 14.06,
+        "1.272": 18.87,
+        "1.382": 19.47,
+        "1.618": 20.74
+      },
+      "volume_clusters": [
+        {
+          "low": 10.31,
+          "high": 10.86,
+          "volume": 1197684200,
+          "mid": 10.62
+        },
+        {
+          "low": 8.13,
+          "high": 8.68,
+          "volume": 1026915400,
+          "mid": 8.42
+        },
+        {
+          "low": 8.68,
+          "high": 9.22,
+          "volume": 984896100,
+          "mid": 8.89
+        }
+      ],
+      "pivot_high_count": 30,
+      "pivot_low_count": 34,
+      "data_points": 752,
+      "date_range": {
+        "start": "2023-07-05",
+        "end": "2026-07-02"
+      }
+    }
+  }
+}

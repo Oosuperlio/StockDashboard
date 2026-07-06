@@ -1,0 +1,338 @@
+[
+  {
+    "id": "b93b60d1",
+    "ticker": "ACGL",
+    "trades": [
+      {
+        "date": "2026-06-08",
+        "type": "buy",
+        "shares": 288.0,
+        "price": 90.095,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-24",
+        "type": "sell",
+        "shares": 288.0,
+        "price": 94.36,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "502d7da9",
+    "ticker": "ACN",
+    "trades": [
+      {
+        "date": "2026-06-24",
+        "type": "buy",
+        "shares": 211.0,
+        "price": 127.225,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-24",
+        "type": "buy",
+        "shares": 89.0,
+        "price": 127.23,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "16a35f50",
+    "ticker": "ADSK",
+    "trades": [
+      {
+        "date": "2026-06-17",
+        "type": "buy",
+        "shares": 144.0,
+        "price": 201.7555,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-17",
+        "type": "sell",
+        "shares": 144.0,
+        "price": 196.0,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "a2a21764",
+    "ticker": "CB",
+    "trades": [
+      {
+        "date": "2026-06-03",
+        "type": "buy",
+        "shares": 71.0,
+        "price": 312.82,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-05",
+        "type": "sell",
+        "shares": 35.0,
+        "price": 327.75687,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-12",
+        "type": "sell",
+        "shares": 36.0,
+        "price": 320.72,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "0d6999ae",
+    "ticker": "GOOG",
+    "trades": [
+      {
+        "date": "2026-06-05",
+        "type": "buy",
+        "shares": 63.0,
+        "price": 365.605,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-11",
+        "type": "sell",
+        "shares": 63.0,
+        "price": 346.41,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "84a92f76",
+    "ticker": "PGR",
+    "trades": [
+      {
+        "date": "2026-06-03",
+        "type": "buy",
+        "shares": 105.0,
+        "price": 196.41,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-05",
+        "type": "sell",
+        "shares": 105.0,
+        "price": 203.41,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "e1ffda54",
+    "ticker": "RJF",
+    "trades": [
+      {
+        "date": "2026-06-01",
+        "type": "buy",
+        "shares": 141.0,
+        "price": 145.38,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-05",
+        "type": "sell",
+        "shares": 70.0,
+        "price": 151.46,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-15",
+        "type": "sell",
+        "shares": 71.0,
+        "price": 156.69,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "59ea2175",
+    "ticker": "T",
+    "trades": [
+      {
+        "date": "2026-06-12",
+        "type": "buy",
+        "shares": 1013.0,
+        "price": 23.225,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-17",
+        "type": "sell",
+        "shares": 1013.0,
+        "price": 22.432,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "59118f49",
+    "ticker": "TTD",
+    "trades": [
+      {
+        "date": "2026-06-10",
+        "type": "buy",
+        "shares": 1156.0,
+        "price": 20.118,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-10",
+        "type": "buy",
+        "shares": 351.0,
+        "price": 19.8293,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-11",
+        "type": "sell",
+        "shares": 1507.0,
+        "price": 18.643809524,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "07197120",
+    "ticker": "MCO",
+    "trades": [
+      {
+        "date": "2026-05-20",
+        "type": "buy",
+        "shares": 28.0,
+        "price": 438.74,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-01",
+        "type": "sell",
+        "shares": 14.0,
+        "price": 460.58,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-06-03",
+        "type": "sell",
+        "shares": 14.0,
+        "price": 448.08,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "b432a559",
+    "ticker": "CBRE",
+    "trades": [
+      {
+        "date": "2026-06-24",
+        "type": "buy",
+        "shares": 300.0,
+        "price": 134.64,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "ff392b78",
+    "ticker": "CME",
+    "trades": [
+      {
+        "date": "2026-07-02",
+        "type": "buy",
+        "shares": 160.0,
+        "price": 233.31,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "b28feee1",
+    "ticker": "CRWD",
+    "trades": [
+      {
+        "date": "2026-06-29",
+        "type": "buy",
+        "shares": 240.0,
+        "price": 178.75,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "286395dc",
+    "ticker": "MPWR",
+    "trades": [
+      {
+        "date": "2026-07-01",
+        "type": "buy",
+        "shares": 30.0,
+        "price": 1346.07,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "f478ea15",
+    "ticker": "SSNC",
+    "trades": [
+      {
+        "date": "2026-07-02",
+        "type": "buy",
+        "shares": 600.0,
+        "price": 64.65,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "f4cfea30",
+    "ticker": "VTRS",
+    "trades": [
+      {
+        "date": "2026-06-24",
+        "type": "buy",
+        "shares": 2000.0,
+        "price": 15.96,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  }
+]
