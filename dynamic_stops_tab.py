@@ -326,7 +326,9 @@ def render_dynamic_stops_tab():
         </tr>"""
 
     table_html += "</tbody></table>"
-    st.markdown(table_html, unsafe_allow_html=True)
+    # Use st.html() to render raw HTML — more reliable than st.markdown(unsafe_allow_html)
+    # on Railway deployments where markdown HTML rendering can fail
+    st.html(table_html)
 
     st.markdown("---")
 
