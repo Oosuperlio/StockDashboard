@@ -21,12 +21,14 @@ COPY indicator_calculator.py .
 COPY indicator_signals.py .
 COPY signal_scanner.py .
 COPY optimize_exits_by_sector.py .
+COPY dynamic_stops_tab.py .
 
-# Copy data files (CSV results for Sector Monitor & daily signals)
+# Copy data files (CSV results + dynamic stops config)
 COPY backtest_sector_subsector_results.csv ./
 COPY backtest_sector_improvement.csv ./
 COPY backtest_4way_results.csv ./
 COPY data/signals/ ./data/signals/
+COPY data/dynamic_stops/stop_config.json ./data/dynamic_stops/
 
 # Set port
 ENV PORT=8000
