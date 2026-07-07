@@ -9,7 +9,7 @@
     {
       "sector": "Consumer Discretionary",
       "total_stocks": 59,
-      "signal_count": 88
+      "signal_count": 89
     },
     {
       "sector": "Consumer Staples",
@@ -39,7 +39,7 @@
     {
       "sector": "Information Technology",
       "total_stocks": 91,
-      "signal_count": 145
+      "signal_count": 147
     },
     {
       "sector": "Materials",
