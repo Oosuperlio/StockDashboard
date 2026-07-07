@@ -99,9 +99,10 @@ def download_stock(ticker, latest_date):
             return None  # up to date
     else:
         start = "2010-01-01"
-        end = datetime.now().strftime("%Y-%m-%d")
+        end = datetime.now().date()
 
-    df = yf.download(ticker, start=start, end=end, progress=False, auto_adjust=True)
+    # yfinance end is exclusive, so add 1 day to include today
+    df = yf.download(ticker, start=start, end=end + timedelta(days=1), progress=False, auto_adjust=True)
     if df.empty:
         return None
 
