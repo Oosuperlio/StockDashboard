@@ -24,7 +24,7 @@
     {
       "sector": "Financials",
       "total_stocks": 69,
-      "signal_count": 164
+      "signal_count": 163
     },
     {
       "sector": "Health Care",
@@ -34,17 +34,17 @@
     {
       "sector": "Industrials",
       "total_stocks": 74,
-      "signal_count": 140
+      "signal_count": 138
     },
     {
       "sector": "Information Technology",
       "total_stocks": 91,
-      "signal_count": 149
+      "signal_count": 147
     },
     {
       "sector": "Materials",
       "total_stocks": 20,
-      "signal_count": 46
+      "signal_count": 45
     },
     {
       "sector": "Real Estate",
@@ -62,5 +62,5 @@
       "signal_count": 44
     }
   ],
-  "updated": "2026-07-06"
+  "updated": "2026-07-07"
 }
