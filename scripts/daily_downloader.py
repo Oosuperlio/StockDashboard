@@ -26,6 +26,14 @@ import pandas as pd
 import numpy as np
 import time
 
+def _f(v, default=0.0):
+    """Convert to float, replacing NaN with default."""
+    try:
+        x = float(v)
+        return x if not np.isnan(x) else default
+    except (ValueError, TypeError):
+        return default
+
 # ── Config ────────────────────────────────────────────────────────────
 CORE_STOCKS = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA", "JPM",
@@ -149,6 +157,7 @@ def download_batch(tickers: list) -> dict:
     """
     Download a batch of tickers from yfinance.
     Returns {ticker: pd.DataFrame} with normalized data.
+    If the batch fails (e.g. due to NaN tickers), retries in smaller sub-batches.
     """
     today = datetime.now().date()
     start = today - timedelta(days=10)  # Fetch last ~7 trading days
@@ -158,11 +167,19 @@ def download_batch(tickers: list) -> dict:
         data = yf.download(tickers, start=start, end=end,
                            auto_adjust=True, progress=False, group_by='ticker')
     except Exception as e:
-        log.warning("Batch download failed: %s", e)
-        return {}
+        log.warning("Batch download failed for %d tickers: %s", len(tickers), e)
+        data = pd.DataFrame()  # force empty to trigger retry
 
     if data.empty:
-        return {}
+        # Retry in smaller sub-batches (some tickers cause yfinance to fail entirely)
+        if len(tickers) <= 1:
+            return {}
+        mid = len(tickers) // 2
+        log.info("  Empty batch, splitting into sub-batches of %d and %d…", mid, len(tickers) - mid)
+        r1 = download_batch(tickers[:mid])
+        r2 = download_batch(tickers[mid:])
+        r1.update(r2)
+        return r1
 
     results = {}
     for tk in tickers:
@@ -170,15 +187,29 @@ def download_batch(tickers: list) -> dict:
             if len(tickers) == 1:
                 df = data.copy()
             else:
+                # yfinance MultiIndex with group_by='ticker': (Ticker, Price) — tickers in level 0
                 if tk not in data.columns.get_level_values(0):
                     continue
-                df = data[tk].copy()
+                df = data.xs(tk, axis=1, level=0).copy()
 
             if df.empty or len(df) == 0:
                 continue
 
-            df = normalize_columns(df, tk)
-            results[tk] = df
+            df = df.reset_index()
+            col_map = {}
+            for c in df.columns:
+                c_lower = c.strip().lower()
+                if c_lower in ("date", "index"):
+                    col_map[c] = "date"
+                elif c_lower == "adj close":
+                    col_map[c] = "adj_close"
+                elif c_lower in ("open", "high", "low", "close", "volume"):
+                    col_map[c] = c_lower
+            df = df.rename(columns=col_map)
+            df["ticker"] = tk
+            keep = [c for c in ["date", "ticker", "open", "high", "low", "close", "adj_close", "volume"]
+                    if c in df.columns]
+            results[tk] = df[keep]
         except Exception:
             continue
 
@@ -204,10 +235,10 @@ def write_to_both_dbs(mkt_con, prices_con, ticker: str, df: pd.DataFrame):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 row["ticker"], d,
-                float(row["open"]), float(row["high"]), float(row["low"]),
-                float(row["close"]),
-                float(row.get("adj_close", row["close"])),
-                int(float(row["volume"])) if not np.isnan(float(row["volume"])) else 0
+                _f(row["open"]), _f(row["high"]), _f(row["low"]),
+                _f(row["close"]),
+                _f(row.get("adj_close", row["close"])),
+                int(_f(row["volume"]))
             ))
         mkt_con.execute("COMMIT")
     except Exception:
@@ -228,9 +259,9 @@ def write_to_both_dbs(mkt_con, prices_con, ticker: str, df: pd.DataFrame):
                 (trade_date, symbol, open, high, low, "close", volume, currency)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (d, ticker,
-                  float(row["open"]), float(row["high"]), float(row["low"]),
-                  float(row["close"]),
-                  int(float(row["volume"])) if not np.isnan(float(row["volume"])) else 0,
+                  _f(row["open"]), _f(row["high"]), _f(row["low"]),
+                  _f(row["close"]),
+                  int(_f(row["volume"])),
                   currency))
         prices_con.execute("COMMIT")
     except Exception:
