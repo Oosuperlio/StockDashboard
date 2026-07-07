@@ -34,6 +34,60 @@ def _f(v, default=0.0):
     except (ValueError, TypeError):
         return default
 
+
+def check_recent_splits(tickers: list) -> list:
+    """Return tickers that had a stock split in the last 30 days.
+    These need full history re-download with auto_adjust=True."""
+    recent = []
+    for tk in tickers:
+        try:
+            t = yf.Ticker(tk)
+            splits = t.splits
+            if not splits.empty:
+                last_split = splits.index[-1]
+                if last_split.date() >= (datetime.now().date() - timedelta(days=30)):
+                    recent.append(tk)
+        except Exception:
+            continue
+    return recent
+
+
+def re_download_full_history(ticker: str, mkt_con, prices_con) -> bool:
+    """Delete and re-download full price history with auto_adjust=True.
+    Used to fix stock split discontinuities."""
+    import numpy as np
+    try:
+        # Delete old
+        mkt_con.execute(f"DELETE FROM daily_prices WHERE ticker='{ticker}'")
+        prices_con.execute(f"DELETE FROM stock_prices WHERE symbol='{ticker}'")
+
+        # Re-download full history
+        data = yf.download(ticker, start='2020-01-01',
+                           end=datetime.now().date() + timedelta(days=1),
+                           auto_adjust=True, progress=False)
+        if data.empty:
+            return False
+
+        currency = 'HKD' if ticker.endswith('.HK') else 'USD'
+        for _, row in data.iterrows():
+            d = row.name.date() if hasattr(row.name, 'date') else row.name
+            mkt_con.execute("""
+                INSERT OR REPLACE INTO daily_prices
+                (ticker, date, open, high, low, close, adj_close, volume)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (ticker, d, _f(row['Open']), _f(row['High']), _f(row['Low']),
+                  _f(row['Close']), _f(row['Close']), int(_f(row['Volume']))))
+            prices_con.execute("""
+                INSERT OR REPLACE INTO stock_prices
+                (trade_date, symbol, open, high, low, "close", volume, currency)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (d, ticker, _f(row['Open']), _f(row['High']), _f(row['Low']),
+                  _f(row['Close']), int(_f(row['Volume'])), currency))
+        return True
+    except Exception as e:
+        log.warning("Full re-download failed for %s: %s", ticker, e)
+        return False
+
 # ── Config ────────────────────────────────────────────────────────────
 CORE_STOCKS = [
     "AAPL", "MSFT", "GOOGL", "AMZN", "META", "NVDA", "TSLA", "JPM",
@@ -278,6 +332,18 @@ def main():
 
     mkt_con = get_market_db()
     prices_con = get_prices_db()
+
+    # ── Check for recent stock splits ──
+    log.info("Checking for recent stock splits…")
+    split_tickers = check_recent_splits(all_tickers)
+    if split_tickers:
+        log.info("Found %d stocks with recent splits: %s", len(split_tickers), split_tickers)
+        for tk in split_tickers:
+            log.info("  Re-downloading full history for %s (split detected)…", tk)
+            if re_download_full_history(tk, mkt_con, prices_con):
+                log.info("  %s: full history re-downloaded with adjusted prices", tk)
+    else:
+        log.info("No recent splits detected")
 
     # Get latest dates from both DBs to skip up-to-date tickers
     mkt_dates = get_latest_market_dates(mkt_con)
