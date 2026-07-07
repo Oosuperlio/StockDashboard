@@ -158,6 +158,42 @@ def main():
     latest_overall = str(row[0]) if row and row[0] else "N/A"
     con.close()
 
+    # ── Sync to prices.ddb (used by signal_scanner) ──────────────
+    if updated:
+        try:
+            prices_db = os.path.join(PROJECT_ROOT, "data", "prices.ddb")
+            con2 = duckdb.connect(prices_db)
+            con2.execute("""
+                CREATE TABLE IF NOT EXISTS stock_prices (
+                    trade_date DATE, symbol VARCHAR,
+                    open DECIMAL(12,4), high DECIMAL(12,4), low DECIMAL(12,4),
+                    "close" DECIMAL(12,4), volume BIGINT,
+                    currency VARCHAR DEFAULT 'USD',
+                    fetched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    PRIMARY KEY (symbol, trade_date)
+                )
+            """)
+            for ticker in updated:
+                # Re-read the just-inserted rows from market_data for this ticker
+                con = duckdb.connect(DB_PATH)
+                rows = con.execute("""
+                    SELECT date, open, high, low, close, volume
+                    FROM daily_prices
+                    WHERE ticker = ? AND date >= (SELECT MAX(date) FROM daily_prices WHERE ticker = ?) - INTERVAL '5 days'
+                """, [ticker, ticker]).fetchall()
+                con.close()
+                currency = 'HKD' if ticker.endswith('.HK') else 'USD'
+                for r in rows:
+                    con2.execute("""
+                        INSERT OR REPLACE INTO stock_prices
+                        (trade_date, symbol, open, high, low, "close", volume, currency)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """, (r[0], ticker, r[1], r[2], r[3], r[4], r[5], currency))
+            con2.close()
+            log.info("Synced %d tickers to prices.ddb (signal_scanner data source)", len(updated))
+        except Exception as e:
+            log.warning("prices.ddb sync failed (non-critical): %s", e)
+
     # ── Summary ────────────────────────────────────────────────────
     now_str = datetime.now().strftime("%Y-%m-%d")
     lines = [f"📡 每日數據更新 | {now_str}"]
