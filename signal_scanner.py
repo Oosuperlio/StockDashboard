@@ -407,6 +407,10 @@ def scan_ticker(
         if check_idx < 5:
             break
 
+        # 跳過非交易日（close=0 的假日/休市日數據）
+        if float(ind_df['close'].iloc[check_idx]) <= 0:
+            continue
+
         bull_pis = bullish_index.get(check_idx, [])
 
         # ── 因子①：成交量確認 ──────────────────────────────
@@ -686,6 +690,9 @@ def scan_tickers(tickers: List[str]) -> List[ScanSignal]:
             print(f"  ⚠️ 無 {sym} 數據")
             continue
         sector = sector_map.get(sym, 'Unknown')
+        # 跳過無法歸類板塊的股票（多為優先股、權證等非主流品種）
+        if sector == 'Unknown':
+            continue
         subsector = subsector_map.get(sym, sector)
         ind_df = calculate_all_indicators(df)
         bullish_index, _ = build_pattern_index(ind_df)
