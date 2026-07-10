@@ -333,9 +333,10 @@ def main():
     mkt_con = get_market_db()
     prices_con = get_prices_db()
 
-    # ── Check for recent stock splits ──
-    log.info("Checking for recent stock splits…")
-    split_tickers = check_recent_splits(all_tickers)
+    # ── Check for recent stock splits (core only for speed) ──
+    log.info("Checking for recent stock splits (core stocks)…")
+    core_for_split = [t for t in all_tickers if not t.endswith('.HK')][:50]
+    split_tickers = check_recent_splits(core_for_split)
     if split_tickers:
         log.info("Found %d stocks with recent splits: %s", len(split_tickers), split_tickers)
         for tk in split_tickers:
@@ -353,10 +354,10 @@ def main():
     stale = []
     for tk in all_tickers:
         ld = mkt_dates.get(tk)
-        if ld is None or ld < today - timedelta(days=3):
+        if ld is None or ld < today:
             stale.append(tk)
 
-    log.info("Stale tickers (no data or last >3 days ago): %d / %d",
+    log.info("Tickers needing update (no data for today): %d / %d",
              len(stale), len(all_tickers))
 
     if not stale:

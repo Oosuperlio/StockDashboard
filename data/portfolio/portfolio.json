@@ -40,6 +40,14 @@
         "price": 127.23,
         "fees": 0.0,
         "notes": ""
+      },
+      {
+        "date": "2026-07-09",
+        "type": "sell",
+        "shares": 100.0,
+        "price": 136.23,
+        "fees": 0.0,
+        "notes": ""
       }
     ]
   },
@@ -262,6 +270,14 @@
         "price": 134.64,
         "fees": 0.0,
         "notes": ""
+      },
+      {
+        "date": "2026-07-09",
+        "type": "sell",
+        "shares": 100.0,
+        "price": 141.065,
+        "fees": 0.0,
+        "notes": ""
       }
     ]
   },
@@ -330,6 +346,42 @@
         "type": "buy",
         "shares": 2000.0,
         "price": 15.96,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-07-09",
+        "type": "sell",
+        "shares": 700.0,
+        "price": 16.775,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "1ca7ab17",
+    "ticker": "SNX",
+    "trades": [
+      {
+        "date": "2026-07-09",
+        "type": "buy",
+        "shares": 170.0,
+        "price": 252.97,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "505a6927",
+    "ticker": "WCC",
+    "trades": [
+      {
+        "date": "2026-07-09",
+        "type": "buy",
+        "shares": 130.0,
+        "price": 323.96,
         "fees": 0.0,
         "notes": ""
       }
