@@ -12,7 +12,7 @@ import yfinance as yf
 from datetime import datetime
 
 # ── Config ──────────────────────────────────────────────────────────────────
-TICKERS = ["ACN", "CBRE", "CME", "CRWD", "MPWR", "SSNC", "VTRS"]
+TICKERS = ["ACN", "CBRE", "CME", "CRWD", "MPWR", "SSNC", "VTRS", "SNX", "WCC"]
 START = "2023-07-05"
 END   = "2026-07-05"
 OUTPUT = os.path.expanduser("~/projects/dashboard/data/dynamic_stops/ema_backtest.json")

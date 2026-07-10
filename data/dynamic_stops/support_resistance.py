@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore")
 
 OUTPUT_PATH = Path.home() / "projects/dashboard/data/dynamic_stops/support_resistance.json"
-TICKERS = ["ACN", "CBRE", "CME", "CRWD", "MPWR", "SSNC", "VTRS"]
+TICKERS = ["ACN", "CBRE", "CME", "CRWD", "MPWR", "SSNC", "VTRS", "SNX", "WCC"]
 START_DATE = "2023-07-05"
 END_DATE = "2026-07-05"
 PIVOT_ORDER = 7  # left/right bars for local extrema detection

@@ -1,227 +1,723 @@
 {
   "metadata": {
-    "generated_at": "2026-07-05",
+    "generated_at": "2026-07-10",
     "description": "Consolidated stop-loss and take-profit configuration per ticker",
-    "sources": ["support_resistance.json", "atr_backtest.json", "ema_backtest.json"],
-    "update_frequency": "weekly (re-run backtests quarterly)"
+    "sources": [
+      "yfinance live data (ATR+EMA+integer support analysis)"
+    ],
+    "update_frequency": "weekly (re-run on portfolio changes)"
   },
   "tickers": {
     "ACN": {
       "name": "Accenture plc",
-      "current_price": 137.35,
+      "current_price": 139.06,
       "trend": "downtrend",
-      "trend_detail": "Below all EMAs (EMA20=$145, EMA50=$164, EMA200=$211)",
+      "trend_detail": "Below all EMAs (EMA20=$141, EMA50=$158, EMA200=$204)",
       "stop_loss": {
-        "method": "ATR 1.0x + Integer Support",
-        "price": 130.00,
-        "pct_from_price": -5.4,
+        "method": "ATR 1.0x Hard Stop",
+        "price": 135.0,
+        "pct_from_price": -2.9,
         "type": "hard",
-        "logic": "ATR(14)=$7.79 → $137.35-$7.79=$129.56, rounded to $130 integer support"
+        "logic": "ATR(14)=$7.94 \u2192 $139.06-($7.94\u00d71.0)=$131.12, rounded to $135.0"
       },
       "trailing_stop": {
-        "method": "EMA(20) after reclaiming $140",
+        "method": "EMA(20) after reclaiming support",
         "current_level": null,
-        "trigger_price": 140.00,
-        "note": "Not active in downtrend. Activates when price recovers above $140."
+        "trigger_price": 146.0,
+        "note": "Not active in downtrend. Activates when price recovers above $146."
       },
       "take_profit": {
         "tiers": [
-          {"level": "TP1", "price": 145.00, "pct_from_price": 5.6, "allocation": "30%", "source": "integer R2"},
-          {"level": "TP2", "price": 150.00, "pct_from_price": 9.2, "allocation": "30%", "source": "integer R3"},
-          {"level": "TP3", "price": null, "pct_from_price": null, "allocation": "40%", "source": "EMA(20) trailing after $140 break"}
+          {
+            "level": "TP1",
+            "price": 147.0,
+            "pct_from_price": 5.7,
+            "allocation": "30%",
+            "source": "integer R1"
+          },
+          {
+            "level": "TP2",
+            "price": 153.0,
+            "pct_from_price": 10.0,
+            "allocation": "30%",
+            "source": "integer R2"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA trailing after recovery"
+          }
         ]
       },
-      "atr": {"value": 7.79, "pct": 5.7, "period": 14},
+      "atr": {
+        "value": 7.94,
+        "pct": 5.7,
+        "period": 14
+      },
       "recommended_atr_multiplier": 1.0,
-      "best_ema_scheme": "A_EMA20",
-      "key_supports": [{"price": 135, "source": "integer"}, {"price": 130, "source": "integer"}, {"price": 125, "source": "integer"}],
-      "key_resistances": [{"price": 140, "source": "integer"}, {"price": 145, "source": "integer"}, {"price": 150, "source": "integer"}]
+      "best_ema_scheme": "C_EMA200",
+      "key_supports": [
+        {
+          "price": 135.0,
+          "source": "integer"
+        },
+        {
+          "price": 130.0,
+          "source": "integer"
+        },
+        {
+          "price": 125.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 145.0,
+          "source": "integer"
+        },
+        {
+          "price": 150.0,
+          "source": "integer"
+        },
+        {
+          "price": 155.0,
+          "source": "integer"
+        }
+      ]
     },
     "CBRE": {
-      "name": "CBRE Group Inc.",
-      "current_price": 141.58,
-      "trend": "uptrend",
-      "trend_detail": "Above EMA20($135) & EMA50($136), near EMA200($145)",
+      "name": "CBRE Group Inc",
+      "current_price": 141.06,
+      "trend": "pullback_in_uptrend",
+      "trend_detail": "Below EMA20($137) & EMA50($137), still above EMA200($144)",
       "stop_loss": {
-        "method": "ATR 2.0x + Integer Support",
-        "price": 133.90,
-        "pct_from_price": -5.4,
+        "method": "ATR 1.0x Hard Stop",
+        "price": 135.0,
+        "pct_from_price": -4.3,
         "type": "hard",
-        "logic": "ATR(14)=$3.84 → $141.58-($3.84×2.0)=$133.90. Backtest Sharpe 0.63"
+        "logic": "ATR(14)=$3.62 \u2192 $141.06-($3.62\u00d71.0)=$137.44, rounded to $135.0"
       },
       "trailing_stop": {
-        "method": "EMA(200) trailing",
-        "current_level": 144.70,
-        "trigger_price": null,
-        "note": "Use EMA(200) as primary exit signal. Hard stop as backup below EMA20."
+        "method": "EMA(20) after reclaiming $137",
+        "current_level": null,
+        "trigger_price": 136.92,
+        "note": "Activates when price reclaims EMA20 at $137. Until then, hold with hard stop."
       },
       "take_profit": {
         "tiers": [
-          {"level": "TP1", "price": 150.00, "pct_from_price": 5.9, "allocation": "30%", "source": "previous high + integer"},
-          {"level": "TP2", "price": 158.00, "pct_from_price": 11.6, "allocation": "30%", "source": "Fibonacci extension"},
-          {"level": "TP3", "price": null, "pct_from_price": null, "allocation": "40%", "source": "EMA(200) trend trailing"}
+          {
+            "level": "TP1",
+            "price": 137.0,
+            "pct_from_price": -2.9,
+            "source": "EMA20 recovery target",
+            "allocation": "30%"
+          },
+          {
+            "level": "TP2",
+            "price": 144.0,
+            "pct_from_price": 2.1,
+            "source": "integer resistance",
+            "allocation": "30%"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "trend trailing after reclaim"
+          }
         ]
       },
-      "atr": {"value": 3.84, "pct": 2.7, "period": 14},
-      "recommended_atr_multiplier": 2.0,
-      "best_ema_scheme": "C_EMA200",
-      "key_supports": [{"price": 140, "source": "integer"}, {"price": 138.77, "source": "volume"}, {"price": 135.44, "source": "pivot"}],
-      "key_resistances": [{"price": 141.76, "source": "fibonacci"}, {"price": 144.02, "source": "fibonacci"}, {"price": 144.15, "source": "pivot"}]
+      "atr": {
+        "value": 3.62,
+        "pct": 2.6,
+        "period": 14
+      },
+      "recommended_atr_multiplier": 1.0,
+      "best_ema_scheme": "A_EMA20",
+      "key_supports": [
+        {
+          "price": 135.0,
+          "source": "integer"
+        },
+        {
+          "price": 130.0,
+          "source": "integer"
+        },
+        {
+          "price": 125.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 145.0,
+          "source": "integer"
+        },
+        {
+          "price": 150.0,
+          "source": "integer"
+        },
+        {
+          "price": 155.0,
+          "source": "integer"
+        }
+      ]
     },
     "CME": {
       "name": "CME Group Inc.",
-      "current_price": 236.60,
+      "current_price": 239.71,
       "trend": "downtrend",
-      "trend_detail": "Below all EMAs (EMA20=$244, EMA50=$262, EMA200=$274)",
+      "trend_detail": "Below all EMAs (EMA20=$242, EMA50=$258, EMA200=$272)",
       "stop_loss": {
         "method": "ATR 1.0x Hard Stop",
-        "price": 228.00,
-        "pct_from_price": -3.6,
+        "price": 235.0,
+        "pct_from_price": -2.0,
         "type": "hard",
-        "logic": "ATR(14)=$8.14 → $236.60-$8.14=$228.46, rounded to $228"
+        "logic": "ATR(14)=$7.89 \u2192 $239.71-($7.89\u00d71.0)=$231.83, rounded to $235.0"
       },
       "trailing_stop": {
-        "method": "EMA(20) after reclaiming $245",
+        "method": "EMA(20) after reclaiming support",
         "current_level": null,
-        "trigger_price": 245.00,
-        "note": "Not active in downtrend. $245 = key resistance to reclaim before EMA trailing."
+        "trigger_price": 252.0,
+        "note": "Not active in downtrend. Activates when price recovers above $252."
       },
       "take_profit": {
         "tiers": [
-          {"level": "TP1", "price": 250.00, "pct_from_price": 5.7, "allocation": "30%", "source": "integer R3"},
-          {"level": "TP2", "price": 265.00, "pct_from_price": 12.0, "allocation": "30%", "source": "previous support turned resistance"},
-          {"level": "TP3", "price": null, "pct_from_price": null, "allocation": "40%", "source": "EMA(20) trailing after $245 break"}
+          {
+            "level": "TP1",
+            "price": 254.0,
+            "pct_from_price": 6.0,
+            "allocation": "30%",
+            "source": "integer R1"
+          },
+          {
+            "level": "TP2",
+            "price": 264.0,
+            "pct_from_price": 10.1,
+            "allocation": "30%",
+            "source": "integer R2"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA trailing after recovery"
+          }
         ]
       },
-      "atr": {"value": 8.14, "pct": 3.4, "period": 14},
+      "atr": {
+        "value": 7.89,
+        "pct": 3.3,
+        "period": 14
+      },
       "recommended_atr_multiplier": 1.0,
       "best_ema_scheme": "C_EMA200",
-      "key_supports": [{"price": 235, "source": "integer"}, {"price": 230, "source": "integer"}, {"price": 225, "source": "integer"}],
-      "key_resistances": [{"price": 240, "source": "integer"}, {"price": 245, "source": "integer"}, {"price": 250, "source": "integer"}]
+      "key_supports": [
+        {
+          "price": 235.0,
+          "source": "integer"
+        },
+        {
+          "price": 230.0,
+          "source": "integer"
+        },
+        {
+          "price": 225.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 245.0,
+          "source": "integer"
+        },
+        {
+          "price": 250.0,
+          "source": "integer"
+        },
+        {
+          "price": 255.0,
+          "source": "integer"
+        }
+      ]
     },
     "CRWD": {
-      "name": "CrowdStrike Holdings Inc.",
-      "current_price": 193.98,
+      "name": "CrowdStrike Holdings, Inc.",
+      "current_price": 198.4,
       "trend": "strong_uptrend",
-      "trend_detail": "Far above all EMAs (EMA20=$176, EMA50=$158, EMA200=$131)",
+      "trend_detail": "Far above all EMAs (EMA20=$182, EMA50=$164, EMA200=$133)",
       "stop_loss": {
-        "method": "ATR 1.5x Hard Stop",
-        "price": 181.50,
-        "pct_from_price": -6.4,
+        "method": "ATR 2.0x Hard Stop",
+        "price": 179.5,
+        "pct_from_price": -9.5,
         "type": "hard",
-        "logic": "ATR(14)=$8.29 → $193.98-($8.29×1.5)=$181.54, rounded to $181.50. Backtest Sharpe 0.87"
+        "logic": "ATR(14)=$9.47 \u2192 $198.40-($9.47\u00d72.0)=$179.45, rounded to $179.5"
       },
       "trailing_stop": {
-        "method": "EMA(50) trailing (best backtest: Sharpe 1.41, +206.85%)",
-        "current_level": 158.38,
+        "method": "EMA(50) trailing",
+        "current_level": 163.92,
         "trigger_price": null,
-        "note": "EMA(50) is the primary exit signal. Hard stop $181.50 prevents catastrophic gap-down."
+        "note": "Use EMA(50) trailing as primary exit signal. Hard stop as backup below EMA20."
       },
       "take_profit": {
         "tiers": [
-          {"level": "TP1", "price": 220.00, "pct_from_price": 13.4, "allocation": "30%", "source": "recent high"},
-          {"level": "TP2", "price": 250.00, "pct_from_price": 28.9, "allocation": "30%", "source": "trend extension"},
-          {"level": "TP3", "price": null, "pct_from_price": null, "allocation": "40%", "source": "EMA(50) trend trailing - let winners run"}
+          {
+            "level": "TP1",
+            "price": 214.0,
+            "pct_from_price": 7.9,
+            "allocation": "30%",
+            "source": "trend extension"
+          },
+          {
+            "level": "TP2",
+            "price": 228.0,
+            "pct_from_price": 14.9,
+            "allocation": "30%",
+            "source": "previous high + integer"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA(50) trailing - let winners run"
+          }
         ]
       },
-      "atr": {"value": 8.29, "pct": 4.3, "period": 14},
-      "recommended_atr_multiplier": 1.5,
+      "atr": {
+        "value": 9.47,
+        "pct": 4.8,
+        "period": 14
+      },
+      "recommended_atr_multiplier": 2.0,
       "best_ema_scheme": "B_EMA50",
-      "key_supports": [{"price": 190, "source": "integer"}, {"price": 185, "source": "integer"}, {"price": 180, "source": "integer"}],
-      "key_resistances": [{"price": 195, "source": "integer"}, {"price": 196.41, "source": "pivot"}, {"price": 200, "source": "integer"}]
+      "key_supports": [
+        {
+          "price": 195.0,
+          "source": "integer"
+        },
+        {
+          "price": 190.0,
+          "source": "integer"
+        },
+        {
+          "price": 185.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 205.0,
+          "source": "integer"
+        },
+        {
+          "price": 210.0,
+          "source": "integer"
+        },
+        {
+          "price": 215.0,
+          "source": "integer"
+        }
+      ]
     },
     "MPWR": {
-      "name": "Monolithic Power Systems Inc.",
-      "current_price": 1288.16,
-      "trend": "pullback_in_uptrend",
-      "trend_detail": "Below EMA20($1,444) & EMA50($1,460), still above EMA200($1,218)",
+      "name": "Monolithic Power Systems, Inc.",
+      "current_price": 1374.13,
+      "trend": "downtrend",
+      "trend_detail": "Below all EMAs (EMA20=$1406, EMA50=$1440, EMA200=$1221)",
       "stop_loss": {
-        "method": "EMA(200) Long-term Support",
-        "price": 1218.00,
-        "pct_from_price": -5.4,
+        "method": "ATR 1.0x Hard Stop",
+        "price": 1276.5,
+        "pct_from_price": -7.1,
         "type": "hard",
-        "logic": "EMA200 at $1,218. Backtest EMA(20) Sharpe 1.18 +172%, but current pullback means EMA200 is safer hard stop."
+        "logic": "ATR(14)=$97.59 \u2192 $1374.13-($97.59\u00d71.0)=$1276.54, rounded to $1276.5"
       },
       "trailing_stop": {
-        "method": "EMA(20) after reclaiming $1,444 (EMA20)",
+        "method": "EMA(20) after reclaiming support",
         "current_level": null,
-        "trigger_price": 1444.00,
-        "note": "Activates when price reclaims EMA20 at $1,444. Until then, hold with EMA200 hard stop."
+        "trigger_price": 1443.0,
+        "note": "Not active in downtrend. Activates when price recovers above $1443."
       },
       "take_profit": {
         "tiers": [
-          {"level": "TP1", "price": 1445.00, "pct_from_price": 12.2, "source": "EMA20 recovery target", "allocation": "30%"},
-          {"level": "TP2", "price": 1500.00, "pct_from_price": 16.4, "source": "integer resistance", "allocation": "30%"},
-          {"level": "TP3", "price": 1664.00, "pct_from_price": 29.2, "source": "previous all-time high", "allocation": "40%"}
+          {
+            "level": "TP1",
+            "price": 1457.0,
+            "pct_from_price": 6.0,
+            "allocation": "30%",
+            "source": "integer R1"
+          },
+          {
+            "level": "TP2",
+            "price": 1512.0,
+            "pct_from_price": 10.0,
+            "allocation": "30%",
+            "source": "integer R2"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA trailing after recovery"
+          }
         ]
       },
-      "atr": {"value": 99.37, "pct": 7.7, "period": 14},
-      "recommended_atr_multiplier": 1.0,
-      "best_ema_scheme": "A_EMA20",
-      "key_supports": [{"price": 1285, "source": "integer"}, {"price": 1280, "source": "integer"}, {"price": 1275, "source": "integer"}],
-      "key_resistances": [{"price": 1290, "source": "integer"}, {"price": 1295, "source": "integer"}, {"price": 1300, "source": "integer"}]
-    },
-    "SSNC": {
-      "name": "SS&C Technologies Holdings Inc.",
-      "current_price": 65.52,
-      "trend": "weak",
-      "trend_detail": "At EMA20($65.54), below EMA50($67) and EMA200($74)",
-      "stop_loss": {
-        "method": "ATR 1.0x + Fibonacci Support",
-        "price": 63.65,
-        "pct_from_price": -2.9,
-        "type": "hard",
-        "logic": "ATR(14)=$1.87 → $65.52-$1.87=$63.65, consistent with Fib support at $64.51"
+      "atr": {
+        "value": 97.59,
+        "pct": 7.1,
+        "period": 14
       },
-      "trailing_stop": {
-        "method": "EMA(50) after reclaiming $67",
-        "current_level": null,
-        "trigger_price": 67.00,
-        "note": "Activates when price breaks above EMA50($67). Until then, use hard stop."
-      },
-      "take_profit": {
-        "tiers": [
-          {"level": "TP1", "price": 69.00, "pct_from_price": 5.3, "allocation": "30%", "source": "volume cluster R1"},
-          {"level": "TP2", "price": 74.00, "pct_from_price": 12.9, "allocation": "30%", "source": "EMA200 level"},
-          {"level": "TP3", "price": null, "pct_from_price": null, "allocation": "40%", "source": "EMA(200) trailing after $67 break"}
-        ]
-      },
-      "atr": {"value": 1.87, "pct": 2.9, "period": 14},
       "recommended_atr_multiplier": 1.0,
       "best_ema_scheme": "C_EMA200",
-      "key_supports": [{"price": 65.17, "source": "fibonacci"}, {"price": 65.05, "source": "pivot"}, {"price": 64.51, "source": "pivot"}],
-      "key_resistances": [{"price": 68.65, "source": "volume"}, {"price": 69.16, "source": "fibonacci"}, {"price": 69.83, "source": "fibonacci"}]
+      "key_supports": [
+        {
+          "price": 1370.0,
+          "source": "integer"
+        },
+        {
+          "price": 1365.0,
+          "source": "integer"
+        },
+        {
+          "price": 1360.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 1380.0,
+          "source": "integer"
+        },
+        {
+          "price": 1385.0,
+          "source": "integer"
+        },
+        {
+          "price": 1390.0,
+          "source": "integer"
+        }
+      ]
+    },
+    "SSNC": {
+      "name": "SS&C Technologies Holdings, Inc",
+      "current_price": 66.73,
+      "trend": "weak",
+      "trend_detail": "At EMA20($66), below EMA50($67) and EMA200($74)",
+      "stop_loss": {
+        "method": "ATR 1.0x Hard Stop",
+        "price": 65.0,
+        "pct_from_price": -2.6,
+        "type": "hard",
+        "logic": "ATR(14)=$1.88 \u2192 $66.73-($1.88\u00d71.0)=$64.85, rounded to $65.0"
+      },
+      "trailing_stop": {
+        "method": "EMA(20) after reclaiming support",
+        "current_level": null,
+        "trigger_price": 70.0,
+        "note": "Not active in weak. Activates when price recovers above $70."
+      },
+      "take_profit": {
+        "tiers": [
+          {
+            "level": "TP1",
+            "price": 71.0,
+            "pct_from_price": 6.4,
+            "allocation": "30%",
+            "source": "integer R1"
+          },
+          {
+            "level": "TP2",
+            "price": 73.0,
+            "pct_from_price": 9.4,
+            "allocation": "30%",
+            "source": "integer R2"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA trailing after recovery"
+          }
+        ]
+      },
+      "atr": {
+        "value": 1.88,
+        "pct": 2.8,
+        "period": 14
+      },
+      "recommended_atr_multiplier": 1.0,
+      "best_ema_scheme": "C_EMA200",
+      "key_supports": [
+        {
+          "price": 60.0,
+          "source": "integer"
+        },
+        {
+          "price": 55.0,
+          "source": "integer"
+        },
+        {
+          "price": 50.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 70.0,
+          "source": "integer"
+        },
+        {
+          "price": 75.0,
+          "source": "integer"
+        },
+        {
+          "price": 80.0,
+          "source": "integer"
+        }
+      ]
     },
     "VTRS": {
       "name": "Viatris Inc.",
-      "current_price": 16.70,
+      "current_price": 16.34,
       "trend": "uptrend",
-      "trend_detail": "Above all EMAs (EMA20=$16.06, EMA50=$15.72, EMA200=$13.55)",
+      "trend_detail": "Above EMA20($16) & EMA50($16), near EMA200($14)",
       "stop_loss": {
-        "method": "ATR 1.0x Hard Stop",
-        "price": 16.22,
-        "pct_from_price": -2.9,
+        "method": "ATR 2.0x Hard Stop",
+        "price": 15.5,
+        "pct_from_price": -5.1,
         "type": "hard",
-        "logic": "ATR(14)=$0.48 → $16.70-$0.48=$16.22"
+        "logic": "ATR(14)=$0.52 \u2192 $16.34-($0.52\u00d72.0)=$15.31, rounded to $15.5"
       },
       "trailing_stop": {
-        "method": "EMA(20) trailing (above all EMAs, good for trailing)",
-        "current_level": 16.06,
+        "method": "EMA(200) trailing",
+        "current_level": 13.67,
         "trigger_price": null,
-        "note": "Use EMA(20) as primary exit. Hard stop $16.22 is tighter backup."
+        "note": "Use EMA(200) trailing as primary exit signal. Hard stop as backup below EMA20."
       },
       "take_profit": {
         "tiers": [
-          {"level": "TP1", "price": 17.40, "pct_from_price": 4.2, "allocation": "30%", "source": "pivot high R1"},
-          {"level": "TP2", "price": 18.87, "pct_from_price": 13.0, "allocation": "30%", "source": "fibonacci extension"},
-          {"level": "TP3", "price": null, "pct_from_price": null, "allocation": "40%", "source": "EMA(50) trend trailing"}
+          {
+            "level": "TP1",
+            "price": 18.0,
+            "pct_from_price": 10.2,
+            "allocation": "30%",
+            "source": "trend extension"
+          },
+          {
+            "level": "TP2",
+            "price": 19.0,
+            "pct_from_price": 16.3,
+            "allocation": "30%",
+            "source": "previous high + integer"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA(200) trailing - let winners run"
+          }
         ]
       },
-      "atr": {"value": 0.48, "pct": 2.9, "period": 14},
+      "atr": {
+        "value": 0.52,
+        "pct": 3.2,
+        "period": 14
+      },
+      "recommended_atr_multiplier": 2.0,
+      "best_ema_scheme": "C_EMA200",
+      "key_supports": [
+        {
+          "price": 10.0,
+          "source": "integer"
+        },
+        {
+          "price": 5.0,
+          "source": "integer"
+        },
+        {
+          "price": 0.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 20.0,
+          "source": "integer"
+        },
+        {
+          "price": 25.0,
+          "source": "integer"
+        },
+        {
+          "price": 30.0,
+          "source": "integer"
+        }
+      ]
+    },
+    "SNX": {
+      "name": "TD SYNNEX Corporation",
+      "current_price": 250.16,
+      "trend": "downtrend",
+      "trend_detail": "Below all EMAs (EMA20=$260, EMA50=$249, EMA200=$198)",
+      "stop_loss": {
+        "method": "ATR 1.0x Hard Stop",
+        "price": 245.0,
+        "pct_from_price": -2.1,
+        "type": "hard",
+        "logic": "ATR(14)=$12.17 \u2192 $250.16-($12.17\u00d71.0)=$237.99, rounded to $245.0"
+      },
+      "trailing_stop": {
+        "method": "EMA(20) after reclaiming support",
+        "current_level": null,
+        "trigger_price": 263.0,
+        "note": "Not active in downtrend. Activates when price recovers above $263."
+      },
+      "take_profit": {
+        "tiers": [
+          {
+            "level": "TP1",
+            "price": 265.0,
+            "pct_from_price": 5.9,
+            "allocation": "30%",
+            "source": "integer R1"
+          },
+          {
+            "level": "TP2",
+            "price": 275.0,
+            "pct_from_price": 9.9,
+            "allocation": "30%",
+            "source": "integer R2"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA trailing after recovery"
+          }
+        ]
+      },
+      "atr": {
+        "value": 12.17,
+        "pct": 4.9,
+        "period": 14
+      },
       "recommended_atr_multiplier": 1.0,
       "best_ema_scheme": "C_EMA200",
-      "key_supports": [{"price": 15.50, "source": "pivot"}, {"price": 15.34, "source": "fibonacci"}, {"price": 15.00, "source": "integer"}],
-      "key_resistances": [{"price": 17.40, "source": "pivot"}, {"price": 18.87, "source": "fibonacci"}, {"price": 19.47, "source": "fibonacci"}]
+      "key_supports": [
+        {
+          "price": 245.0,
+          "source": "integer"
+        },
+        {
+          "price": 240.0,
+          "source": "integer"
+        },
+        {
+          "price": 235.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 255.0,
+          "source": "integer"
+        },
+        {
+          "price": 260.0,
+          "source": "integer"
+        },
+        {
+          "price": 265.0,
+          "source": "integer"
+        }
+      ]
+    },
+    "WCC": {
+      "name": "WESCO International, Inc.",
+      "current_price": 328.91,
+      "trend": "downtrend",
+      "trend_detail": "Below all EMAs (EMA20=$336, EMA50=$337, EMA200=$294)",
+      "stop_loss": {
+        "method": "ATR 1.0x Hard Stop",
+        "price": 320.0,
+        "pct_from_price": -2.7,
+        "type": "hard",
+        "logic": "ATR(14)=$15.00 \u2192 $328.91-($15.00\u00d71.0)=$313.91, rounded to $320.0"
+      },
+      "trailing_stop": {
+        "method": "EMA(20) after reclaiming support",
+        "current_level": null,
+        "trigger_price": 345.0,
+        "note": "Not active in downtrend. Activates when price recovers above $345."
+      },
+      "take_profit": {
+        "tiers": [
+          {
+            "level": "TP1",
+            "price": 349.0,
+            "pct_from_price": 6.1,
+            "allocation": "30%",
+            "source": "integer R1"
+          },
+          {
+            "level": "TP2",
+            "price": 362.0,
+            "pct_from_price": 10.1,
+            "allocation": "30%",
+            "source": "integer R2"
+          },
+          {
+            "level": "TP3",
+            "price": null,
+            "pct_from_price": null,
+            "allocation": "40%",
+            "source": "EMA trailing after recovery"
+          }
+        ]
+      },
+      "atr": {
+        "value": 15.0,
+        "pct": 4.6,
+        "period": 14
+      },
+      "recommended_atr_multiplier": 1.0,
+      "best_ema_scheme": "C_EMA200",
+      "key_supports": [
+        {
+          "price": 325.0,
+          "source": "integer"
+        },
+        {
+          "price": 320.0,
+          "source": "integer"
+        },
+        {
+          "price": 315.0,
+          "source": "integer"
+        }
+      ],
+      "key_resistances": [
+        {
+          "price": 335.0,
+          "source": "integer"
+        },
+        {
+          "price": 340.0,
+          "source": "integer"
+        },
+        {
+          "price": 345.0,
+          "source": "integer"
+        }
+      ]
     }
   }
 }
