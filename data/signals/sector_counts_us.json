@@ -9,7 +9,7 @@
     {
       "sector": "Consumer Discretionary",
       "total_stocks": 59,
-      "signal_count": 89
+      "signal_count": 90
     },
     {
       "sector": "Consumer Staples",
@@ -24,12 +24,12 @@
     {
       "sector": "Financials",
       "total_stocks": 69,
-      "signal_count": 162
+      "signal_count": 164
     },
     {
       "sector": "Health Care",
       "total_stocks": 61,
-      "signal_count": 101
+      "signal_count": 99
     },
     {
       "sector": "Industrials",
@@ -39,7 +39,7 @@
     {
       "sector": "Information Technology",
       "total_stocks": 91,
-      "signal_count": 131
+      "signal_count": 127
     },
     {
       "sector": "Materials",
@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 31,
-      "signal_count": 51
+      "signal_count": 52
     },
     {
       "sector": "Unknown",
@@ -59,8 +59,8 @@
     {
       "sector": "Utilities",
       "total_stocks": 31,
-      "signal_count": 39
+      "signal_count": 38
     }
   ],
-  "updated": "2026-07-20"
+  "updated": "2026-07-21"
 }
