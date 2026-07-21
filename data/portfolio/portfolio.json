@@ -48,6 +48,14 @@
         "price": 136.23,
         "fees": 0.0,
         "notes": ""
+      },
+      {
+        "date": "2026-07-14",
+        "type": "sell",
+        "shares": 200.0,
+        "price": 134.03,
+        "fees": 0.0,
+        "notes": ""
       }
     ]
   },
@@ -278,6 +286,14 @@
         "price": 141.065,
         "fees": 0.0,
         "notes": ""
+      },
+      {
+        "date": "2026-07-14",
+        "type": "sell",
+        "shares": 200.0,
+        "price": 135.915,
+        "fees": 0.0,
+        "notes": ""
       }
     ]
   },
@@ -304,6 +320,14 @@
         "type": "buy",
         "shares": 240.0,
         "price": 178.75,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-07-14",
+        "type": "sell",
+        "shares": 80.0,
+        "price": 205.75,
         "fees": 0.0,
         "notes": ""
       }
@@ -334,6 +358,30 @@
         "price": 64.65,
         "fees": 0.0,
         "notes": ""
+      },
+      {
+        "date": "2026-07-14",
+        "type": "sell",
+        "shares": 150.0,
+        "price": 67.265,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-07-14",
+        "type": "sell",
+        "shares": 300.0,
+        "price": 68.01,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-07-16",
+        "type": "sell",
+        "shares": 150.0,
+        "price": 70.71,
+        "fees": 0.0,
+        "notes": ""
       }
     ]
   },
@@ -354,6 +402,14 @@
         "type": "sell",
         "shares": 700.0,
         "price": 16.775,
+        "fees": 0.0,
+        "notes": ""
+      },
+      {
+        "date": "2026-07-14",
+        "type": "sell",
+        "shares": 1300.0,
+        "price": 16.282308,
         "fees": 0.0,
         "notes": ""
       }
@@ -382,6 +438,48 @@
         "type": "buy",
         "shares": 130.0,
         "price": 323.96,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "625d2e60",
+    "ticker": "DASH",
+    "trades": [
+      {
+        "date": "2026-07-10",
+        "type": "buy",
+        "shares": 210.0,
+        "price": 193.51,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "9a71ab7e",
+    "ticker": "PNR",
+    "trades": [
+      {
+        "date": "2026-07-13",
+        "type": "buy",
+        "shares": 550.0,
+        "price": 76.84,
+        "fees": 0.0,
+        "notes": ""
+      }
+    ]
+  },
+  {
+    "id": "e46227f3",
+    "ticker": "INVH",
+    "trades": [
+      {
+        "date": "2026-07-14",
+        "type": "buy",
+        "shares": 1400.0,
+        "price": 30.01,
         "fees": 0.0,
         "notes": ""
       }

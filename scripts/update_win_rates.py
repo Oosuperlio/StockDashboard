@@ -2,7 +2,7 @@
 """
 update_win_rates.py — 每週六運行，更新形態勝率數據並整理變化報告
 """
-import subprocess, json, datetime, sys, os
+import subprocess, json, datetime, sys, os, concurrent.futures
 
 WORKDIR = os.path.dirname(os.path.abspath(__file__))
 PARENT = os.path.dirname(WORKDIR)
@@ -35,17 +35,33 @@ old_sp500 = read_csv("backtest_results_sp500.csv")
 old_hsi   = read_csv("backtest_results_hsi.csv")
 
 # ── 2. 運行回測 ──────────────────────────────────────────────
-report.append("=== 運行回測 ===")
+report.append("=== 運行回測 ===\n")
 
-# 使用新的四維回測（覆蓋 SP500 + 擴展美股 + HSI）
-try:
-    result = subprocess.run(
-        [sys.executable, "backtest_4way.py"],
-        capture_output=True, text=True, timeout=3600, cwd=PARENT
-    )
-    report.append(f"  ✅ 四維回測完成（exit={result.returncode}）")
-except Exception as e:
-    report.append(f"  ❌ 四維回測: {e}")
+# 並行運行 S&P 500 和 HSI 回測（各已內建 multiprocessing）
+def run_backtest(script_name):
+    try:
+        result = subprocess.run(
+            [sys.executable, script_name],
+            capture_output=True, text=True, timeout=1800, cwd=PARENT
+        )
+        last_line = result.stdout.strip().split("\n")[-1] if result.stdout else ""
+        if result.returncode == 0:
+            return f"  ✅ {script_name}: {last_line}"
+        else:
+            stderr = result.stderr.strip().split("\n")[-1] if result.stderr else ""
+            return f"  ❌ {script_name}: exit={result.returncode}, {stderr}"
+    except subprocess.TimeoutExpired:
+        return f"  ⏰ {script_name}: 超時"
+    except Exception as e:
+        return f"  ❌ {script_name}: {e}"
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    futures = {
+        executor.submit(run_backtest, "backtest_sp500.py"): "S&P 500",
+        executor.submit(run_backtest, "backtest_hsi.py"): "HSI",
+    }
+    for future in concurrent.futures.as_completed(futures):
+        report.append(future.result())
 
 # ── 3. 讀取新數據 ──────────────────────────────────────────────
 new_sp500 = read_csv("backtest_results_sp500.csv")

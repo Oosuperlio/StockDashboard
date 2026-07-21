@@ -4,6 +4,9 @@ HSI 成分股形態勝率回測
 """
 import sys
 import csv
+import warnings
+warnings.filterwarnings('ignore')
+import multiprocessing as mp
 from collections import defaultdict
 import numpy as np
 import duckdb
@@ -83,71 +86,86 @@ def backtest_ticker(ticker):
         }
     return ticker_results
 
-# ── 主回測 ────────────────────────────────────────────────
-print(f"📊 HSI 形態回測開始 | {len(tickers)} 隻股票 | 前瞻窗口: {FORWARD_DAYS}天 | 門檻: {THRESHOLD*100}%")
-print("-" * 60)
-
-all_results = {}
-for ticker in tickers:
+# ── 輔助包裝（給 multiprocessing 用） ─────────────────────────
+def _backtest_wrapper_hsi(ticker):
     try:
-        res = backtest_ticker(ticker)
-        if res:
-            all_results[ticker] = res
+        return ticker, backtest_ticker(ticker)
     except Exception as e:
-        print(f"  ⚠️ {ticker}: {e}")
+        return ticker, None
 
-print(f"✅ 完成！成功: {len(all_results)} 隻")
 
-# ── 聚合 ─────────────────────────────────────────────────
-agg = defaultdict(lambda: {"count": 0, "successes": 0, "returns": [], "confidence": 0.0})
-for ticker, results in all_results.items():
-    for (name, direction), data in results.items():
-        key = (name, direction)
-        agg[key]["count"] += data["count"]
-        agg[key]["successes"] += data["successes"]
-        agg[key]["returns"].append(data["avg_return"])
-        agg[key]["confidence"] = data["confidence"]
+# ── 主回測 ────────────────────────────────────────────────
+if __name__ == "__main__":
+    n_workers = min(mp.cpu_count(), 6)
+    print(f"📊 HSI 形態回測開始 | {len(tickers)} 隻股票 | 並行: {n_workers} 進程 | 前瞻窗口: {FORWARD_DAYS}天 | 門檻: {THRESHOLD*100}%")
+    print("-" * 60)
 
-final = []
-for (name, direction), data in agg.items():
-    if data["count"] == 0:
-        continue
-    win_rate = data["successes"] / data["count"] * 100
-    avg_ret = np.mean(data["returns"]) * 100
-    final.append({
-        "pattern": name,
-        "direction": direction,
-        "count": data["count"],
-        "successes": data["successes"],
-        "failures": data["count"] - data["successes"],
-        "win_rate": win_rate,
-        "avg_return": avg_ret,
-        "confidence": data["confidence"],
-    })
+    all_results = {}
+    done = 0
+    errors = 0
 
-final.sort(key=lambda x: -x["win_rate"])
+    with mp.Pool(n_workers) as pool:
+        for ticker, res in pool.imap_unordered(_backtest_wrapper_hsi, tickers):
+            if res:
+                all_results[ticker] = res
+            else:
+                errors += 1
+            done += 1
+            if done % 50 == 0:
+                print(f"  進度: {done}/{len(tickers)} ({done/len(tickers)*100:.1f}%) — 已處理 {len(all_results)} 隻有形態的股票")
 
-# ── 輸出 ─────────────────────────────────────────────────
-print("\n" + "=" * 80)
-print(f"形態勝率排行榜 | 覆蓋 {len(all_results)} 隻 HSI 成分股")
-print("=" * 80)
-header = f"{'形態':<22} {'方向':<8} {'總次數':>6} {'成功':>6} {'失敗':>6} {'勝率':>7} {'平均回報':>9} {'置信':>6}"
-print(header)
-print("-" * 80)
-for r in final:
-    mark = " ★" if r["win_rate"] >= 60 else (" ☆" if r["win_rate"] >= 50 else "")
-    print(
-        f"{r['pattern']:<22} {r['direction']:<8} "
-        f"{r['count']:>6} {r['successes']:>6} {r['failures']:>6} "
-        f"{r['win_rate']:>6.1f}% {r['avg_return']:>+8.2f}% {r['confidence']:>5.2f}{mark}"
-    )
-print("-" * 80)
-print(f"★ = 勝率≥60%  ☆ = 勝率≥50%")
+    print(f"✅ 完成！成功: {len(all_results)} 隻，錯誤: {errors} 隻")
 
-# ── 儲存 ─────────────────────────────────────────────────
-out = "backtest_results_hsi.csv"
-with open(out, "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=["pattern","direction","count","successes","failures","win_rate","avg_return","confidence"])
-    w.writeheader()
-    w.writerows(final)
-print(f"\n💾 已儲存: {out}")
+    # ── 聚合 ─────────────────────────────────────────────────
+    agg = defaultdict(lambda: {"count": 0, "successes": 0, "returns": [], "confidence": 0.0})
+    for ticker, results in all_results.items():
+        for (name, direction), data in results.items():
+            key = (name, direction)
+            agg[key]["count"] += data["count"]
+            agg[key]["successes"] += data["successes"]
+            agg[key]["returns"].append(data["avg_return"])
+            agg[key]["confidence"] = data["confidence"]
+
+    final = []
+    for (name, direction), data in agg.items():
+        if data["count"] == 0:
+            continue
+        win_rate = data["successes"] / data["count"] * 100
+        avg_ret = np.mean(data["returns"]) * 100
+        final.append({
+            "pattern": name,
+            "direction": direction,
+            "count": data["count"],
+            "successes": data["successes"],
+            "failures": data["count"] - data["successes"],
+            "win_rate": win_rate,
+            "avg_return": avg_ret,
+            "confidence": data["confidence"],
+        })
+
+    final.sort(key=lambda x: -x["win_rate"])
+
+    # ── 輸出 ─────────────────────────────────────────────────
+    print("\n" + "=" * 80)
+    print(f"形態勝率排行榜 | 覆蓋 {len(all_results)} 隻 HSI 成分股")
+    print("=" * 80)
+    header = f"{'形態':<22} {'方向':<8} {'總次數':>6} {'成功':>6} {'失敗':>6} {'勝率':>7} {'平均回報':>9} {'置信':>6}"
+    print(header)
+    print("-" * 80)
+    for r in final:
+        mark = " ★" if r["win_rate"] >= 60 else (" ☆" if r["win_rate"] >= 50 else "")
+        print(
+            f"{r['pattern']:<22} {r['direction']:<8} "
+            f"{r['count']:>6} {r['successes']:>6} {r['failures']:>6} "
+            f"{r['win_rate']:>6.1f}% {r['avg_return']:>+8.2f}% {r['confidence']:>5.2f}{mark}"
+        )
+    print("-" * 80)
+    print(f"★ = 勝率≥60%  ☆ = 勝率≥50%")
+
+    # ── 儲存 ─────────────────────────────────────────────────
+    out = "backtest_results_hsi.csv"
+    with open(out, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["pattern","direction","count","successes","failures","win_rate","avg_return","confidence"])
+        w.writeheader()
+        w.writerows(final)
+    print(f"\n💾 已儲存: {out}")

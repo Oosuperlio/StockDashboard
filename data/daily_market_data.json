@@ -1,0 +1,179 @@
+{
+  "positions": [
+    {
+      "ticker": "ACN",
+      "shares": 200.0,
+      "avg_cost": 127.2265,
+      "total_cost": 25445.3
+    },
+    {
+      "ticker": "CBRE",
+      "shares": 200.0,
+      "avg_cost": 134.64,
+      "total_cost": 26928.0
+    },
+    {
+      "ticker": "CME",
+      "shares": 160.0,
+      "avg_cost": 233.31,
+      "total_cost": 37329.6
+    },
+    {
+      "ticker": "CRWD",
+      "shares": 240.0,
+      "avg_cost": 178.75,
+      "total_cost": 42900.0
+    },
+    {
+      "ticker": "MPWR",
+      "shares": 30.0,
+      "avg_cost": 1346.07,
+      "total_cost": 40382.1
+    },
+    {
+      "ticker": "SSNC",
+      "shares": 600.0,
+      "avg_cost": 64.65,
+      "total_cost": 38790.0
+    },
+    {
+      "ticker": "VTRS",
+      "shares": 1300.0,
+      "avg_cost": 15.96,
+      "total_cost": 20748.0
+    },
+    {
+      "ticker": "SNX",
+      "shares": 170.0,
+      "avg_cost": 252.97,
+      "total_cost": 43004.9
+    },
+    {
+      "ticker": "WCC",
+      "shares": 130.0,
+      "avg_cost": 323.96,
+      "total_cost": 42114.8
+    },
+    {
+      "ticker": "DASH",
+      "shares": 210.0,
+      "avg_cost": 193.51,
+      "total_cost": 40637.1
+    }
+  ],
+  "prices": {
+    "ACN": {
+      "current": 138.52,
+      "prev_close": 135.23,
+      "change_pct": 2.43
+    },
+    "CBRE": {
+      "current": 138.03,
+      "prev_close": 139.53,
+      "change_pct": -1.08
+    },
+    "CME": {
+      "current": 245.1,
+      "prev_close": 240.27,
+      "change_pct": 2.01
+    },
+    "CRWD": {
+      "current": 187.91,
+      "prev_close": 187.18,
+      "change_pct": 0.39
+    },
+    "MPWR": {
+      "current": 1291.38,
+      "prev_close": 1352.74,
+      "change_pct": -4.54
+    },
+    "SSNC": {
+      "current": 68.06,
+      "prev_close": 66.62,
+      "change_pct": 2.16
+    },
+    "VTRS": {
+      "current": 16.39,
+      "prev_close": 16.27,
+      "change_pct": 0.74
+    },
+    "SNX": {
+      "current": 251.31,
+      "prev_close": 251.52,
+      "change_pct": -0.08
+    },
+    "WCC": {
+      "current": 330.84,
+      "prev_close": 335.02,
+      "change_pct": -1.25
+    },
+    "DASH": {
+      "current": 189.57,
+      "prev_close": 191.82,
+      "change_pct": -1.17
+    }
+  },
+  "indices": {
+    "^GSPC": {
+      "current": 7515.34,
+      "prev_close": 7575.39,
+      "change_pct": -0.79
+    },
+    "^IXIC": {
+      "current": 25873.18,
+      "prev_close": 26281.61,
+      "change_pct": -1.55
+    },
+    "^DJI": {
+      "current": 52498.64,
+      "prev_close": 52637.01,
+      "change_pct": -0.26
+    },
+    "^FTSE": {
+      "current": NaN,
+      "prev_close": 10497.3,
+      "change_pct": NaN
+    },
+    "^N225": {
+      "current": NaN,
+      "prev_close": NaN,
+      "change_pct": NaN
+    },
+    "^HSI": {
+      "current": NaN,
+      "prev_close": 24175.12,
+      "change_pct": NaN
+    },
+    "000300.SS": {
+      "current": NaN,
+      "prev_close": 4780.79,
+      "change_pct": NaN
+    }
+  },
+  "forex": {
+    "USDHKD=X": {
+      "current": 7.84,
+      "prev_close": NaN,
+      "change_pct": NaN
+    }
+  },
+  "commodities": {
+    "GC=F": {
+      "current": NaN,
+      "prev_close": NaN,
+      "change_pct": NaN
+    },
+    "CL=F": {
+      "current": NaN,
+      "prev_close": NaN,
+      "change_pct": NaN
+    }
+  },
+  "totals": {
+    "total_cost": 358279.8,
+    "total_market_value": 366050.4,
+    "total_pl": 7770.6,
+    "total_pl_pct": 2.17
+  },
+  "timestamp": "2026-07-13 18:07"
+}

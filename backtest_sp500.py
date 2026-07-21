@@ -4,6 +4,9 @@ S&P 500 全量形態勝率回測
 """
 import sys
 import csv
+import warnings
+warnings.filterwarnings('ignore')
+import multiprocessing as mp
 from collections import defaultdict
 import numpy as np
 import duckdb
@@ -118,28 +121,34 @@ def aggregate(all_results):
     final.sort(key=lambda x: -x["win_rate"])
     return final
 
+# ── 輔助包裝（給 multiprocessing 用） ─────────────────────────
+def _backtest_wrapper(ticker):
+    try:
+        return ticker, backtest_ticker(ticker)
+    except Exception as e:
+        return ticker, None
+
+
 # ── 主程式 ────────────────────────────────────────────────
 def main():
     tickers = load_sp500()
-    print(f"📊 S&P 500 回測開始 | {len(tickers)} 隻股票 | 前瞻窗口: {FORWARD_DAYS}天 | 門檻: {THRESHOLD*100}%")
+    n_workers = min(mp.cpu_count(), 6)
+    print(f"📊 S&P 500 回測開始 | {len(tickers)} 隻股票 | 並行: {n_workers} 進程 | 前瞻窗口: {FORWARD_DAYS}天 | 門檻: {THRESHOLD*100}%")
     print("-" * 60)
 
     all_results = {}
     done = 0
     errors = 0
 
-    for ticker in tickers:
-        try:
-            res = backtest_ticker(ticker)
+    with mp.Pool(n_workers) as pool:
+        for ticker, res in pool.imap_unordered(_backtest_wrapper, tickers):
             if res:
                 all_results[ticker] = res
-        except Exception as e:
-            errors += 1
-            print(f"  ⚠️ {ticker}: {e}")
-
-        done += 1
-        if done % 50 == 0:
-            print(f"  進度: {done}/{len(tickers)} ({done/len(tickers)*100:.1f}%) — 已處理 {len(all_results)} 隻有形態的股票")
+            else:
+                errors += 1
+            done += 1
+            if done % 50 == 0:
+                print(f"  進度: {done}/{len(tickers)} ({done/len(tickers)*100:.1f}%) — 已處理 {len(all_results)} 隻有形態的股票")
 
     print(f"\n✅ 完成！成功: {len(all_results)} 隻，錯誤: {errors} 隻")
 

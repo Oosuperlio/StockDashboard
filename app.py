@@ -1100,6 +1100,27 @@ def _render_sector_breakdown(market: str, label: str):
     st.markdown(html, unsafe_allow_html=True)
 
 
+def _get_latest_prices_batch(symbols: list) -> dict:
+    """Preload latest close prices from DuckDB for a list of symbols.
+    Returns {symbol: price} dict; missing symbols are omitted."""
+    try:
+        from database.duckdb_client import PRICES_DB
+        import duckdb
+        con = duckdb.connect(PRICES_DB, read_only=True)
+        # Build a single query with all symbols
+        placeholders = ",".join("?" for _ in symbols)
+        rows = con.execute(f"""
+            SELECT symbol, close
+            FROM stock_prices
+            WHERE symbol IN ({placeholders})
+              AND trade_date = (SELECT MAX(trade_date) FROM stock_prices WHERE symbol IN ({placeholders}))
+        """, symbols * 2).fetchall()
+        con.close()
+        return {r[0]: float(r[1]) for r in rows}
+    except Exception:
+        return {}
+
+
 def _render_signal_tab(df: pd.DataFrame, market: str):
     """Render signal cards for one market tab."""
     if df.empty:
@@ -1108,6 +1129,10 @@ def _render_signal_tab(df: pd.DataFrame, market: str):
 
     # Sort: tier asc, win_rate desc
     df = df.sort_values(["tier", "win_rate"], ascending=[True, False]).reset_index(drop=True)
+
+    # Preload latest prices from DB for all symbols in this tab
+    symbols = df["symbol"].dropna().unique().tolist()
+    latest_prices = _get_latest_prices_batch(symbols)
 
     tier_labels = {1: "🔥 Tier-1 強烈買入信號", 2: "⚡ Tier-2 買入信號", 3: "📊 Tier-3 觀察信號"}
     tier_classes = {1: "signal-tier-1", 2: "signal-tier-2", 3: "signal-tier-3"}
@@ -1126,11 +1151,12 @@ def _render_signal_tab(df: pd.DataFrame, market: str):
         cols = st.columns(2)
         for i, (_, row) in enumerate(tier_df.iterrows()):
             with cols[i % 2]:
-                _render_signal_card(row, market, tier, tier_classes, tier_badges)
+                _render_signal_card(row, market, tier, tier_classes, tier_badges, latest_prices)
 
 
 def _render_signal_card(row: pd.Series, market: str, tier: int,
-                        tier_classes: dict, tier_badges: dict):
+                        tier_classes: dict, tier_badges: dict,
+                        latest_prices: dict = None):
     """Render a single clickable signal card. Clicking navigates to stock detail page."""
     symbol = row.get("symbol", "?")
     sector = row.get("sector", "?")
@@ -1139,6 +1165,7 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
     pattern_conf = row.get("pattern_conf", 0)
 
     price = row.get("price", 0)
+    sig_date = row.get("date", "")
     wr_stock = row.get("win_rate_stock")
     wr_sector = row.get("win_rate_sector")
     stock_n = int(row.get("stock_n", 0))
@@ -1150,9 +1177,25 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
     tp2 = row.get("tp2_price", 0)
     sl = row.get("sl_price", 0)
 
-    # Price formatting
     price_prefix = "HK$" if market == "hk" else "$"
+
+    # Signal entry price
     price_str = f"{price_prefix}{price:.2f}" if price else "—"
+
+    # Current/live price from DB
+    current_price = (latest_prices or {}).get(symbol)
+    if current_price:
+        current_str = f"{price_prefix}{current_price:.2f}"
+        price_diff = current_price - price if price else 0
+        diff_pct = (price_diff / price * 100) if price and price > 0 else 0
+        diff_color = "#48bb78" if price_diff >= 0 else "#fc8181"
+        diff_arrow = "↑" if price_diff >= 0 else "↓"
+        current_html = f'<span style="color:{diff_color};font-weight:600">{current_str}</span> <span style="color:{diff_color};font-size:11px">{diff_arrow} {abs(diff_pct):.1f}%</span>'
+    else:
+        current_html = f'<span style="color:#718096">—</span>'
+
+    date_str = str(sig_date) if sig_date else "—"
+
     tp1_str = f"{price_prefix}{tp1:.2f}" if tp1 else "—"
     tp2_str = f"{price_prefix}{tp2:.2f}" if tp2 else "—"
     sl_str = f"{price_prefix}{sl:.2f}" if sl else "—"
@@ -1180,12 +1223,16 @@ def _render_signal_card(row: pd.Series, market: str, tier: int,
             <span class="signal-symbol">{flag} {vol_icon} {symbol}</span>
             <span class="signal-tier-badge {tier_badges.get(tier, '')}">Tier-{tier}</span>
         </div>
-        <div class="signal-sector">🏭 {sector[:20]}</div>
+        <div class="signal-sector">🏭 {sector[:20]} ｜ 📅 {date_str}</div>
         <div class="signal-signal">{signal_name}</div>
         <div class="signal-pattern">📐 形態確認: {pattern} {f'({pattern_conf:.0%})' if pattern and pattern != 'None' else ''}</div>
         <div class="signal-meta">
-            <span>💰 <b>{price_str}</b></span>
+            <span>💰 信號價: <b>{price_str}</b></span>
+            <span>📍 現價: {current_html}</span>
+        </div>
+        <div class="signal-meta" style="border-top: none; padding-top: 4px;">
             <span>📈 回報: <b>{avg_ret:+.1%}</b></span>
+            <span></span>
         </div>
         <div class="signal-prices">
             <span class="signal-wr">📊 個股勝率: <b>{stock_wr_str}</b> {stock_n_str}</span>

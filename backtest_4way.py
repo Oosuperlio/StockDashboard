@@ -15,6 +15,7 @@ backtest_4way.py — 四維回測：Sector × Signal × Pattern確認 × 成交�
 
 import sys
 import os
+import multiprocessing as mp
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -383,6 +384,15 @@ def backtest_stock(symbol, sector):
     return trades
 
 
+# ── 輔助包裝（給 multiprocessing 用） ─────────────────────────
+def _bt_wrapper(args):
+    sym, sector = args
+    try:
+        return backtest_stock(sym, sector)
+    except Exception as e:
+        return []
+
+
 # ── 主程序 ────────────────────────────────────────────────────────────
 
 def main():
@@ -395,26 +405,28 @@ def main():
     sector_map = get_sector_map()
     print(f"\n已載入 {len(sector_map)} 檔股票的 sector 映射")
 
+    n_workers = min(mp.cpu_count(), 6)
     all_trades = []
 
     for market in ['sp500', 'us-extended', 'hsi']:
         tickers = load_constituents(market)
         market_name = '美股擴展宇宙' if market == 'us-extended' else ('S&P 500' if market == 'sp500' else 'HSI')
-        print(f"\n📂 回測 {market_name} ({len(tickers)} 檔)...")
-        if market == 'us-extended':
-            print(f"   (新增 {len(tickers)} 隻全量 US 股票 — 含擴展宇宙)")
+        print(f"\n📂 回測 {market_name} ({len(tickers)} 檔) | 並行: {n_workers} 進程...")
         if not tickers:
             print(f"  ⏭️  {market_name} 無股票，跳過")
+            continue
 
-        for i, sym in enumerate(tickers):
-            sector = sector_map.get(sym, 'Unknown')
-            trades = backtest_stock(sym, sector)
-            all_trades.extend(trades)
+        args_list = [(sym, sector_map.get(sym, 'Unknown')) for sym in tickers]
+        market_trades = []
 
-            if (i + 1) % 50 == 0:
-                print(f"  ... 已處理 {i+1} 隻，累計 {len(all_trades)} 個信號")
+        with mp.Pool(n_workers) as pool:
+            for i, trades in enumerate(pool.imap_unordered(_bt_wrapper, args_list)):
+                market_trades.extend(trades)
+                if (i + 1) % 50 == 0 or (i + 1) == len(tickers):
+                    print(f"  ... 已處理 {i+1}/{len(tickers)} 隻，累計 {len(market_trades)} 個信號")
 
-        print(f"  ✅ {market_name} 完成：{len(tickers)} 檔")
+        all_trades.extend(market_trades)
+        print(f"  ✅ {market_name} 完成：{len(tickers)} 檔，{len(market_trades)} 信號")
 
     print(f"\n總信號數：{len(all_trades)}")
 

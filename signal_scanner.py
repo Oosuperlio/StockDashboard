@@ -371,6 +371,7 @@ class ScanSignal:
     tier: int               # 1=最高, 2=中, 3=一般
     reasons: str            # 為何入選（文字說明）
     volume_confirmed: bool  # 因子①：成交量確認
+    latest_price: float = 0.0  # 最新收盤價（format_signals 顯示用）
 
 
 # ─── 每檔股票最新日期信號跟蹤（scan_market 去重用）────────────────────────
@@ -592,6 +593,9 @@ def scan_ticker(
             tp2_price = round(entry_price * (1 + avg_return * 2), 2)
             sl_price = round(entry_price * 0.99, 2)
 
+            # 取得最新收盤價（用於顯示）
+            latest_close = float(ind_df['close'].iloc[-1])
+
             signals.append(ScanSignal(
                 symbol=sym,
                 sector=sector,
@@ -615,6 +619,7 @@ def scan_ticker(
                 tier=tier,
                 reasons=' | '.join(reasons),
                 volume_confirmed=vol_confirmed,
+                latest_price=latest_close,
             ))
 
     return signals
@@ -872,6 +877,10 @@ def format_signals(signals: List[ScanSignal], top_n: int = 20) -> str:
             lines.append("─" * 40)
 
         price_str = f"${sig.price:.2f}" if sig.symbol.isupper() else f"HK${sig.price:.2f}"
+        # 如果最新價與進場價不同，顯示兩者
+        if sig.latest_price and abs(sig.latest_price - sig.price) > 0.01:
+            latest_str = f"${sig.latest_price:.2f}" if sig.symbol.isupper() else f"HK${sig.latest_price:.2f}"
+            price_str = f"{price_str} → 📍{latest_str}"
         vol_icon = '📈' if sig.volume_confirmed else '⚪'
         flag = '🟢' if sig.win_rate >= 0.60 else ('🟡' if sig.win_rate >= 0.45 else '⚪')
 
