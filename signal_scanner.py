@@ -415,17 +415,19 @@ def scan_ticker(
         bull_pis = bullish_index.get(check_idx, [])
 
         # ── 因子①：成交量確認 ──────────────────────────────
+        can_check_next = (check_idx + 1 < len(ind_df))
         vol_today_ok = vol_next_ok = False
-        if check_idx + 1 < len(ind_df):
-            vol_today = ind_df['volume'].iloc[check_idx]
-            vol_ma = ind_df['vol_ma20'].iloc[check_idx]
+        vol_today = ind_df['volume'].iloc[check_idx]
+        vol_ma = ind_df['vol_ma20'].iloc[check_idx]
+        if vol_ma > 0:
+            vol_today_ok = vol_today >= vol_ma * VOL_SPIKE_TODAY
+        if can_check_next:
             vol_next = ind_df['volume'].iloc[check_idx + 1]
             vol_ma_next = ind_df['vol_ma20'].iloc[check_idx + 1]
-            if vol_ma > 0:
-                vol_today_ok = vol_today >= vol_ma * VOL_SPIKE_TODAY
             if vol_ma_next > 0:
                 vol_next_ok = vol_next >= vol_ma_next * VOL_SPIKE_NEXT
-        vol_confirmed = vol_today_ok and vol_next_ok
+        # 最新交易日無隔天數據時，只靠今天成交量確認
+        vol_confirmed = vol_today_ok and (vol_next_ok if can_check_next else True)
 
         # ── 收集指標信號 ──
         all_ind_signals = []
