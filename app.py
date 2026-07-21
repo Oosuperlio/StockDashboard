@@ -1107,14 +1107,18 @@ def _get_latest_prices_batch(symbols: list) -> dict:
         from database.duckdb_client import PRICES_DB
         import duckdb
         con = duckdb.connect(PRICES_DB, read_only=True)
-        # Build a single query with all symbols
         placeholders = ",".join("?" for _ in symbols)
         rows = con.execute(f"""
-            SELECT symbol, close
-            FROM stock_prices
-            WHERE symbol IN ({placeholders})
-              AND trade_date = (SELECT MAX(trade_date) FROM stock_prices WHERE symbol IN ({placeholders}))
-        """, symbols * 2).fetchall()
+            WITH latest AS (
+                SELECT symbol, MAX(trade_date) AS max_date
+                FROM stock_prices
+                WHERE symbol IN ({placeholders})
+                GROUP BY symbol
+            )
+            SELECT sp.symbol, sp.close
+            FROM stock_prices sp
+            JOIN latest l ON sp.symbol = l.symbol AND sp.trade_date = l.max_date
+        """, symbols).fetchall()
         con.close()
         return {r[0]: float(r[1]) for r in rows}
     except Exception:
