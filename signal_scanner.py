@@ -544,25 +544,30 @@ def scan_ticker(
                 win_rate = fb_hist[0] if fb_hist else 0.50
 
             # ── Tier 分級（n 門檻 + win_rate 門檻，兩者都要滿足）──────────
-            # Tier 分級使用的 n：來自己實際採用的數據源（個股 > 板塊 > fallback）
-            # 當所有數據源均無記錄時，tier_n = 0（無啞值，避免低樣本湊數進入 Tier 1/2）
-            if stock_hist:
+            # 當個股樣本過少（<6，連最低 Tier 門檻都不夠）時使用板塊數據分級
+            if stock_hist and sector_hist and stock_n < 6:
+                tier_n = sector_n
+                tier_win_rate = win_rate_sector
+            elif stock_hist:
                 tier_n = stock_n
+                tier_win_rate = win_rate_stock
             elif sector_hist:
                 tier_n = sector_n
+                tier_win_rate = win_rate_sector
             else:
-                tier_n = 0  # 無任何歷史數據時為 0，不湊數
+                tier_n = 0
+                tier_win_rate = win_rate  # fallback
             # Tier 1：有成交量確認的強信號
-            if vol_confirmed and has_pat and matched_conf >= 0.7 and tier_n >= 8 and win_rate >= 0.50:
+            if vol_confirmed and has_pat and matched_conf >= 0.7 and tier_n >= 8 and tier_win_rate >= 0.50:
                 tier = 1
-            elif vol_confirmed and has_pat and tier_n >= 6 and win_rate >= 0.50:
+            elif vol_confirmed and has_pat and tier_n >= 6 and tier_win_rate >= 0.50:
                 tier = 1
             # Tier 2：無成交量但歷史表現優秀
-            elif has_pat and matched_conf >= 0.7 and tier_n >= 12 and win_rate >= 0.55:
+            elif has_pat and matched_conf >= 0.7 and tier_n >= 12 and tier_win_rate >= 0.55:
                 tier = 1
-            elif has_pat and tier_n >= 10 and win_rate >= 0.55:
+            elif has_pat and tier_n >= 10 and tier_win_rate >= 0.55:
                 tier = 2
-            elif vol_confirmed and tier_n >= 6 and win_rate >= 0.45:
+            elif vol_confirmed and tier_n >= 6 and tier_win_rate >= 0.45:
                 tier = 2
             else:
                 tier = 3
