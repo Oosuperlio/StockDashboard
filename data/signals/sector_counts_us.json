@@ -19,27 +19,27 @@
     {
       "sector": "Energy",
       "total_stocks": 21,
-      "signal_count": 54
+      "signal_count": 55
     },
     {
       "sector": "Financials",
       "total_stocks": 69,
-      "signal_count": 156
+      "signal_count": 153
     },
     {
       "sector": "Health Care",
       "total_stocks": 61,
-      "signal_count": 103
+      "signal_count": 102
     },
     {
       "sector": "Industrials",
       "total_stocks": 74,
-      "signal_count": 126
+      "signal_count": 131
     },
     {
       "sector": "Information Technology",
       "total_stocks": 91,
-      "signal_count": 146
+      "signal_count": 149
     },
     {
       "sector": "Materials",
@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 31,
-      "signal_count": 48
+      "signal_count": 47
     },
     {
       "sector": "Unknown",
@@ -59,8 +59,8 @@
     {
       "sector": "Utilities",
       "total_stocks": 31,
-      "signal_count": 46
+      "signal_count": 45
     }
   ],
-  "updated": "2026-07-23"
+  "updated": "2026-07-24"
 }
