@@ -19,12 +19,12 @@
     {
       "sector": "Energy",
       "total_stocks": 21,
-      "signal_count": 56
+      "signal_count": 54
     },
     {
       "sector": "Financials",
       "total_stocks": 69,
-      "signal_count": 158
+      "signal_count": 156
     },
     {
       "sector": "Health Care",
@@ -34,12 +34,12 @@
     {
       "sector": "Industrials",
       "total_stocks": 74,
-      "signal_count": 137
+      "signal_count": 136
     },
     {
       "sector": "Information Technology",
       "total_stocks": 91,
-      "signal_count": 130
+      "signal_count": 126
     },
     {
       "sector": "Materials",
@@ -62,5 +62,5 @@
       "signal_count": 42
     }
   ],
-  "updated": "2026-07-28"
+  "updated": "2026-07-29"
 }
