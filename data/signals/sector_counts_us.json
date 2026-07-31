@@ -4,7 +4,7 @@
     {
       "sector": "Communication Services",
       "total_stocks": 26,
-      "signal_count": 49
+      "signal_count": 48
     },
     {
       "sector": "Consumer Discretionary",
@@ -19,27 +19,27 @@
     {
       "sector": "Energy",
       "total_stocks": 21,
-      "signal_count": 52
+      "signal_count": 51
     },
     {
       "sector": "Financials",
       "total_stocks": 69,
-      "signal_count": 162
+      "signal_count": 160
     },
     {
       "sector": "Health Care",
       "total_stocks": 61,
-      "signal_count": 108
+      "signal_count": 107
     },
     {
       "sector": "Industrials",
       "total_stocks": 74,
-      "signal_count": 140
+      "signal_count": 138
     },
     {
       "sector": "Information Technology",
       "total_stocks": 91,
-      "signal_count": 154
+      "signal_count": 153
     },
     {
       "sector": "Materials",
@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 31,
-      "signal_count": 52
+      "signal_count": 53
     },
     {
       "sector": "Unknown",
@@ -59,8 +59,8 @@
     {
       "sector": "Utilities",
       "total_stocks": 31,
-      "signal_count": 45
+      "signal_count": 44
     }
   ],
-  "updated": "2026-07-30"
+  "updated": "2026-07-31"
 }
