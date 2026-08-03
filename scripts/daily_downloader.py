@@ -35,6 +35,27 @@ def _f(v, default=0.0):
         return default
 
 
+def _has_valid_data(row) -> bool:
+    """Skip insert if open/high/low/close are all zero/NaN (yfinance garbage row).
+
+    Guards against the zero-price corruption bug: yfinance rate-limited or
+    bad batches return rows where every OHLCV field is NaN → _f() converts to
+    0.0 → INSERT OR REPLACE writes $0.00 rows that freeze on later runs.
+    """
+    import math
+    for c in ['open', 'high', 'low', 'close']:
+        v = row.get(c)
+        if v is None:
+            continue
+        try:
+            x = float(v)
+        except (TypeError, ValueError):
+            continue  # array/scalar conversion failure (numpy 2.x bug) → treat as invalid
+        if not math.isnan(x) and x != 0.0:
+            return True
+    return False
+
+
 def check_recent_splits(tickers: list) -> list:
     """Return tickers that had a stock split in the last 30 days.
     These need full history re-download with auto_adjust=True."""
@@ -278,6 +299,9 @@ def write_to_both_dbs(mkt_con, prices_con, ticker: str, df: pd.DataFrame):
     mkt_con.execute("BEGIN TRANSACTION")
     try:
         for _, row in df.iterrows():
+            if not _has_valid_data(row):
+                log.warning("  %s: all-NaN/zero row on %s — skipping insert", ticker, row.get("date"))
+                continue
             d = row["date"]
             if hasattr(d, "date"):
                 d = d.date()
@@ -303,6 +327,8 @@ def write_to_both_dbs(mkt_con, prices_con, ticker: str, df: pd.DataFrame):
     prices_con.execute("BEGIN TRANSACTION")
     try:
         for _, row in df.iterrows():
+            if not _has_valid_data(row):
+                continue  # already warned in market_data write above
             d = row["date"]
             if hasattr(d, "date"):
                 d = d.date()
@@ -350,11 +376,21 @@ def main():
     mkt_dates = get_latest_market_dates(mkt_con)
     today = datetime.now().date()
 
+    # Also get latest close to detect $0 data that needs re-download
+    mkt_closes = {}
+    rows = mkt_con.execute(
+        "SELECT ticker, close FROM daily_prices WHERE date = (SELECT MAX(date) FROM daily_prices) AND close IS NOT NULL"
+    ).fetchall()
+    for r in rows:
+        mkt_closes[r[0]] = r[1]
+
     # Filter to tickers that might need updating
     stale = []
     for tk in all_tickers:
         ld = mkt_dates.get(tk)
-        if ld is None or ld < today:
+        close_val = mkt_closes.get(tk)
+        # Also re-download if latest close is $0 (yfinance failure on prior run)
+        if ld is None or ld < today or (ld == today and close_val == 0.0):
             stale.append(tk)
 
     log.info("Tickers needing update (no data for today): %d / %d",
