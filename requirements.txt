@@ -1,4 +1,11 @@
-streamlit>=1.28.0
+# Pinned to fix streamlit/starlette incompatibility (streamlit issue #9846 class):
+# - streamlit 1.61+ requires starlette>=0.46; starlette 1.4.0 introduced a required
+#   `thread_minimum_size` kwarg on GZipResponder that streamlit's bundled
+#   starlette_gzip_middleware.py does not pass -> TypeError at request time.
+# - starlette must be >=0.46 for streamlit 1.57+'s DEFAULT_EXCLUDED_CONTENT_TYPES import,
+#   but <1.4.0 to avoid the thread_minimum_size requirement. 0.49.0 verified working.
+streamlit==1.60.0
+starlette==0.49.0
 yfinance>=0.2.36
 plotly>=5.18.0
 pandas>=2.0.0
