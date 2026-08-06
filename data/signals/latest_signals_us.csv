@@ -1,11 +1,12 @@
 symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rate,win_rate_stock,win_rate_sector,stock_n,sector_n,avg_return,price,tp1_price,tp2_price,sl_price,date,tier,volume_confirmed
+PCAR,Industrials,Farm & Heavy Construction Machinery,RSI,RSI 動能加速（強勢區）,Bullish Engulfing,0.75,1.0,0.75,,0.75,0,8,0.0308,135.96,140.15,144.34,134.6,2026-08-04,1,True
 AEIS,Industrials,Electrical Equipment & Parts,BB,價格在 BB 中軌上方,Bullish Engulfing,0.75,1.0,0.6667,,0.6667,0,18,0.0284,296.38,304.8,313.21,293.42,2026-08-03,1,True
 AME,Industrials,Specialty Industrial Machinery,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.6667,,0.6667,0,18,0.0284,243.77,250.69,257.62,241.33,2026-08-03,1,True
-PCAR,Industrials,Farm & Heavy Construction Machinery,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.6667,,0.6667,0,18,0.0284,132.06,135.81,139.56,130.74,2026-08-03,1,True
 CTVA,Materials,Agricultural Inputs,BB,BB 跌破下軌 (超賣),Bullish Engulfing,0.75,1.0,0.625,,0.625,0,8,0.0516,76.04,79.96,83.89,75.28,2026-08-03,1,True
 POWL,Industrials,Electrical Equipment & Parts,RSI,RSI 加速上升,Bullish Engulfing,0.75,1.0,0.625,,0.625,0,8,0.0139,219.72,222.77,225.83,217.52,2026-08-03,1,True
 ICLR,Health Care,Diagnostics & Research,BB,BB 跌破下軌 (超賣),Morning Star,0.8,1.0,0.5692,,0.5692,0,65,0.0244,156.85,160.68,164.5,155.28,2026-08-04,1,False
 EXPD,Industrials,Integrated Freight & Logistics,BB,BB 中軌向上（上升趨勢）,Morning Star,0.8,1.0,0.5385,,0.5385,0,13,0.0388,170.59,177.21,183.83,168.88,2026-08-03,1,True
+SOLV,Health Care,Medical Instruments & Supplies,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.875,0.875,0.3606,8,502,0.0488,87.94,92.23,96.52,87.06,2026-08-04,2,True
 WYNN,Consumer Discretionary,Resorts & Casinos,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.8333,0.8333,0.3934,6,427,0.0904,101.15,110.29,119.44,100.14,2026-08-05,2,True
 FICO,Information Technology,Software - Application,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.8333,0.8333,0.4474,6,456,0.0693,1045.46,1117.91,1190.36,1035.01,2026-08-03,2,True
 PLTR,Information Technology,Software - Infrastructure,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.8,0.8,0.45,5,100,0.0533,162.66,171.33,180.0,161.03,2026-08-04,2,True
@@ -15,6 +16,7 @@ FOXA,Communication Services,Entertainment,BB,BB 中軌向上（上升趨勢）,N
 NI,Utilities,Utilities - Regulated Gas,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.6667,0.6667,0.4097,6,144,0.0279,42.91,44.11,45.3,42.48,2026-08-05,2,True
 CDW,Information Technology,Information Technology Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.625,0.625,0.4471,8,747,0.037,140.1,145.28,150.47,138.7,2026-08-05,2,True
 FSLR,Information Technology,Solar,BB,價格在 BB 中軌上方,None,0.0,0.425,0.6154,0.6154,0.4327,13,1188,0.0134,243.63,246.89,250.16,241.19,2026-08-04,2,True
+KVUE,Consumer Staples,Household & Personal Products,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.6,0.6,0.3092,10,262,0.0121,19.67,19.91,20.15,19.47,2026-08-05,2,True
 PH,Industrials,Specialty Industrial Machinery,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.6,0.6,0.3579,10,746,0.0227,996.9,1019.53,1042.16,986.93,2026-08-05,2,True
 RL,Consumer Discretionary,Apparel Manufacturing,BB,價格在 BB 中軌上方,None,0.0,0.425,0.6,0.6,0.4026,10,529,0.0485,380.78,399.25,417.72,376.97,2026-08-05,2,True
 DVA,Health Care,Medical Care Facilities,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.5714,0.5714,0.3173,7,375,0.0078,188.69,190.16,191.63,186.8,2026-08-05,2,True
@@ -23,14 +25,17 @@ FFIV,Information Technology,Software - Infrastructure,RSI,RSI 維持強勢 (50-7
 DIS,Communication Services,Entertainment,MACD,MACD 突破 0 軸,None,0.0,0.595,0.5238,,0.5238,0,21,0.0053,101.76,102.3,102.84,100.74,2026-08-05,2,True
 ANET,Information Technology,Computer Hardware,RSI,RSI 加速上升,None,0.0,0.5525,0.5,0.5,0.4113,6,851,0.0236,197.31,201.97,206.62,195.34,2026-08-05,2,True
 IT,Information Technology,Information Technology Services,RSI,RSI 加速上升,None,0.0,0.5525,0.5,0.5,0.4113,6,851,0.0052,185.79,186.76,187.72,183.93,2026-08-04,2,True
-COR,Health Care,Medical Distribution,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.5,0.5,0.3402,18,579,0.014,306.28,310.57,314.86,303.22,2026-08-04,2,True
+ADM,Consumer Staples,Farm Products,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.5,0.5,0.2846,10,246,0.0111,77.58,78.44,79.3,76.8,2026-08-05,2,True
+COR,Health Care,Medical Distribution,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.5,0.5,0.3402,18,579,0.014,317.22,321.66,326.1,314.05,2026-08-05,2,True
 EXPE,Consumer Discretionary,Travel Services,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.5,0.5,0.3934,6,427,0.0247,319.66,327.56,335.45,316.46,2026-08-05,2,True
+NUE,Materials,Steel,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.5,0.5,0.3886,6,229,0.0122,274.74,278.09,281.44,271.99,2026-08-05,2,True
 NWSA,Communication Services,Entertainment,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.5,0.5,0.4128,10,235,0.0059,28.59,28.76,28.93,28.3,2026-08-04,2,True
 ZBH,Health Care,Medical Devices,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.5,0.5,0.3606,8,502,0.0268,98.16,100.79,103.42,97.18,2026-08-05,2,True
-SRE,Utilities,Utilities - Diversified,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.5,0.5,0.4097,6,144,0.0428,86.65,90.36,94.07,85.78,2026-08-04,2,True
+SRE,Utilities,Utilities - Diversified,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.5,0.5,0.4097,6,144,0.0428,84.66,88.28,91.91,83.81,2026-08-05,2,True
 GILD,Health Care,Drug Manufacturers - General,BB,價格在 BB 中軌上方,None,0.0,0.425,0.5,0.5,0.365,6,715,0.0189,135.25,137.81,140.36,133.9,2026-08-04,2,True
 SBAC,Real Estate,REIT - Specialty,BB,價格在 BB 中軌上方,None,0.0,0.425,0.5,0.5,0.3248,6,311,0.0267,187.9,192.92,197.93,186.02,2026-08-04,2,True
 ENB,Energy,Oil & Gas Midstream,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4815,,0.4815,0,81,0.0139,51.94,52.66,53.38,51.42,2026-08-05,2,True
+TRP,Energy,Oil & Gas Midstream,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4815,,0.4815,0,81,0.0139,63.86,64.75,65.64,63.22,2026-08-05,2,True
 INSM,Health Care,Biotechnology,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.48,,0.48,0,25,0.0086,98.75,99.6,100.45,97.76,2026-08-04,2,True
 ZBRA,Information Technology,Communication Equipment,RSI,RSI 加速上升,None,0.0,0.5525,0.4667,0.4667,0.4113,15,851,-0.0025,368.99,368.07,367.15,365.3,2026-08-05,2,True
 BN,Financials,Asset Management,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4667,,0.4667,0,30,0.003,43.53,43.66,43.79,43.09,2026-08-03,2,True
@@ -38,9 +43,13 @@ RVTY,Health Care,Diagnostics & Research,RSI,RSI 加速上升,None,0.0,0.5525,0.4
 SHOP,Information Technology,Software - Application,KDJ,KDJ 金叉,None,0.0,0.5525,0.4606,,0.4606,0,165,0.01,144.24,145.68,147.12,142.8,2026-08-05,2,True
 STRD,Information Technology,Software - Application,KDJ,KDJ 金叉,None,0.0,0.5525,0.4606,,0.4606,0,165,0.01,59.59,60.19,60.78,58.99,2026-08-03,2,True
 STRK,Information Technology,Software - Application,KDJ,KDJ 金叉,None,0.0,0.5525,0.4606,,0.4606,0,165,0.01,63.2,63.83,64.46,62.57,2026-08-04,2,True
+EIX,Utilities,Utilities - Regulated Electric,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.4545,,0.4545,0,33,0.0084,68.32,68.89,69.47,67.64,2026-08-05,2,True
 W,Consumer Discretionary,Internet Retail,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.4524,,0.4524,0,42,0.0084,116.08,117.06,118.03,114.92,2026-08-04,2,True
 CRL,Health Care,Diagnostics & Research,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.451,,0.451,0,51,0.0047,260.72,261.95,263.17,258.11,2026-08-05,2,True
+WAT,Health Care,Diagnostics & Research,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.451,,0.451,0,51,0.0047,396.08,397.94,399.8,392.12,2026-08-04,2,True
 KSPI,Information Technology,Software - Infrastructure,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.45,,0.45,0,100,0.0204,92.0,93.88,95.75,91.08,2026-08-03,2,True
+NET,Information Technology,Software - Infrastructure,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.45,,0.45,0,100,0.0204,301.33,307.48,313.62,298.32,2026-08-04,2,True
+RBRK,Information Technology,Software - Infrastructure,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.45,,0.45,0,100,0.0204,84.81,86.54,88.27,83.96,2026-08-05,2,True
 PHM,Consumer Discretionary,Residential Construction,RSI,RSI 維持強勢 (50-70),Morning Star,0.8,1.0,1.0,1.0,0.4226,9,265,0.0574,131.68,139.24,146.8,130.36,2026-08-04,3,False
 MTZ,Industrials,Engineering & Construction,BB,BB 跌破下軌 (超賣),Support,0.7,0.99,1.0,,1.0,0,8,0.07,261.22,279.51,297.79,258.61,2026-08-03,3,False
 SLB,Energy,Oil & Gas Equipment & Services,BB,BB 中軌向上（上升趨勢）,Morning Star,0.8,1.0,0.8333,0.8333,0.5571,6,70,0.0405,49.31,51.31,53.3,48.82,2026-08-03,3,False
@@ -48,7 +57,6 @@ NCLH,Consumer Discretionary,Travel Services,MACD,MACD 金叉 (多頭區),None,0.
 TSN,Consumer Staples,Farm Products,KDJ,KDJ 金叉,Support,0.9,1.0,0.8,,,0,0,0.0149,59.61,60.5,61.39,59.01,2026-08-03,3,True
 EL,Consumer Staples,Household & Personal Products,BB,價格在 BB 中軌上方,Bullish Engulfing,0.75,0.9075,0.8,0.8,0.3836,5,146,0.0383,86.97,90.3,93.63,86.1,2026-08-04,3,False
 JPM,Financials,Banks - Diversified,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.8,0.8,0.2747,5,517,0.0127,359.24,363.8,368.36,355.65,2026-08-05,3,False
-EIX,Utilities,Utilities - Regulated Electric,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.8,0.8,0.4104,5,441,0.0323,68.32,70.53,72.73,67.64,2026-08-05,3,False
 DELL,Information Technology,Computer Hardware,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.75,0.75,0.3353,8,340,0.0516,429.02,451.16,473.29,424.73,2026-08-03,3,False
 COHR,Information Technology,Scientific & Technical Instruments,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.75,0.75,0.3767,8,754,0.0198,323.73,330.14,336.55,320.49,2026-08-04,3,False
 GNRC,Industrials,Specialty Industrial Machinery,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.75,0.75,0.3303,8,875,0.0574,218.63,231.18,243.73,216.44,2026-08-04,3,False
@@ -91,7 +99,6 @@ GEV,Industrials,Specialty Industrial Machinery,RSI,RSI 加速上升,None,0.0,0.5
 HON,Industrials,Conglomerates,KDJ,KDJ 金叉,None,0.0,0.5525,0.5,0.5,0.3223,16,2110,0.0166,248.79,252.92,257.05,246.3,2026-08-04,3,False
 LUV,Industrials,Airlines,KDJ,KDJ 金叉,None,0.0,0.5525,0.5,0.5,0.3223,14,2110,0.0116,47.07,47.62,48.16,46.6,2026-08-03,3,False
 MGM,Consumer Discretionary,Resorts & Casinos,KDJ,KDJ 金叉,None,0.0,0.5525,0.5,0.5,0.3183,18,1244,0.0272,45.72,46.96,48.21,45.26,2026-08-04,3,False
-SOLV,Health Care,Medical Instruments & Supplies,RSI,RSI 加速上升,None,0.0,0.5525,0.5,0.5,0.2803,74,8492,0.0161,88.07,89.49,90.91,87.19,2026-08-03,3,False
 STLD,Materials,Steel,KDJ,KDJ 金叉,None,0.0,0.5525,0.5,0.5,0.314,18,637,0.0154,265.1,269.18,273.27,262.45,2026-08-04,3,False
 IRM,Real Estate,REIT - Specialty,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.5,0.5,0.2311,14,818,0.0187,124.08,126.4,128.72,122.84,2026-08-03,3,False
 FIX,Industrials,Engineering & Construction,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.5,0.5,0.3303,6,875,0.0098,1770.96,1788.32,1805.67,1753.25,2026-08-03,3,False
@@ -107,7 +114,6 @@ SUNB,Industrials,Rental & Leasing Services,RSI,RSI 維持強勢 (50-70),Morning 
 WMS,Industrials,Building Products & Equipment,RSI,RSI 維持強勢 (50-70),Morning Star,0.8,1.0,0.4725,,0.4725,0,436,0.0182,145.15,147.79,150.43,143.7,2026-08-03,3,False
 META,Communication Services,Internet Content & Information,RSI,RSI 加速上升,None,0.0,0.5525,0.471,0.471,0.3116,155,3322,0.0106,588.77,595.01,601.25,582.88,2026-08-05,3,False
 CL,Consumer Staples,Household & Personal Products,RSI,RSI 上穿 50 中性線,Bullish Engulfing,0.75,0.9735000000000001,0.4667,,0.4667,0,30,0.0138,92.53,93.81,95.08,91.6,2026-08-04,3,False
-KVUE,Consumer Staples,Household & Personal Products,RSI,RSI 上穿 50 中性線,Bullish Engulfing,0.75,0.9735000000000001,0.4667,,0.4667,0,30,0.0138,19.55,19.82,20.09,19.35,2026-08-04,3,False
 PG,Consumer Staples,Household & Personal Products,RSI,RSI 上穿 50 中性線,Bullish Engulfing,0.75,0.9735000000000001,0.4667,,0.4667,0,30,0.0138,148.01,150.05,152.1,146.53,2026-08-04,3,False
 EW,Health Care,Medical Devices,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4667,0.4667,0.2741,15,686,0.0135,88.82,90.02,91.22,87.93,2026-08-03,3,False
 HWM,Industrials,Aerospace & Defense,RSI,RSI 加速上升,None,0.0,0.5525,0.4636,0.4636,0.2981,151,11545,0.0234,291.42,298.24,305.06,288.51,2026-08-05,3,False
@@ -125,11 +131,11 @@ WELL,Real Estate,REIT - Healthcare Facilities,RSI,RSI 上穿 50 中性線,None,0
 AAOI,Information Technology,Communication Equipment,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,131.63,133.75,135.87,130.31,2026-08-04,3,True
 ALAB,Information Technology,Semiconductors,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,361.67,367.49,373.32,358.05,2026-08-04,3,True
 BR,Information Technology,Information Technology Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,163.41,166.04,168.67,161.78,2026-08-05,3,True
-CGNX,Information Technology,Scientific & Technical Instruments,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,71.52,72.67,73.82,70.8,2026-08-04,3,True
-CPAY,Information Technology,Software - Infrastructure,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,396.52,402.9,409.29,392.55,2026-08-04,3,True
+CGNX,Information Technology,Scientific & Technical Instruments,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,70.71,71.85,72.99,70.0,2026-08-05,3,True
+CPAY,Information Technology,Software - Infrastructure,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,394.53,400.88,407.23,390.58,2026-08-05,3,True
 CRWV,Information Technology,Software - Infrastructure,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,85.76,87.14,88.52,84.9,2026-08-03,3,True
 EPAM,Information Technology,Information Technology Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,107.26,108.99,110.71,106.19,2026-08-03,3,True
-FIS,Information Technology,Information Technology Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,44.78,45.5,46.22,44.33,2026-08-03,3,True
+FIS,Information Technology,Information Technology Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,44.26,44.97,45.69,43.82,2026-08-04,3,True
 FISV,Information Technology,Financial Technology,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,54.11,54.98,55.85,53.57,2026-08-05,3,True
 GRAB,Information Technology,Software - Application,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,3.72,3.78,3.84,3.68,2026-08-04,3,True
 LDOS,Information Technology,Information Technology Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4471,,0.4471,0,747,0.0161,126.85,128.89,130.93,125.58,2026-08-05,3,True
@@ -153,9 +159,9 @@ BKR,Energy,Oil & Gas Equipment & Services,RSI,RSI 維持強勢 (50-70),Bullish E
 APA,Energy,Oil & Gas E&P,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.4367,0.4367,0.2962,229,4484,0.0055,34.66,34.85,35.04,34.31,2026-08-05,3,False
 BLDR,Industrials,Building Products & Equipment,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4355,0.4355,0.2986,186,19157,0.003,75.86,76.09,76.32,75.1,2026-08-05,3,False
 PODD,Health Care,Medical Devices,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4348,0.4348,0.2606,23,1869,0.0171,169.7,172.6,175.5,168.0,2026-08-03,3,False
-WAT,Health Care,Diagnostics & Research,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4348,0.4348,0.2606,23,1869,0.0135,396.08,401.43,406.77,392.12,2026-08-04,3,False
 ALGN,Health Care,Medical Instruments & Supplies,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.4348,0.4348,0.3144,23,1323,0.0055,172.89,173.84,174.79,171.16,2026-08-03,3,False
 DECK,Consumer Discretionary,Footwear & Accessories,RSI,RSI 加速上升,None,0.0,0.5525,0.4336,0.4336,0.3117,113,6796,0.0083,99.5,100.33,101.15,98.5,2026-08-03,3,False
+DOC,Real Estate,REIT - Healthcare Facilities,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.4333,,0.4333,0,30,0.0103,21.79,22.01,22.24,21.57,2026-08-05,3,True
 LRCX,Information Technology,Semiconductor Equipment & Materials,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.4333,0.4333,0.3785,30,1593,0.032,317.74,327.91,338.08,314.56,2026-08-04,3,False
 DT,Information Technology,Software - Application,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4327,,0.4327,0,1188,0.0141,50.86,51.58,52.29,50.35,2026-08-05,3,True
 SSNC,Information Technology,Software - Application,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4327,,0.4327,0,1188,0.0141,81.06,82.2,83.35,80.25,2026-08-04,3,True
@@ -185,15 +191,17 @@ TFC,Financials,Banks - Regional,RSI,RSI 維持強勢 (50-70),Morning Star,0.8,1.
 TPR,Consumer Discretionary,Luxury Goods,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4255,0.4255,0.3027,47,1665,0.0079,159.16,160.42,161.67,157.57,2026-08-05,3,False
 AWK,Utilities,Utilities - Regulated Water,BB,BB 中軌向上（上升趨勢）,Bullish Engulfing,0.75,1.0,0.4222,,0.4222,0,90,0.0167,134.01,136.25,138.49,132.67,2026-08-04,3,False
 ORLY,Consumer Discretionary,Auto Parts,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.4221,,0.4221,0,199,0.0146,91.83,93.17,94.51,90.91,2026-08-04,3,False
+AFG,Financials,Insurance - Property & Casualty,KDJ,KDJ 金叉,Consolidation Breakout,0.85,1.0,0.4211,,0.4211,0,19,0.0158,146.73,149.05,151.37,145.26,2026-08-05,3,True
 ECL,Materials,Specialty Chemicals,RSI,RSI 動能加速（強勢區）,Bullish Engulfing,0.75,1.0,0.4211,,0.4211,0,19,0.0022,283.14,283.76,284.39,280.31,2026-08-04,3,False
 SWKS,Information Technology,Semiconductors,RSI,RSI 維持強勢 (50-70),Morning Star,0.8,1.0,0.4207,,0.4207,0,454,0.0197,66.79,68.11,69.42,66.12,2026-08-04,3,False
 NFLX,Communication Services,Entertainment,RSI,RSI 加速上升,None,0.0,0.5525,0.4179,0.4179,0.3116,134,3322,0.0146,73.33,74.4,75.47,72.6,2026-08-03,3,False
-SCHW,Financials,Capital Markets,RSI,RSI 動能加速（強勢區）,Consolidation Breakout,0.76,1.0,0.4167,0.4167,0.2515,12,1022,-0.0046,108.02,107.52,107.03,106.94,2026-08-05,3,False
+SCHW,Financials,Capital Markets,RSI,RSI 動能加速（強勢區）,Consolidation Breakout,0.85,1.0,0.4167,0.4167,0.2515,12,1022,-0.0046,108.02,107.52,107.03,106.94,2026-08-05,3,False
 FITB,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.4167,0.4167,0.3142,24,1932,0.0151,57.77,58.64,59.51,57.19,2026-08-04,3,False
 HLT,Consumer Discretionary,Lodging,KDJ,KDJ 金叉,None,0.0,0.5525,0.4167,0.4167,0.3183,36,1244,0.0045,324.56,326.02,327.48,321.31,2026-08-05,3,False
 IHG,Consumer Discretionary,Lodging,BB,價格在 BB 中軌上方,Bullish Engulfing,0.75,0.9075,0.4151,,0.4151,0,212,0.0132,160.72,162.84,164.96,159.11,2026-08-05,3,False
 DAL,Industrials,Airlines,RSI,RSI 加速上升,None,0.0,0.5525,0.4142,0.4142,0.2981,169,11545,0.0111,93.14,94.17,95.21,92.21,2026-08-05,3,False
 RF,Financials,Banks - Regional,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4138,0.4138,0.279,29,3129,0.0104,31.95,32.28,32.61,31.63,2026-08-04,3,False
+BCE,Communication Services,Telecom Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4128,,0.4128,0,235,-0.0015,22.06,22.03,21.99,21.84,2026-08-05,3,True
 NYT,Communication Services,Publishing,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4128,,0.4128,0,235,-0.0015,75.61,75.5,75.38,74.85,2026-08-04,3,True
 PINS,Communication Services,Internet Content & Information,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4128,,0.4128,0,235,-0.0015,23.36,23.32,23.29,23.13,2026-08-05,3,True
 TME,Communication Services,Internet Content & Information,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4128,,0.4128,0,235,-0.0015,9.53,9.52,9.5,9.43,2026-08-05,3,True
@@ -201,15 +209,18 @@ VOD,Communication Services,Telecom Services,RSI,RSI 維持強勢 (50-70),None,0.
 CAH,Health Care,Medical Distribution,RSI,RSI 維持強勢 (50-70),Consolidation Breakout,0.76,1.0,0.4118,0.4118,0.2427,17,791,0.0012,239.23,239.52,239.8,236.84,2026-08-05,3,False
 GFS,Information Technology,Semiconductors,RSI,RSI 加速上升,None,0.0,0.5525,0.4113,,0.4113,0,851,0.0125,49.46,50.08,50.7,48.97,2026-08-05,3,True
 MKSI,Information Technology,Scientific & Technical Instruments,RSI,RSI 加速上升,None,0.0,0.5525,0.4113,,0.4113,0,851,0.0125,313.1,317.01,320.93,309.97,2026-08-05,3,True
+SITM,Information Technology,Semiconductors,RSI,RSI 加速上升,None,0.0,0.5525,0.4113,,0.4113,0,851,0.0125,543.12,549.91,556.7,537.69,2026-08-05,3,True
+VIAV,Information Technology,Communication Equipment,RSI,RSI 加速上升,None,0.0,0.5525,0.4113,,0.4113,0,851,0.0125,38.9,39.39,39.87,38.51,2026-08-05,3,True
+BP,Energy,Oil & Gas Integrated,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.411,,0.411,0,146,0.0074,42.44,42.75,43.07,42.02,2026-08-04,3,True
 CQP,Energy,Oil & Gas Midstream,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.411,,0.411,0,146,0.0074,64.13,64.6,65.08,63.49,2026-08-05,3,True
 E,Energy,Oil & Gas Integrated,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.411,,0.411,0,146,0.0074,52.83,53.22,53.61,52.3,2026-08-05,3,True
 ET,Energy,Oil & Gas Midstream,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.411,,0.411,0,146,0.0074,20.34,20.49,20.64,20.14,2026-08-05,3,True
+SU,Energy,Oil & Gas Integrated,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.411,,0.411,0,146,0.0074,62.82,63.28,63.75,62.19,2026-08-05,3,True
 EMA,Utilities,Utilities - Regulated Electric,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4104,,0.4104,0,441,0.0122,51.58,52.21,52.84,51.06,2026-08-05,3,False
 FTS,Utilities,Utilities - Regulated Electric,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4104,,0.4104,0,441,0.0122,56.53,57.22,57.91,55.96,2026-08-03,3,False
 SOMN,Utilities,Utilities - Regulated Electric,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4104,,0.4104,0,441,0.0122,49.17,49.77,50.37,48.68,2026-08-03,3,False
 NRG,Utilities,Utilities - Independent Power Producers,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4097,,0.4097,0,144,0.0064,117.04,117.79,118.54,115.87,2026-08-04,3,True
 SO,Utilities,Utilities - Regulated Electric,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4097,,0.4097,0,144,0.0064,92.94,93.53,94.13,92.01,2026-08-03,3,True
-NWS,Communication Services,Entertainment,RSI,RSI 維持強勢 (50-70),Consolidation Breakout,0.85,1.0,0.4091,0.4091,0.2124,22,386,0.0085,33.13,33.41,33.69,32.8,2026-08-05,3,False
 AMGN,Health Care,Drug Manufacturers - General,KDJ,KDJ 金叉,None,0.0,0.5525,0.408,,0.408,0,125,0.0055,407.83,410.07,412.32,403.75,2026-08-05,3,True
 ILMN,Health Care,Diagnostics & Research,KDJ,KDJ 金叉,None,0.0,0.5525,0.408,,0.408,0,125,0.0055,203.01,204.13,205.24,200.98,2026-08-04,3,True
 UTHR,Health Care,Drug Manufacturers - Specialty & Generic,KDJ,KDJ 金叉,None,0.0,0.5525,0.408,,0.408,0,125,0.0055,519.01,521.86,524.72,513.82,2026-08-05,3,True
@@ -218,18 +229,19 @@ CBRS,Information Technology,Semiconductors,MACD,MACD 突破 0 軸,None,0.0,0.595
 LFUS,Information Technology,Electronic Components,MACD,MACD 突破 0 軸,None,0.0,0.595,0.4064,,0.4064,0,529,0.0085,466.46,470.42,474.39,461.8,2026-08-04,3,False
 MDB,Information Technology,Software - Infrastructure,MACD,MACD 突破 0 軸,None,0.0,0.595,0.4064,,0.4064,0,529,0.0085,380.04,383.27,386.5,376.24,2026-08-04,3,False
 P,Information Technology,Computer Hardware,MACD,MACD 突破 0 軸,None,0.0,0.595,0.4064,,0.4064,0,529,0.0085,80.14,80.82,81.5,79.34,2026-08-03,3,False
-RBRK,Information Technology,Software - Infrastructure,MACD,MACD 突破 0 軸,None,0.0,0.595,0.4064,,0.4064,0,529,0.0085,84.81,85.53,86.25,83.96,2026-08-05,3,False
 SMCIP,Information Technology,Computer Hardware,MACD,MACD 突破 0 軸,None,0.0,0.595,0.4064,,0.4064,0,529,0.0085,55.3,55.77,56.24,54.75,2026-08-04,3,False
 SNX,Information Technology,Electronics & Computer Distribution,MACD,MACD 突破 0 軸,None,0.0,0.595,0.4064,,0.4064,0,529,0.0085,263.07,265.31,267.54,260.44,2026-08-05,3,False
 GWW,Industrials,Industrial Distribution,KDJ,KDJ 金叉,None,0.0,0.5525,0.4062,0.4062,0.3223,32,2110,0.005,1371.25,1378.11,1384.96,1357.54,2026-08-03,3,False
-HBANZ,Financials,Banks - Regional,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4057,,0.4057,0,424,0.0104,19.6,19.8,20.01,19.4,2026-08-05,3,True
 CFG,Financials,Banks - Regional,RSI,RSI 加速上升,None,0.0,0.5525,0.4049,0.4049,0.3014,163,11488,0.0121,73.6,74.49,75.38,72.86,2026-08-05,3,False
-EQT,Energy,Oil & Gas E&P,RSI,RSI 加速上升,None,0.0,0.5525,0.4048,0.4048,0.3227,126,3306,0.0092,53.56,54.05,54.55,53.02,2026-08-03,3,False
-NUE,Materials,Steel,RSI,RSI 加速上升,None,0.0,0.5525,0.4048,0.4048,0.3048,126,3639,0.0133,274.74,278.39,282.05,271.99,2026-08-05,3,False
+EQT,Energy,Oil & Gas E&P,RSI,RSI 加速上升,None,0.0,0.5525,0.4048,0.4048,0.3227,126,3306,0.0092,53.3925,53.88,54.37,52.86,2026-08-03,3,False
 KEY,Financials,Banks - Regional,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4048,0.4048,0.279,42,3129,0.0111,23.1,23.36,23.61,22.87,2026-08-04,3,False
 IVZ,Financials,Asset Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.404,0.404,0.2842,198,19108,0.0093,32.01,32.31,32.61,31.69,2026-08-05,3,False
 GOOGL,Communication Services,Internet Content & Information,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4034,0.4034,0.3082,238,5205,0.0103,362.43,366.16,369.9,358.81,2026-08-05,3,False
+BALL,Consumer Discretionary,Packaging & Containers,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4026,,0.4026,0,529,0.0119,63.75,64.51,65.27,63.11,2026-08-04,3,True
 BKNG,Consumer Discretionary,Travel Services,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4026,,0.4026,0,529,0.0119,207.02,209.48,211.95,204.95,2026-08-05,3,True
+BWA,Consumer Discretionary,Auto Parts,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4026,,0.4026,0,529,0.0119,66.78,67.57,68.37,66.11,2026-08-05,3,True
+HMC,Consumer Discretionary,Auto Manufacturers,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4026,,0.4026,0,529,0.0119,30.6,30.96,31.33,30.29,2026-08-05,3,True
+MELI,Consumer Discretionary,Internet Retail,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4026,,0.4026,0,529,0.0119,1922.5699,1945.45,1968.33,1903.34,2026-08-05,3,True
 SN,Consumer Discretionary,"Furnishings, Fixtures & Appliances",BB,價格在 BB 中軌上方,None,0.0,0.425,0.4026,,0.4026,0,529,0.0119,182.11,184.28,186.44,180.29,2026-08-05,3,True
 MS,Financials,Capital Markets,RSI,RSI 加速上升,None,0.0,0.5525,0.4025,0.4025,0.3014,159,11488,0.0109,218.27,220.65,223.03,216.09,2026-08-05,3,False
 WFC,Financials,Banks - Diversified,RSI,RSI 加速上升,None,0.0,0.5525,0.4013,0.4013,0.3014,157,11488,0.0083,89.17,89.91,90.65,88.28,2026-08-05,3,False
@@ -276,7 +288,7 @@ MSTR,Information Technology,Software - Application,KDJ,KDJ 金叉,None,0.0,0.552
 NXT,Information Technology,Solar,KDJ,KDJ 金叉,None,0.0,0.5525,0.3918,,0.3918,0,1955,0.0107,98.44,99.49,100.55,97.46,2026-08-04,3,False
 RMBS,Information Technology,Semiconductors,KDJ,KDJ 金叉,None,0.0,0.5525,0.3918,,0.3918,0,1955,0.0107,92.21,93.2,94.18,91.29,2026-08-03,3,False
 SMTC,Information Technology,Semiconductors,KDJ,KDJ 金叉,None,0.0,0.5525,0.3918,,0.3918,0,1955,0.0107,119.08,120.35,121.63,117.89,2026-08-03,3,False
-MPWR,Information Technology,Semiconductors,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3912,0.3912,0.3573,317,20206,0.0058,1345.45,1353.25,1361.06,1332.0,2026-08-05,3,False
+MPWR,Information Technology,Semiconductors,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3912,0.3912,0.3573,317,20206,0.0058,1345.46,1353.26,1361.07,1332.01,2026-08-05,3,False
 MRNA,Health Care,Biotechnology,RSI,RSI 加速上升,None,0.0,0.5525,0.3911,0.3911,0.2803,179,8492,-0.0013,56.255,56.18,56.11,55.69,2026-08-05,3,False
 VTRS,Health Care,Drug Manufacturers - Specialty & Generic,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3899,0.3899,0.2705,218,10885,0.0123,17.65,17.87,18.08,17.47,2026-08-05,3,False
 CNH,Industrials,Farm & Heavy Construction Machinery,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3898,,0.3898,0,118,0.0111,10.8,10.92,11.04,10.69,2026-08-03,3,True
@@ -286,20 +298,21 @@ ROL,Consumer Discretionary,Personal Services,RSI,RSI 維持超賣,None,0.0,0.385
 CMI,Industrials,Specialty Industrial Machinery,KDJ,KDJ 金叉,None,0.0,0.5525,0.3889,0.3889,0.3223,36,2110,0.0101,648.85,655.4,661.96,642.36,2026-08-03,3,False
 AEM,Materials,Gold,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3886,,0.3886,0,229,0.0091,165.45,166.96,168.46,163.8,2026-08-05,3,True
 MOS,Materials,Agricultural Inputs,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3886,,0.3886,0,229,0.0091,23.41,23.62,23.84,23.18,2026-08-05,3,True
+NTR,Materials,Agricultural Inputs,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3886,,0.3886,0,229,0.0091,66.92,67.53,68.14,66.25,2026-08-05,3,True
 GE,Industrials,Aerospace & Defense,RSI,RSI 加速上升,None,0.0,0.5525,0.3885,0.3885,0.2981,157,11545,0.0097,381.22,384.92,388.62,377.41,2026-08-05,3,False
-BCE,Communication Services,Telecom Services,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.3884,,0.3884,0,121,0.0056,22.0,22.12,22.25,21.78,2026-08-04,3,False
 CW,Industrials,Aerospace & Defense,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.3881,,0.3881,0,335,0.009,747.67,754.4,761.13,740.19,2026-08-03,3,False
 EFX,Industrials,Consulting Services,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.3881,,0.3881,0,335,0.009,177.12,178.71,180.31,175.35,2026-08-04,3,False
 ETN,Industrials,Specialty Industrial Machinery,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.3881,,0.3881,0,335,0.009,438.23,442.17,446.12,433.85,2026-08-03,3,False
 RRX,Industrials,Specialty Industrial Machinery,RSI,RSI 維持強勢 (50-70),Bullish Engulfing,0.75,1.0,0.3881,,0.3881,0,335,0.009,211.21,213.11,215.01,209.1,2026-08-03,3,False
 AMX,Communication Services,Telecom Services,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3881,,0.3881,0,268,0.0017,24.02,24.06,24.1,23.78,2026-08-05,3,True
-SPOT,Communication Services,Internet Content & Information,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3881,,0.3881,0,268,0.0017,486.33,487.16,487.98,481.47,2026-08-03,3,True
+SPOT,Communication Services,Internet Content & Information,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3881,,0.3881,0,268,0.0017,478.17,478.98,479.8,473.39,2026-08-04,3,True
 EQR,Real Estate,REIT - Residential,KDJ,KDJ 金叉,Bullish Engulfing,0.75,1.0,0.3871,,0.3871,0,31,0.0016,67.57,67.68,67.79,66.89,2026-08-03,3,False
 ESS,Real Estate,REIT - Residential,KDJ,KDJ 金叉,Bullish Engulfing,0.75,1.0,0.3871,,0.3871,0,31,0.0016,287.21,287.67,288.13,284.34,2026-08-04,3,False
 PM,Consumer Staples,Tobacco,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3871,0.3871,0.2565,31,928,0.0023,188.93,189.36,189.8,187.04,2026-08-05,3,False
 WMB,Energy,Oil & Gas Midstream,RSI,RSI 加速上升,None,0.0,0.5525,0.3865,0.3865,0.3227,163,3306,0.0084,71.81,72.41,73.02,71.09,2026-08-05,3,False
 DVN,Energy,Oil & Gas E&P,RSI,RSI 加速上升,None,0.0,0.5525,0.3864,0.3864,0.3227,132,3306,0.005,44.05,44.27,44.49,43.61,2026-08-04,3,False
 PAA,Energy,Oil & Gas Midstream,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.386,,0.386,0,171,0.0019,23.55,23.59,23.64,23.31,2026-08-04,3,True
+PBA,Energy,Oil & Gas Midstream,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.386,,0.386,0,171,0.0019,48.38,48.47,48.56,47.9,2026-08-04,3,True
 VNOM,Energy,Oil & Gas Midstream,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.386,,0.386,0,171,0.0019,42.34,42.42,42.5,41.92,2026-08-04,3,True
 BSBR,Financials,Banks - Regional,MACD,MACD 突破 0 軸,None,0.0,0.595,0.3846,,0.3846,0,39,0.0004,5.74,5.74,5.74,5.68,2026-08-03,3,True
 UNH,Health Care,Healthcare Plans,KDJ,KDJ 金叉,None,0.0,0.5525,0.3846,0.3846,0.2852,26,1536,0.0124,412.75,417.87,422.99,408.62,2026-08-05,3,False
@@ -338,8 +351,6 @@ MTSI,Information Technology,Semiconductors,MACD,MACD 金叉 (空頭區),None,0.0
 NOK,Information Technology,Communication Equipment,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3767,,0.3767,0,754,0.0102,9.92,10.02,10.12,9.82,2026-08-04,3,False
 QNT,Information Technology,Software - Application,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3767,,0.3767,0,754,0.0102,56.91,57.49,58.07,56.34,2026-08-05,3,False
 SANM,Information Technology,Electronic Components,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3767,,0.3767,0,754,0.0102,207.46,209.58,211.69,205.39,2026-08-04,3,False
-SITM,Information Technology,Semiconductors,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3767,,0.3767,0,754,0.0102,583.06,589.01,594.95,577.23,2026-08-04,3,False
-VIAV,Information Technology,Communication Equipment,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3767,,0.3767,0,754,0.0102,40.32,40.73,41.14,39.92,2026-08-04,3,False
 VICR,Information Technology,Electronic Components,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3767,,0.3767,0,754,0.0102,226.48,228.79,231.1,224.22,2026-08-04,3,False
 CDE,Materials,Gold,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3766,,0.3766,0,77,0.0046,17.43,17.51,17.59,17.26,2026-08-05,3,True
 GFI,Materials,Gold,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3766,,0.3766,0,77,0.0046,37.29,37.46,37.63,36.92,2026-08-05,3,True
@@ -371,7 +382,6 @@ WULF,Financials,Capital Markets,BB,BB 中軌向上（上升趨勢）,Bullish Eng
 CACI,Information Technology,Information Technology Services,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,518.03,521.86,525.7,512.85,2026-08-05,3,False
 ERIC,Information Technology,Communication Equipment,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,10.06,10.13,10.21,9.96,2026-08-05,3,False
 GRMN,Information Technology,Scientific & Technical Instruments,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,307.36,309.63,311.91,304.29,2026-08-04,3,False
-NET,Information Technology,Software - Infrastructure,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,292.96,295.13,297.3,290.03,2026-08-05,3,False
 NTNX,Information Technology,Software - Infrastructure,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,61.06,61.51,61.96,60.45,2026-08-03,3,False
 NVMI,Information Technology,Semiconductor Equipment & Materials,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,402.38,405.36,408.34,398.36,2026-08-05,3,False
 OKTA,Information Technology,Software - Infrastructure,RSI,RSI 加速上升,None,0.0,0.5525,0.3693,,0.3693,0,10688,0.0074,147.04,148.13,149.22,145.57,2026-08-05,3,False
@@ -387,8 +397,6 @@ EXR,Real Estate,REIT - Industrial,RSI,RSI 動能加速（強勢區）,None,0.0,0
 SMCI,Information Technology,Computer Hardware,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3667,0.3667,0.3785,30,1593,-0.0411,31.69,30.39,29.09,31.37,2026-08-04,3,False
 BEN,Financials,Asset Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3664,0.3664,0.2842,131,19108,0.0091,34.92,35.24,35.56,34.57,2026-08-05,3,False
 AM,Energy,Oil & Gas Midstream,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3664,,0.3664,0,292,0.0073,21.16,21.31,21.47,20.95,2026-08-05,3,False
-PBA,Energy,Oil & Gas Midstream,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3664,,0.3664,0,292,0.0073,47.15,47.49,47.84,46.68,2026-08-05,3,False
-TRP,Energy,Oil & Gas Midstream,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3664,,0.3664,0,292,0.0073,63.86,64.33,64.79,63.22,2026-08-05,3,False
 LVS,Consumer Discretionary,Resorts & Casinos,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3661,0.3661,0.2984,254,12430,0.0074,46.98,47.33,47.68,46.51,2026-08-03,3,False
 TEAM,Information Technology,Software - Application,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.366,,0.366,0,2885,0.0091,110.31,111.31,112.32,109.21,2026-08-04,3,False
 BLK,Financials,Asset Management,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3659,0.3659,0.279,41,3129,0.0023,1126.63,1129.22,1131.81,1115.36,2026-08-03,3,False
@@ -405,15 +413,18 @@ SONY,Information Technology,Consumer Electronics,RSI,RSI 維持強勢 (50-70),No
 ZM,Information Technology,Software - Application,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3645,,0.3645,0,16764,0.0088,100.64,101.53,102.41,99.63,2026-08-05,3,False
 ZS,Information Technology,Software - Infrastructure,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3645,,0.3645,0,16764,0.0088,161.65,163.07,164.5,160.03,2026-08-05,3,False
 MET,Financials,Insurance - Life,KDJ,KDJ 金叉,None,0.0,0.5525,0.3636,0.3636,0.3142,22,1932,0.0133,96.13,97.41,98.69,95.17,2026-08-04,3,False
+FANG,Energy,Oil & Gas E&P,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3636,0.3636,0.386,11,171,-0.0116,191.87,189.64,187.42,189.95,2026-08-04,3,True
 J,Industrials,Engineering & Construction,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3636,0.3636,0.3333,11,936,0.003,144.67,145.1,145.54,143.22,2026-08-05,3,True
-PCG,Utilities,Utilities - Regulated Electric,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3636,0.3636,0.3562,11,365,0.0009,17.43,17.45,17.46,17.26,2026-08-03,3,True
+PCG,Utilities,Utilities - Regulated Electric,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3636,0.3636,0.3562,11,365,0.0009,17.45,17.47,17.48,17.28,2026-08-04,3,True
 FOX,Communication Services,Entertainment,RSI,RSI 加速上升,None,0.0,0.5525,0.3618,0.3618,0.3116,152,3322,0.0088,52.62,53.08,53.55,52.09,2026-08-03,3,False
+VALE,Materials,Other Industrial Metals & Mining,RSI,RSI 加速上升,None,0.0,0.5525,0.3616,,0.3616,0,177,0.0,14.94,14.94,14.94,14.79,2026-08-05,3,True
 CCJ,Energy,Uranium,KDJ,KDJ 金叉,None,0.0,0.5525,0.3614,,0.3614,0,498,0.0061,89.72,90.27,90.81,88.82,2026-08-03,3,False
 EPD,Energy,Oil & Gas Midstream,KDJ,KDJ 金叉,None,0.0,0.5525,0.3614,,0.3614,0,498,0.0061,38.12,38.35,38.59,37.74,2026-08-04,3,False
 MPLX,Energy,Oil & Gas Midstream,KDJ,KDJ 金叉,None,0.0,0.5525,0.3614,,0.3614,0,498,0.0061,58.91,59.27,59.63,58.32,2026-08-03,3,False
 TS,Energy,Oil & Gas Equipment & Services,KDJ,KDJ 金叉,None,0.0,0.5525,0.3614,,0.3614,0,498,0.0061,57.15,57.5,57.85,56.58,2026-08-03,3,False
 WES,Energy,Oil & Gas Midstream,KDJ,KDJ 金叉,None,0.0,0.5525,0.3614,,0.3614,0,498,0.0061,46.74,47.03,47.31,46.27,2026-08-03,3,False
 TTD,Communication Services,Advertising Agencies,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3612,0.3612,0.3082,227,5205,-0.0037,18.96,18.89,18.82,18.77,2026-08-05,3,False
+HBANZ,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.3611,,0.3611,0,108,0.0084,19.6,19.76,19.93,19.4,2026-08-05,3,True
 RIOT,Financials,Capital Markets,KDJ,KDJ 金叉,None,0.0,0.5525,0.3611,,0.3611,0,108,0.0084,21.5,21.68,21.86,21.29,2026-08-05,3,True
 ABNB,Consumer Discretionary,Travel Services,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3581,0.3581,0.2984,215,12430,0.0059,152.49,153.39,154.29,150.97,2026-08-05,3,False
 ATI,Industrials,Metal Fabrication,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3579,,0.3579,0,746,0.0057,205.11,206.28,207.45,203.06,2026-08-05,3,True
@@ -422,6 +433,7 @@ FERG,Industrials,Industrial Distribution,RSI,RSI 維持強勢 (50-70),None,0.0,0
 LTM,Industrials,Airlines,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3579,,0.3579,0,746,0.0057,57.7,58.03,58.36,57.12,2026-08-05,3,True
 TRI,Industrials,Specialty Business Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3579,,0.3579,0,746,0.0057,98.61,99.17,99.73,97.62,2026-08-05,3,True
 WTS,Industrials,Specialty Industrial Machinery,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3579,,0.3579,0,746,0.0057,363.84,365.91,367.99,360.2,2026-08-05,3,True
+ZTO,Industrials,Integrated Freight & Logistics,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3579,,0.3579,0,746,0.0057,23.69,23.83,23.96,23.45,2026-08-05,3,True
 BMRN,Health Care,Biotechnology,BB,BB 中軌向上（上升趨勢）,Bullish Engulfing,0.75,1.0,0.3577,,0.3577,0,260,0.0085,60.72,61.24,61.75,60.11,2026-08-04,3,False
 LH,Health Care,Diagnostics & Research,BB,BB 中軌向上（上升趨勢）,Bullish Engulfing,0.75,1.0,0.3577,,0.3577,0,260,0.0085,312.34,314.99,317.65,309.22,2026-08-04,3,False
 QSR,Consumer Discretionary,Restaurants,KDJ,KDJ 金叉,Bullish Engulfing,0.75,1.0,0.3571,,0.3571,0,70,0.007,73.88,74.4,74.91,73.14,2026-08-04,3,False
@@ -452,6 +464,7 @@ ERIE,Financials,Insurance Brokers,RSI,RSI 動能加速（強勢區）,None,0.0,0
 HUM,Health Care,Healthcare Plans,KDJ,KDJ 金叉,None,0.0,0.5525,0.3448,0.3448,0.2852,29,1536,0.0102,374.5,378.32,382.14,370.75,2026-08-03,3,False
 BAM,Financials,Asset Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,51.94,52.19,52.44,51.42,2026-08-04,3,True
 BBVA,Financials,Banks - Diversified,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,28.07,28.2,28.34,27.79,2026-08-05,3,True
+BNS,Financials,Banks - Diversified,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,87.13,87.55,87.97,86.26,2026-08-04,3,True
 CG,Financials,Asset Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,49.84,50.08,50.32,49.34,2026-08-05,3,True
 EQH,Financials,Asset Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,51.3,51.55,51.79,50.79,2026-08-05,3,True
 HSBC,Financials,Banks - Diversified,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,102.68,103.17,103.67,101.65,2026-08-05,3,True
@@ -460,11 +473,11 @@ IR,Industrials,Specialty Industrial Machinery,RSI,RSI 動能加速（強勢區�
 NWG,Financials,Banks - Regional,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,19.42,19.51,19.61,19.23,2026-08-03,3,True
 RYAN,Financials,Insurance - Specialty,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,43.63,43.84,44.05,43.19,2026-08-03,3,True
 SAN,Financials,Banks - Diversified,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,14.64,14.71,14.78,14.49,2026-08-05,3,True
+SLF,Financials,Insurance - Diversified,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,81.87,82.26,82.66,81.05,2026-08-05,3,True
 TPG,Financials,Asset Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,47.91,48.14,48.37,47.43,2026-08-05,3,True
 VLYPN,Financials,Banks - Regional,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3448,,0.3448,0,609,0.0048,25.85,25.97,26.1,25.59,2026-08-03,3,True
 VLO,Energy,Oil & Gas Refining & Marketing,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3448,0.3448,0.2998,232,5768,0.0031,308.73,309.69,310.64,305.64,2026-08-04,3,False
 CHKP,Information Technology,Software - Infrastructure,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3447,,0.3447,0,1001,0.0043,122.97,123.5,124.03,121.74,2026-08-03,3,False
-FANG,Energy,Oil & Gas E&P,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3447,0.3447,0.2998,264,5768,-0.0013,198.75,198.49,198.23,196.76,2026-08-03,3,False
 KDP,Consumer Staples,Beverages - Non-Alcoholic,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3429,0.3429,0.2565,35,928,0.0036,31.1,31.21,31.32,30.79,2026-08-04,3,False
 MAA,Real Estate,REIT - Residential,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3429,0.3429,0.2311,35,818,0.009,134.56,135.77,136.98,133.21,2026-08-05,3,False
 GEN,Information Technology,Software - Infrastructure,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3408,0.3408,0.3639,179,16781,0.006,27.95,28.12,28.29,27.67,2026-08-05,3,False
@@ -480,11 +493,13 @@ TSLA,Consumer Discretionary,Auto Manufacturers,RSI,RSI 加速上升,None,0.0,0.5
 RDDT,Communication Services,Internet Content & Information,KDJ,KDJ 金叉,None,0.0,0.5525,0.3345,,0.3345,0,550,0.0065,154.71,155.72,156.72,153.16,2026-08-03,3,False
 SKM,Communication Services,Telecom Services,KDJ,KDJ 金叉,None,0.0,0.5525,0.3345,,0.3345,0,550,0.0065,34.8,35.03,35.25,34.45,2026-08-04,3,False
 TLK,Communication Services,Telecom Services,KDJ,KDJ 金叉,None,0.0,0.5525,0.3345,,0.3345,0,550,0.0065,15.18,15.28,15.38,15.03,2026-08-03,3,False
-EA,Communication Services,Electronic Gaming & Multimedia,BB,價格在 BB 中軌上方,Consolidation Breakout,0.85,1.0,0.3333,,0.3333,0,51,0.0016,209.7,210.04,210.37,207.6,2026-08-04,3,True
+NWS,Communication Services,Entertainment,BB,價格在 BB 中軌上方,Consolidation Breakout,0.85,1.0,0.3333,,0.3333,0,51,0.0016,33.13,33.18,33.24,32.8,2026-08-05,3,True
 CPRT,Industrials,Specialty Business Services,MACD,MACD 突破 0 軸,None,0.0,0.595,0.3333,0.3333,0.2912,6,570,0.0138,29.4,29.81,30.21,29.11,2026-08-04,3,False
 GSAT,Communication Services,Telecom Services,MACD,MACD 突破 0 軸,None,0.0,0.595,0.3333,,0.3333,0,165,0.0084,84.18,84.89,85.59,83.34,2026-08-03,3,False
 MCHP,Information Technology,Semiconductors,RSI,RSI 加速上升,None,0.0,0.5525,0.3333,0.3333,0.3693,117,10688,0.01,77.79,78.57,79.35,77.01,2026-08-05,3,False
 AOS,Industrials,Specialty Industrial Machinery,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3333,0.3333,0.2929,138,17460,0.0049,63.18,63.49,63.8,62.55,2026-08-05,3,False
+DRS,Industrials,Aerospace & Defense,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3333,,0.3333,0,936,0.0044,44.62,44.82,45.01,44.17,2026-08-05,3,True
+EA,Communication Services,Electronic Gaming & Multimedia,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3333,0.3333,0.3881,6,268,-0.0019,209.91,209.51,209.11,207.81,2026-08-03,3,True
 TKO,Communication Services,Entertainment,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3333,0.3333,0.3007,258,6080,0.0028,184.51,185.03,185.54,182.66,2026-08-04,3,False
 TEVA,Health Care,Drug Manufacturers - Specialty & Generic,BB,價格在 BB 中軌上方,Bullish Engulfing,0.75,0.9075,0.332,,0.332,0,259,0.0039,34.72,34.86,34.99,34.37,2026-08-05,3,False
 CHTR,Communication Services,Telecom Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3315,0.3315,0.3082,178,5205,-0.0055,153.17,152.33,151.49,151.64,2026-08-05,3,False
@@ -523,7 +538,6 @@ AU,Materials,Gold,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3294,,0.3294,0,5
 BHP,Materials,Other Industrial Metals & Mining,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3294,,0.3294,0,595,0.0031,87.46,87.73,88.0,86.59,2026-08-04,3,False
 PKX,Materials,Steel,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3294,,0.3294,0,595,0.0031,54.68,54.85,55.02,54.13,2026-08-04,3,False
 RGLD,Materials,Gold,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3294,,0.3294,0,595,0.0031,202.04,202.67,203.29,200.02,2026-08-03,3,False
-VALE,Materials,Other Industrial Metals & Mining,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3294,,0.3294,0,595,0.0031,14.83,14.88,14.92,14.68,2026-08-04,3,False
 BCH,Financials,Banks - Regional,RSI,RSI 維持強勢 (50-70),Support,0.8,1.0,0.3276,,0.3276,0,58,0.0022,41.55,41.64,41.73,41.13,2026-08-03,3,True
 BSAC,Financials,Banks - Regional,RSI,RSI 維持強勢 (50-70),Support,0.8,1.0,0.3276,,0.3276,0,58,0.0022,34.71,34.79,34.86,34.36,2026-08-03,3,False
 LEN,Consumer Discretionary,Residential Construction,RSI,RSI 加速上升,None,0.0,0.5525,0.3265,0.3265,0.3117,147,6796,0.0031,87.88,88.15,88.42,87.0,2026-08-05,3,False
@@ -555,6 +569,7 @@ GL,Financials,Insurance - Life,RSI,RSI 加速上升,None,0.0,0.5525,0.3221,0.322
 AIZ,Financials,Insurance - Property & Casualty,RSI,RSI 動能加速（強勢區）,Consolidation Breakout,0.85,1.0,0.3218,,0.3218,0,87,0.0041,301.57,302.81,304.04,298.55,2026-08-05,3,True
 WBS,Financials,Banks - Regional,RSI,RSI 動能加速（強勢區）,Consolidation Breakout,0.85,1.0,0.3218,,0.3218,0,87,0.0041,79.12,79.44,79.77,78.33,2026-08-05,3,True
 GM,Consumer Discretionary,Auto Manufacturers,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3217,0.3217,0.2995,230,10441,0.0003,89.16,89.19,89.21,88.27,2026-08-05,3,False
+B,Materials,Gold,BB,BB 中軌向上（上升趨勢）,Consolidation Breakout,0.85,1.0,0.3214,,0.3214,0,28,0.0074,41.05,41.35,41.66,40.64,2026-08-05,3,True
 GLXY,Financials,Capital Markets,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3214,,0.3214,0,865,0.0073,22.14,22.3,22.46,21.92,2026-08-04,3,False
 RKT,Financials,Mortgage Finance,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.3214,,0.3214,0,865,0.0073,13.86,13.96,14.06,13.72,2026-08-05,3,False
 REGN,Health Care,Biotechnology,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3207,0.3207,0.2804,290,14417,0.0008,768.58,769.19,769.81,760.89,2026-08-05,3,False
@@ -567,16 +582,14 @@ CRM,Information Technology,Software - Application,RSI,RSI 加速上升,None,0.0,
 CCZ,Communication Services,Cable & Satellite,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3194,,0.3194,0,144,0.0009,64.3,64.36,64.42,63.66,2026-08-05,3,True
 RBLX,Communication Services,Electronic Gaming & Multimedia,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3194,,0.3194,0,144,0.0009,36.67,36.7,36.74,36.3,2026-08-03,3,True
 WMG,Communication Services,Entertainment,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3194,,0.3194,0,144,0.0009,25.1,25.12,25.15,24.85,2026-08-03,3,True
-DOC,Real Estate,REIT - Healthcare Facilities,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3188,0.3188,0.2509,207,7011,0.004,21.79,21.88,21.96,21.57,2026-08-05,3,False
 AMCR,Consumer Discretionary,Packaging & Containers,KDJ,KDJ 金叉,None,0.0,0.5525,0.3183,,0.3183,0,1244,0.0033,46.02,46.17,46.32,45.56,2026-08-03,3,False
 AVY,Consumer Discretionary,Packaging & Containers,KDJ,KDJ 金叉,None,0.0,0.5525,0.3183,,0.3183,0,1244,0.0033,175.58,176.16,176.74,173.82,2026-08-05,3,False
 BROS,Consumer Discretionary,Restaurants,KDJ,KDJ 金叉,None,0.0,0.5525,0.3183,,0.3183,0,1244,0.0033,65.67,65.89,66.1,65.01,2026-08-05,3,False
-BWA,Consumer Discretionary,Auto Parts,KDJ,KDJ 金叉,None,0.0,0.5525,0.3183,,0.3183,0,1244,0.0033,66.78,67.0,67.22,66.11,2026-08-05,3,False
 CCK,Consumer Discretionary,Packaging & Containers,KDJ,KDJ 金叉,None,0.0,0.5525,0.3183,,0.3183,0,1244,0.0033,119.87,120.27,120.66,118.67,2026-08-03,3,False
 AZO,Consumer Discretionary,Auto Parts,KDJ,KDJ 金叉,None,0.0,0.5525,0.3182,0.3182,0.3183,22,1244,0.0145,3066.0601,3110.52,3154.98,3035.4,2026-08-05,3,False
 EQIX,Real Estate,REIT - Specialty,RSI,RSI 加速上升,None,0.0,0.5525,0.3182,0.3182,0.2327,132,4401,0.0054,1056.2,1061.9,1067.61,1045.64,2026-08-05,3,False
 COIN,Financials,Financial Data & Stock Exchanges,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3182,0.3182,0.3485,22,1277,-0.0036,146.5,145.97,145.45,145.03,2026-08-03,3,False
-SWK,Industrials,Tools & Accessories,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3182,0.3182,0.295,198,22337,-0.0023,102.4,102.16,101.93,101.38,2026-08-04,3,False
+SWK,Industrials,Tools & Accessories,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3182,0.3182,0.295,198,22337,-0.0023,98.11,97.88,97.66,97.13,2026-08-03,3,False
 EXE,Energy,Oil & Gas E&P,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.318,0.318,0.2963,217,4891,0.0004,93.07,93.11,93.14,92.14,2026-08-04,3,False
 HAS,Consumer Discretionary,Leisure,BB,價格在 BB 中軌上方,None,0.0,0.425,0.318,0.318,0.2984,305,12430,0.0053,91.16,91.64,92.13,90.25,2026-08-05,3,False
 BRKRP,Health Care,Medical Devices,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3173,,0.3173,0,375,-0.0037,391.1,389.65,388.21,387.19,2026-08-05,3,True
@@ -592,7 +605,7 @@ CRSP,Health Care,Biotechnology,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.314
 PHG,Health Care,Medical Devices,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3144,,0.3144,0,1323,0.003,26.59,26.67,26.75,26.32,2026-08-05,3,False
 RPRX,Health Care,Biotechnology,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3144,,0.3144,0,1323,0.003,57.48,57.65,57.82,56.91,2026-08-04,3,False
 ARCC,Financials,Asset Management,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,19.17,19.25,19.33,18.98,2026-08-03,3,False
-BBD,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,3.62,3.63,3.65,3.58,2026-08-03,3,False
+BBD,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,3.6159,3.63,3.65,3.58,2026-08-03,3,False
 BCS,Financials,Banks - Diversified,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,27.83,27.94,28.06,27.55,2026-08-03,3,False
 BNY,Financials,Banks - Diversified,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,156.2,156.84,157.48,154.64,2026-08-03,3,False
 BPOP,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,177.52,178.25,178.98,175.74,2026-08-05,3,False
@@ -607,14 +620,12 @@ JEF,Financials,Capital Markets,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1
 SHG,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,71.18,71.47,71.76,70.47,2026-08-03,3,False
 TRU,Financials,Financial Data & Stock Exchanges,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,81.72,82.06,82.39,80.9,2026-08-04,3,False
 WTFC,Financials,Banks - Regional,KDJ,KDJ 金叉,None,0.0,0.5525,0.3142,,0.3142,0,1932,0.0041,161.76,162.42,163.09,160.14,2026-08-03,3,False
-B,Materials,Gold,KDJ,KDJ 金叉,None,0.0,0.5525,0.314,,0.314,0,637,0.0047,37.36,37.54,37.71,36.99,2026-08-03,3,False
 FNV,Materials,Gold,KDJ,KDJ 金叉,None,0.0,0.5525,0.314,,0.314,0,637,0.0047,226.55,227.61,228.68,224.28,2026-08-05,3,False
 RPM,Materials,Specialty Chemicals,KDJ,KDJ 金叉,None,0.0,0.5525,0.314,,0.314,0,637,0.0047,111.49,112.01,112.54,110.38,2026-08-03,3,False
 SCCO,Materials,Copper,KDJ,KDJ 金叉,None,0.0,0.5525,0.314,,0.314,0,637,0.0047,185.91,186.78,187.66,184.05,2026-08-03,3,False
 SQM,Materials,Specialty Chemicals,KDJ,KDJ 金叉,None,0.0,0.5525,0.314,,0.314,0,637,0.0047,68.58,68.9,69.22,67.89,2026-08-04,3,False
 BDRX,Health Care,Biotechnology,RSI,RSI 維持超賣,None,0.0,0.385,0.3138,,0.3138,0,956,0.0016,1.49,1.49,1.49,1.48,2026-08-04,3,False
 BIDU,Communication Services,Internet Content & Information,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3135,,0.3135,0,772,0.0011,113.06,113.18,113.31,111.93,2026-08-03,3,False
-HMC,Consumer Discretionary,Auto Manufacturers,RSI,RSI 維持強勢 (50-70),Support,0.7,1.0,0.3125,,0.3125,0,32,-0.0041,29.6,29.48,29.36,29.3,2026-08-03,3,False
 NDSN,Industrials,Specialty Industrial Machinery,KDJ,KDJ 金叉,None,0.0,0.5525,0.3125,0.3125,0.3223,16,2110,0.0072,302.62,304.8,306.98,299.59,2026-08-03,3,False
 VMC,Materials,Building Materials,KDJ,KDJ 金叉,None,0.0,0.5525,0.3125,0.3125,0.314,32,637,0.0099,283.59,286.4,289.21,280.75,2026-08-03,3,False
 TSCO,Consumer Discretionary,Specialty Retail,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3125,0.3125,0.3027,32,1665,-0.004,33.12,32.99,32.86,32.79,2026-08-04,3,False
@@ -623,7 +634,6 @@ BABA,Consumer Discretionary,Internet Retail,RSI,RSI 加速上升,None,0.0,0.5525
 CART,Consumer Discretionary,Internet Retail,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,45.39,45.57,45.75,44.94,2026-08-03,3,False
 FIVE,Consumer Discretionary,Specialty Retail,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,224.16,225.06,225.95,221.92,2026-08-05,3,False
 JD,Consumer Discretionary,Internet Retail,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,33.02,33.15,33.28,32.69,2026-08-03,3,False
-MELI,Consumer Discretionary,Internet Retail,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,1922.5699,1930.26,1937.95,1903.34,2026-08-05,3,False
 MOD,Consumer Discretionary,Auto Parts,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,194.61,195.39,196.17,192.66,2026-08-05,3,False
 NIO,Consumer Discretionary,Auto Manufacturers,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,4.81,4.83,4.85,4.76,2026-08-03,3,False
 PDD,Consumer Discretionary,Internet Retail,RSI,RSI 加速上升,None,0.0,0.5525,0.3117,,0.3117,0,6796,0.004,91.03,91.39,91.76,90.12,2026-08-04,3,False
@@ -668,7 +678,6 @@ PKG,Consumer Discretionary,Packaging & Containers,RSI,RSI 動能加速（強勢�
 TM,Consumer Discretionary,Auto Manufacturers,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3027,,0.3027,0,1665,0.0035,189.17,189.83,190.49,187.28,2026-08-04,3,False
 TXRH,Consumer Discretionary,Restaurants,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3027,,0.3027,0,1665,0.0035,210.67,211.41,212.14,208.56,2026-08-03,3,False
 BMO,Financials,Banks - Diversified,RSI,RSI 加速上升,None,0.0,0.5525,0.3014,,0.3014,0,11488,0.0041,180.94,181.68,182.42,179.13,2026-08-05,3,False
-BNS,Financials,Banks - Diversified,RSI,RSI 加速上升,None,0.0,0.5525,0.3014,,0.3014,0,11488,0.0041,88.55,88.91,89.28,87.66,2026-08-05,3,False
 CET,Financials,Asset Management,RSI,RSI 加速上升,None,0.0,0.5525,0.3014,,0.3014,0,11488,0.0041,54.89,55.12,55.34,54.34,2026-08-05,3,False
 CM,Financials,Banks - Diversified,RSI,RSI 加速上升,None,0.0,0.5525,0.3014,,0.3014,0,11488,0.0041,118.68,119.17,119.65,117.49,2026-08-05,3,False
 DB,Financials,Banks - Regional,RSI,RSI 加速上升,None,0.0,0.5525,0.3014,,0.3014,0,11488,0.0041,37.47,37.62,37.78,37.1,2026-08-04,3,False
@@ -694,18 +703,15 @@ AVB,Real Estate,REIT - Residential,KDJ,KDJ 金叉,None,0.0,0.5525,0.3,0.3,0.2818
 CF,Materials,Agricultural Inputs,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3,0.3,0.2853,160,5036,-0.0026,116.71,116.41,116.1,115.54,2026-08-05,3,False
 INCY,Health Care,Biotechnology,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3,0.3,0.2606,30,1869,0.0016,120.6,120.79,120.99,119.39,2026-08-04,3,False
 AR,Energy,Oil & Gas E&P,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,35.69,35.63,35.58,35.33,2026-08-04,3,False
-BP,Energy,Oil & Gas Integrated,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,42.44,42.37,42.3,42.02,2026-08-04,3,False
 CNQ,Energy,Oil & Gas E&P,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,44.75,44.68,44.61,44.3,2026-08-05,3,False
 DINO,Energy,Oil & Gas Refining & Marketing,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,88.25,88.11,87.97,87.37,2026-08-04,3,False
 EQNR,Energy,Oil & Gas Integrated,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,38.13,38.07,38.01,37.75,2026-08-05,3,False
 IMO,Energy,Oil & Gas Integrated,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,125.34,125.14,124.94,124.09,2026-08-05,3,False
 OVV,Energy,Oil & Gas E&P,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,60.75,60.65,60.56,60.14,2026-08-04,3,False
 PR,Energy,Oil & Gas E&P,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,20.5,20.47,20.43,20.29,2026-08-04,3,False
-SU,Energy,Oil & Gas Integrated,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,64.45,64.35,64.24,63.81,2026-08-04,3,False
 WDS,Energy,Oil & Gas E&P,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,22.02,21.98,21.95,21.8,2026-08-05,3,False
 YPF,Energy,Oil & Gas Integrated,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2998,,0.2998,0,5768,-0.0016,48.67,48.59,48.51,48.18,2026-08-05,3,False
 AS,Consumer Discretionary,Leisure,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2995,,0.2995,0,10441,0.0032,36.73,36.85,36.97,36.36,2026-08-05,3,False
-BALL,Consumer Discretionary,Packaging & Containers,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2995,,0.2995,0,10441,0.0032,63.49,63.69,63.9,62.86,2026-08-05,3,False
 BURL,Consumer Discretionary,Apparel Retail,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2995,,0.2995,0,10441,0.0032,369.34,370.52,371.7,365.65,2026-08-05,3,False
 CASY,Consumer Discretionary,Specialty Retail,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2995,,0.2995,0,10441,0.0032,852.86,855.59,858.32,844.33,2026-08-05,3,False
 HTHT,Consumer Discretionary,Lodging,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2995,,0.2995,0,10441,0.0032,42.34,42.48,42.61,41.92,2026-08-05,3,False
@@ -723,7 +729,6 @@ ARXS,Industrials,Aerospace & Defense,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,
 CLH,Industrials,Waste Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,309.24,310.35,311.47,306.15,2026-08-05,3,False
 CNI,Industrials,Railroads,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,127.54,128.0,128.46,126.26,2026-08-05,3,False
 CSL,Industrials,Building Products & Equipment,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,385.32,386.71,388.09,381.47,2026-08-05,3,False
-DRS,Industrials,Aerospace & Defense,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,45.81,45.97,46.14,45.35,2026-08-03,3,False
 EMBJ,Industrials,Aerospace & Defense,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,70.52,70.77,71.03,69.81,2026-08-04,3,False
 FER,Industrials,Engineering & Construction,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,66.55,66.79,67.03,65.88,2026-08-05,3,False
 GFL,Industrials,Waste Management,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,41.19,41.34,41.49,40.78,2026-08-05,3,False
@@ -734,7 +739,6 @@ LECO,Industrials,Tools & Accessories,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,
 RELX,Industrials,Specialty Business Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,36.61,36.74,36.87,36.24,2026-08-05,3,False
 SYM,Industrials,Specialty Industrial Machinery,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,46.52,46.69,46.85,46.05,2026-08-05,3,False
 WCC,Industrials,Industrial Distribution,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,373.08,374.42,375.77,369.35,2026-08-05,3,False
-ZTO,Industrials,Integrated Freight & Logistics,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2986,,0.2986,0,19157,0.0036,23.69,23.78,23.86,23.45,2026-08-05,3,False
 CHRW,Industrials,Integrated Freight & Logistics,RSI,RSI 維持超賣,None,0.0,0.385,0.2983,,0.2983,0,848,0.0072,147.0,148.06,149.12,145.53,2026-08-03,3,False
 SAIA,Industrials,Trucking,RSI,RSI 維持超賣,None,0.0,0.385,0.2983,,0.2983,0,848,0.0072,360.1,362.69,365.29,356.5,2026-08-03,3,False
 AAON,Industrials,Building Products & Equipment,RSI,RSI 加速上升,None,0.0,0.5525,0.2981,,0.2981,0,11545,0.003,93.15,93.43,93.71,92.22,2026-08-05,3,False
@@ -761,12 +765,11 @@ BMY,Health Care,Drug Manufacturers - General,RSI,RSI 維持強勢 (50-70),None,0
 ABBV,Health Care,Drug Manufacturers - General,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2876,0.2876,0.2705,226,10885,0.006,246.2,247.68,249.15,243.74,2026-08-05,3,False
 AJG,Financials,Insurance Brokers,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2872,0.2872,0.2842,282,19108,0.0011,251.03,251.31,251.58,248.52,2026-08-05,3,False
 CCI,Real Estate,REIT - Specialty,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2865,0.2865,0.248,192,8032,0.0017,77.66,77.79,77.92,76.88,2026-08-04,3,False
-RMD,Health Care,Medical Instruments & Supplies,BB,BB 中軌向上（上升趨勢）,Consolidation Breakout,0.72,1.0,0.2857,0.2857,0.209,7,933,-0.0114,224.03,221.48,218.92,221.79,2026-08-05,3,False
+RMD,Health Care,Medical Instruments & Supplies,BB,BB 中軌向上（上升趨勢）,Consolidation Breakout,0.85,1.0,0.2857,0.2857,0.209,7,933,-0.0114,224.03,221.48,218.92,221.79,2026-08-05,3,False
 PNW,Utilities,Utilities - Regulated Electric,KDJ,KDJ 超賣區金叉,None,0.0,0.5599999999999999,0.2857,0.2857,0.2521,21,472,0.0057,101.45,102.03,102.61,100.44,2026-08-04,3,False
 CME,Financials,Financial Data & Stock Exchanges,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2857,0.2857,0.2681,224,16575,0.0013,264.78,265.12,265.47,262.13,2026-08-05,3,False
 MSFT,Information Technology,Software - Infrastructure,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2857,0.2857,0.3639,217,16781,0.003,487.46,488.92,490.38,482.59,2026-08-05,3,False
 TRMB,Information Technology,Scientific & Technical Instruments,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2857,0.2857,0.3573,245,20206,0.0018,58.58,58.69,58.79,57.99,2026-08-05,3,False
-NTR,Materials,Agricultural Inputs,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2853,,0.2853,0,5036,0.0007,66.92,66.97,67.01,66.25,2026-08-05,3,False
 ARWR,Health Care,Biotechnology,KDJ,KDJ 金叉,None,0.0,0.5525,0.2852,,0.2852,0,1536,0.0022,89.59,89.79,89.98,88.69,2026-08-04,3,False
 CYTK,Health Care,Biotechnology,KDJ,KDJ 金叉,None,0.0,0.5525,0.2852,,0.2852,0,1536,0.0022,78.61,78.78,78.96,77.82,2026-08-04,3,False
 GMAB,Health Care,Biotechnology,KDJ,KDJ 金叉,None,0.0,0.5525,0.2852,,0.2852,0,1536,0.0022,29.02,29.08,29.15,28.73,2026-08-04,3,False
@@ -777,9 +780,8 @@ RVMD,Health Care,Biotechnology,KDJ,KDJ 金叉,None,0.0,0.5525,0.2852,,0.2852,0,1
 SMMT,Health Care,Biotechnology,KDJ,KDJ 金叉,None,0.0,0.5525,0.2852,,0.2852,0,1536,0.0022,13.76,13.79,13.82,13.62,2026-08-04,3,False
 IEX,Industrials,Specialty Industrial Machinery,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2852,0.2852,0.295,277,22337,0.0019,236.98,237.43,237.88,234.61,2026-08-05,3,False
 AEG,Financials,Insurance - Diversified,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,9.38,9.41,9.44,9.29,2026-08-04,3,False
-AFG,Financials,Insurance - Property & Casualty,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,141.92,142.36,142.8,140.5,2026-08-03,3,False
 BAP,Financials,Banks - Regional,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,394.88,396.1,397.33,390.93,2026-08-05,3,False
-BBDO,Financials,Banks - Regional,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,3.25,3.26,3.27,3.22,2026-08-04,3,False
+BBDO,Financials,Banks - Regional,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,3.247,3.26,3.27,3.21,2026-08-04,3,False
 BPYPM,Financials,Asset Management,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,15.94,15.99,16.04,15.78,2026-08-04,3,False
 CIB,Financials,Banks - Regional,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,90.14,90.42,90.7,89.24,2026-08-05,3,False
 CNA,Financials,Insurance - Property & Casualty,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,52.96,53.12,53.29,52.43,2026-08-04,3,False
@@ -793,7 +795,6 @@ ORI,Financials,Insurance - Property & Casualty,BB,價格在 BB 中軌上方,None
 RGA,Financials,Insurance - Reinsurance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,236.37,237.1,237.84,234.01,2026-08-03,3,False
 RNR,Financials,Insurance - Reinsurance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,323.58,324.58,325.59,320.34,2026-08-05,3,False
 SEIC,Financials,Asset Management,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,104.76,105.08,105.41,103.71,2026-08-05,3,False
-SLF,Financials,Insurance - Diversified,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,81.87,82.12,82.38,81.05,2026-08-05,3,False
 SLMBP,Financials,Credit Services,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,74.8,75.03,75.26,74.05,2026-08-04,3,False
 VLYPP,Financials,Banks - Regional,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,25.07,25.15,25.23,24.82,2026-08-04,3,False
 ZION,Financials,Banks - Regional,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2847,,0.2847,0,21689,0.0031,71.7,71.92,72.14,70.98,2026-08-05,3,False
@@ -903,7 +904,6 @@ ABT,Health Care,Medical Devices,BB,價格在 BB 中軌上方,None,0.0,0.425,0.23
 KO,Consumer Staples,Beverages - Non-Alcoholic,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2346,0.2346,0.2466,179,6128,0.0053,86.83,87.29,87.75,85.96,2026-08-05,3,False
 CSGP,Real Estate,Real Estate Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2343,0.2343,0.2509,175,7011,-0.0075,30.21,29.98,29.76,29.91,2026-08-05,3,False
 GEHC,Health Care,Medical Devices,BB,價格在 BB 中軌上方,None,0.0,0.425,0.233,0.233,0.2804,206,14417,-0.0058,70.24,69.83,69.43,69.54,2026-08-05,3,False
-ADM,Consumer Staples,Farm Products,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2324,0.2324,0.2466,185,6128,-0.0032,77.58,77.33,77.08,76.8,2026-08-05,3,False
 SYK,Health Care,Medical Devices,KDJ,KDJ 金叉,None,0.0,0.5525,0.2308,0.2308,0.2852,26,1536,-0.0004,341.2,341.06,340.93,337.79,2026-08-03,3,False
 DHR,Health Care,Diagnostics & Research,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2267,0.2267,0.2804,247,14417,-0.002,199.66,199.26,198.86,197.66,2026-08-05,3,False
 CTAS,Industrials,Specialty Business Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2236,0.2236,0.2986,322,19157,0.0044,201.4,202.29,203.17,199.39,2026-08-05,3,False
