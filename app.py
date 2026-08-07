@@ -313,6 +313,7 @@ from database.signals import load_daily_signals, get_signal_summary, signal_date
 
 import json
 from pathlib import Path
+from typing import Optional
 
 # ── Portfolio data engine ──
 from database.portfolio import PortfolioManager, Trade
@@ -1056,18 +1057,28 @@ def render_signal_homepage():
 
     st.markdown("---")
 
+    # ── Read per-market sector filter (set by clicking a sector button) ──
+    sel = st.session_state.get("selected_sector") or {}
+    us_sector = sel.get("us")
+    hk_sector = sel.get("hk")
+
     # ── Tabs for US / HK ──
     tab_us, tab_hk = st.tabs(["🇺🇸 美股信號", "🇭🇰 港股信號"])
 
     with tab_us:
-        _render_signal_tab(df_us, "us")
+        _render_signal_tab(df_us, "us", us_sector)
 
     with tab_hk:
-        _render_signal_tab(df_hk, "hk")
+        _render_signal_tab(df_hk, "hk", hk_sector)
 
 
 def _render_sector_breakdown(market: str, label: str):
-    """Render a compact sector breakdown bar for one market."""
+    """Render a compact sector breakdown bar for one market.
+
+    Each sector gets a clickable button below the stat bars. Clicking a
+    sector stores (market, sector) into st.session_state["selected_sector"];
+    clicking the same sector again toggles the filter off.
+    """
     sectors = load_sector_counts(market)
     if not sectors:
         return
@@ -1079,6 +1090,11 @@ def _render_sector_breakdown(market: str, label: str):
 
     # Sort: has signals first, then by signal_count desc
     sectors.sort(key=lambda s: (-(1 if s["signal_count"] > 0 else 0), -s["signal_count"]))
+
+    # Current selection for THIS market only (per-market independence:
+    # clicking a US sector must not affect the HK tab and vice versa).
+    sel = st.session_state.get("selected_sector") or {}
+    current_sector = sel.get(market)
 
     html = f'<div class="card"><div class="card-header">{label} — 板塊分布</div><div class="sector-stats-container">'
     for s in sectors:
@@ -1098,6 +1114,33 @@ def _render_sector_breakdown(market: str, label: str):
         </div>"""
     html += '</div></div>'
     st.markdown(html, unsafe_allow_html=True)
+
+    # ── Clickable sector filter buttons (3 per row) ──
+    st.caption("👆 點擊板塊按鈕可篩選下方信號；再點一次已選中的板塊可取消篩選")
+    cols_per_row = 3
+    for i in range(0, len(sectors), cols_per_row):
+        row_sectors = sectors[i:i + cols_per_row]
+        cols = st.columns(cols_per_row)
+        for j, s in enumerate(row_sectors):
+            with cols[j]:
+                is_selected = (s["sector"] == current_sector)
+                marker = "✅ " if is_selected else ""
+                label_txt = f"{marker}{s['sector']} ({s['signal_count']})"
+                # key 用 market + 索引，避免板塊名含特殊字元（如 &、+）造成衝突
+                if st.button(
+                    label_txt,
+                    key=f"sector_btn_{market}_{i + j}",
+                    type="primary" if is_selected else "secondary",
+                    use_container_width=True,
+                    help=f"篩選顯示 {s['sector']} 的信號" + ("（再點一次取消）" if is_selected else ""),
+                ):
+                    if is_selected:
+                        # Toggle off — clear this market's filter only
+                        sel.pop(market, None)
+                    else:
+                        sel[market] = s["sector"]
+                    st.session_state["selected_sector"] = sel
+                    st.rerun()
 
 
 def _get_latest_prices_batch(symbols: list) -> dict:
@@ -1125,11 +1168,40 @@ def _get_latest_prices_batch(symbols: list) -> dict:
         return {}
 
 
-def _render_signal_tab(df: pd.DataFrame, market: str):
-    """Render signal cards for one market tab."""
+def _render_signal_tab(df: pd.DataFrame, market: str, selected_sector: Optional[str] = None):
+    """Render signal cards for one market tab.
+
+    When ``selected_sector`` is given (via the sector-breakdown buttons),
+    only signals belonging to that sector are shown. A banner + clear button
+    appear above the list while a filter is active.
+    """
     if df.empty:
         st.caption("📭 暫無信號")
         return
+
+    # ── Sector filter ──
+    if selected_sector:
+        col_banner, col_clear = st.columns([5, 1])
+        with col_banner:
+            st.markdown(
+                f"<div style='background:#2b6cb0;color:#fff;padding:8px 14px;border-radius:8px;"
+                f"font-weight:600;'>🎯 目前篩選：{selected_sector}</div>",
+                unsafe_allow_html=True,
+            )
+        with col_clear:
+            if st.button("❌ 清除篩選", key=f"clear_filter_{market}",
+                         type="secondary", use_container_width=True):
+                # Clear only this market's filter; the other market is untouched
+                sel = st.session_state.get("selected_sector") or {}
+                sel.pop(market, None)
+                st.session_state["selected_sector"] = sel
+                st.rerun()
+
+        filtered: pd.DataFrame = df.query("sector == @selected_sector")
+        if filtered.empty:
+            st.info(f"📭 該板塊（{selected_sector}）目前無信號")
+            return
+        df = filtered.reset_index(drop=True)
 
     # Sort: tier asc, win_rate desc
     df = df.sort_values(["tier", "win_rate"], ascending=[True, False]).reset_index(drop=True)
