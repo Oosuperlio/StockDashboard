@@ -323,6 +323,58 @@ def load_ticker_sector_map() -> Tuple[Dict[str, str], Dict[str, str]]:
         'FISV': ('Information Technology', 'Financial Technology'),
         'SPY': ('Financials', 'Asset Management'),
         'BMNP': ('Information Technology', 'Blockchain'),
+        # ── 港股 .HK 補齊（HSI 恆指分類）──
+        # sector_cache.json 的港股 key 是 hkNNNNN 格式且全為 Unknown（2026-08-07 發現），
+        # 導致 50 隻 HSI 成分股 sector 為 Unknown。以下 47 隻經 Yahoo Finance
+        # 驗證後對映為 HSI 四分類（Commerce & Industry / Finance / Properties / Utilities）。
+        # 其餘 3 隻（0988.HK / 2072.HK / 2083.HK）不在 prices.ddb，為過期成分股。
+        '0017.HK': ('Properties', 'Properties'),
+        '0040.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0083.HK': ('Properties', 'Properties'),
+        '0151.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0269.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0293.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0318.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0467.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0570.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0738.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0769.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0889.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0902.HK': ('Utilities', 'Utilities'),
+        '0912.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '0999.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1000.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1009.HK': ('Properties', 'Properties'),
+        '1181.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1288.HK': ('Finance', 'Finance'),
+        '1658.HK': ('Finance', 'Finance'),
+        '1755.HK': ('Properties', 'Properties'),
+        '1766.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1787.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1788.HK': ('Finance', 'Finance'),
+        '1797.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1800.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1877.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1900.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '1999.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2007.HK': ('Properties', 'Properties'),
+        '2018.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2038.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2068.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2096.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2111.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2138.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2202.HK': ('Properties', 'Properties'),
+        '2238.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2314.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2338.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2600.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '2601.HK': ('Finance', 'Finance'),
+        '2611.HK': ('Finance', 'Finance'),
+        '2638.HK': ('Utilities', 'Utilities'),
+        '2698.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '3309.HK': ('Commerce & Industry', 'Commerce & Industry'),
+        '3328.HK': ('Finance', 'Finance'),
     }
     for tk, (sector, subsector) in KNOWN_SECTOR_OVERRIDES.items():
         if tk not in sector_map or sector_map.get(tk) == 'Unknown':
@@ -1111,10 +1163,32 @@ def _save_signals_for_dashboard(signals, args):
         sector_map, _ = load_ticker_sector_map()
 
         def _get_constituents_for_market(market_label: str) -> list:
-            """Return the list of tickers for the given market based on scan args."""
+            """Return the list of tickers for the given market based on scan args.
+            必須與實際掃描宇宙一致，否則 total_stocks（分母）會小於
+            signal_count（分子）——例如 --us-extended 掃描 ~1,100 隻但
+            分母只算 SP500+Nasdaq100 ~520 隻。"""
             if market_label == "us":
                 tickers = []
-                if args.us_all or (not args.hsi and not args.ticker and not args.tickers):
+                if args.us_extended:
+                    # 與 main() 的 --us-extended 分支同源：prices.ddb 全量美股
+                    try:
+                        import duckdb
+                        db_path = Path(__file__).parent / 'data' / 'prices.ddb'
+                        if db_path.exists():
+                            conn = duckdb.connect(str(db_path))
+                            rows = conn.execute(
+                                "SELECT DISTINCT symbol FROM stock_prices WHERE symbol NOT LIKE '%.HK' ORDER BY symbol"
+                            ).fetchall()
+                            conn.close()
+                            tickers = [r[0] for r in rows]
+                            if not tickers:
+                                raise RuntimeError('prices.ddb 無資料')
+                        else:
+                            raise RuntimeError('prices.ddb 不存在')
+                    except Exception:
+                        # DB 讀取失敗 → 回退 SP500+Nasdaq100（與 main() 回退邏輯一致）
+                        tickers = load_constituents('sp500') + load_constituents('nasdaq')
+                elif args.us_all or (not args.hsi and not args.ticker and not args.tickers):
                     tickers = load_constituents('sp500') + load_constituents('nasdaq')
                 elif args.sp500:
                     tickers = load_constituents('sp500')
@@ -1126,15 +1200,27 @@ def _save_signals_for_dashboard(signals, args):
             else:  # hk
                 return load_constituents('hsi')
 
-        for mkt_label, mkt_df in [("us", df_us), ("hk", df_hk)]:
+        # 只對「本次實際掃描的 market」生成 JSON — 沒掃描的 market 不要覆寫既有 JSON
+        # （與 _save_market 的保護邏輯一致：US 掃描時 df_hk 為空，不能把
+        #   sector_counts_hk.json 覆寫成 signal_count 全 0）
+        for mkt_label, mkt_df, mkt_scanned in [
+            ("us", df_us, scanned_us),
+            ("hk", df_hk, scanned_hk),
+        ]:
+            if not mkt_scanned:
+                print(f"  ⏭️ 跳過 {mkt_label} sector 統計（本次未掃描，保留既有 JSON）")
+                continue
+
             # Total stocks per sector
             const_tickers = _get_constituents_for_market(mkt_label)
             sector_total = Counter()
             for sym in const_tickers:
                 sector_total[sector_map.get(sym, 'Unknown')] += 1
 
-            # Signals per sector from actual data
-            signal_counts = Counter(mkt_df["sector"]) if not mkt_df.empty else Counter()
+            # Signals per sector from actual data — 按 symbol 去重後再統計，
+            # 確保 signal_count 語義為「有信號的股票數」，恆 <= total_stocks
+            mkt_dedup = mkt_df.drop_duplicates(subset='symbol') if not mkt_df.empty else mkt_df
+            signal_counts = Counter(mkt_dedup["sector"]) if not mkt_dedup.empty else Counter()
 
             # Build output
             all_sectors = sorted(set(list(sector_total.keys()) + list(signal_counts.keys())))
