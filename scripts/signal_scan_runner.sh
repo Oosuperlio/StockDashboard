@@ -31,6 +31,7 @@ echo "---"
 echo "🔁 [$(date '+%Y-%m-%d %H:%M:%S %Z')] 掃描完成 (exit=$SCAN_EXIT)"
 
 # 步驟 4：提交信號 CSV 到 GitHub（版本歷史記錄）
+PUSH_FAILED=0
 if [ -d "$SCRIPT_DIR/data/signals" ]; then
     echo "📤 提交信號數據到 GitHub..."
     cd "$SCRIPT_DIR"
@@ -40,7 +41,12 @@ if [ -d "$SCRIPT_DIR/data/signals" ]; then
     if ! git diff --cached --quiet; then
         git commit -m "🤖 auto: update daily signal results [$(date '+%Y-%m-%d %H:%M')]"
         echo "🚂 推送至 GitHub（版本歷史）..."
-        git push origin main 2>&1 || echo "⚠️ git push 失敗（可能無變更或網路問題）"
+        if ! git push origin main 2>&1; then
+            echo "❌ git push 失敗 — 詳細錯誤見上方輸出。請檢查 GitHub 憑證（remote URL / credential store）" >&2
+            PUSH_FAILED=1
+        else
+            echo "✅ git push 成功"
+        fi
     else
         echo "⏭️  信號數據無變更，跳過 git push"
     fi
@@ -51,6 +57,11 @@ fi
 # 步驟 5：直接上傳到 Railway 觸發部署（git push 的 webhook 已失效）
 echo "🚀 上傳至 Railway 觸發部署..."
 $RAILWAY_CLI up 2>&1 || echo "⚠️ railway up 失敗，請檢查 Railway CLI 是否已登入"
+
+if [ "$PUSH_FAILED" = "1" ]; then
+    echo "❌ [$(date '+%Y-%m-%d %H:%M:%S %Z')] 掃描完成，但 git push 失敗 — 信號 CSV 未上傳 GitHub，請檢查憑證" >&2
+    exit 2
+fi
 
 echo "✅ [$(date '+%Y-%m-%d %H:%M:%S %Z')] 完成"
 exit $SCAN_EXIT
