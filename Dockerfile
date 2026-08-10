@@ -29,6 +29,8 @@ COPY backtest_sector_improvement.csv ./
 COPY backtest_4way_results.csv ./
 COPY data/signals/ ./data/signals/
 COPY data/dynamic_stops/stop_config.json ./data/dynamic_stops/
+# Price database (DuckDB) — 信號卡「📍 現價」從此讀取；缺少會全部顯示「—」
+COPY data/prices.ddb ./data/
 
 # Set port
 ENV PORT=8000

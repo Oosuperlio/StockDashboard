@@ -1214,13 +1214,29 @@ def _render_signal_tab(df: pd.DataFrame, market: str, selected_sector: Optional[
     tier_classes = {1: "signal-tier-1", 2: "signal-tier-2", 3: "signal-tier-3"}
     tier_badges = {1: "tier-badge-1", 2: "tier-badge-2", 3: "tier-badge-3"}
 
+    # ── 渲染量控制：Tier-1 + Tier-2 全顯示；Tier-3 預設只顯示勝率 Top 20，
+    #    避免一次渲染上千張 HTML 卡片塞爆 WebSocket / 前端（1060 張卡片卡死問題）──
+    TIER3_INITIAL = 20
+    TIER3_BATCH = 50
+    t3_state_key = f"tier3_visible_{market}"
+    total_t3 = int((df["tier"] == 3).sum())
+
     for tier in [1, 2, 3]:
         tier_df = df[df["tier"] == tier]
         if tier_df.empty:
             continue
 
+        shown_total = len(tier_df)
+        visible = shown_total  # default: show all (Tier-1 / Tier-2 全顯示)
+        if tier == 3 and shown_total > TIER3_INITIAL:
+            visible = min(int(st.session_state.get(t3_state_key, TIER3_INITIAL)), shown_total)
+            tier_df = tier_df.iloc[:visible]
+            subtitle = f"{len(tier_df)}/{shown_total} 個信號（按勝率排序）"
+        else:
+            subtitle = f"{shown_total} 個信號"
+
         st.markdown(f"<div class='signal-section-title'>{tier_labels[tier]}</div>"
-                    f"<div class='signal-section-subtitle'>{len(tier_df)} 個信號</div>",
+                    f"<div class='signal-section-subtitle'>{subtitle}</div>",
                     unsafe_allow_html=True)
 
         # Two-column layout for signal cards
@@ -1228,6 +1244,26 @@ def _render_signal_tab(df: pd.DataFrame, market: str, selected_sector: Optional[
         for i, (_, row) in enumerate(tier_df.iterrows()):
             with cols[i % 2]:
                 _render_signal_card(row, market, tier, tier_classes, tier_badges, latest_prices)
+
+        # ── Tier-3「顯示更多 / 收起」控制（點擊後 session_state 標記，每批 +50）──
+        if tier == 3 and shown_total > TIER3_INITIAL:
+            if visible < shown_total:
+                next_visible = min(visible + TIER3_BATCH, shown_total)
+                if st.button(
+                    f"📥 顯示更多 Tier-3（目前 {visible}/{shown_total}）",
+                    key=f"t3_more_{market}",
+                    use_container_width=True,
+                ):
+                    st.session_state[t3_state_key] = next_visible
+                    st.rerun()
+            else:
+                if st.button(
+                    f"📤 收起 Tier-3（隱藏至 Top {TIER3_INITIAL}）",
+                    key=f"t3_collapse_{market}",
+                    use_container_width=True,
+                ):
+                    st.session_state[t3_state_key] = TIER3_INITIAL
+                    st.rerun()
 
 
 def _render_signal_card(row: pd.Series, market: str, tier: int,

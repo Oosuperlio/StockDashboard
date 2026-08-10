@@ -2,8 +2,7 @@
 .git/
 .gitignore
 
-# Large DuckDB - not needed in Docker image (loaded from Railway volume or Yahoo)
-data/prices.ddb
+# Large DuckDB - 只排除 prices_recent.ddb（prices.ddb 需打進 image 供信號卡現價使用）
 data/prices_recent.ddb
 
 # Python cache
