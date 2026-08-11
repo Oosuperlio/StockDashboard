@@ -99,7 +99,6 @@ HWM,Industrials,Aerospace & Defense,RSI,RSI 加速上升,None,0.0,0.5525,0.4636,
 NXPI,Information Technology,Semiconductors,RSI,RSI 加速上升,None,0.0,0.5525,0.4622,0.4622,0.3693,119,10688,0.0209,239.71,244.72,249.73,237.31,2026-08-07,3,False
 RCL,Consumer Discretionary,Travel Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4618,0.4618,0.2995,262,10441,0.0148,320.0,324.74,329.47,316.8,2026-08-07,3,False
 BX,Financials,Asset Management,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.4615,0.4615,0.279,39,3129,0.0044,137.13,137.73,138.34,135.76,2026-08-07,3,False
-AAPL,Information Technology,Consumer Electronics,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.4615,0.4615,0.3785,26,1593,0.0084,313.33,315.96,318.59,310.2,2026-08-07,3,False
 D,Utilities,Utilities - Regulated Electric,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.4615,0.4615,0.4104,13,441,0.031,68.27,70.39,72.5,67.59,2026-08-05,3,False
 TSLA,Consumer Discretionary,Auto Manufacturers,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4615,0.4615,0.3233,13,529,0.0023,328.58,329.34,330.09,325.29,2026-08-07,3,False
 WYNN,Consumer Discretionary,Resorts & Casinos,BB,BB 中軌向上（上升趨勢）,Morning Star,0.8,1.0,0.4599,,0.4599,0,237,0.0144,102.54,104.02,105.49,101.51,2026-08-07,3,False
