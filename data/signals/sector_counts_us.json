@@ -3,63 +3,48 @@
   "sectors": [
     {
       "sector": "Communication Services",
-      "total_stocks": 51,
-      "signal_count": 49
-    },
-    {
-      "sector": "Consumer Discretionary",
-      "total_stocks": 97,
-      "signal_count": 92
-    },
-    {
-      "sector": "Consumer Staples",
-      "total_stocks": 49,
-      "signal_count": 45
-    },
-    {
-      "sector": "Energy",
-      "total_stocks": 56,
-      "signal_count": 56
-    },
-    {
-      "sector": "Financials",
-      "total_stocks": 166,
-      "signal_count": 160
-    },
-    {
-      "sector": "Health Care",
-      "total_stocks": 112,
-      "signal_count": 110
-    },
-    {
-      "sector": "Industrials",
-      "total_stocks": 149,
-      "signal_count": 146
-    },
-    {
-      "sector": "Information Technology",
-      "total_stocks": 170,
-      "signal_count": 165
-    },
-    {
-      "sector": "Materials",
-      "total_stocks": 49,
-      "signal_count": 47
-    },
-    {
-      "sector": "Real Estate",
-      "total_stocks": 53,
-      "signal_count": 41
-    },
-    {
-      "sector": "Unknown",
-      "total_stocks": 104,
+      "total_stocks": 5,
       "signal_count": 0
     },
     {
-      "sector": "Utilities",
-      "total_stocks": 46,
-      "signal_count": 31
+      "sector": "Consumer Discretionary",
+      "total_stocks": 5,
+      "signal_count": 0
+    },
+    {
+      "sector": "Consumer Staples",
+      "total_stocks": 5,
+      "signal_count": 0
+    },
+    {
+      "sector": "Energy",
+      "total_stocks": 1,
+      "signal_count": 0
+    },
+    {
+      "sector": "Financials",
+      "total_stocks": 9,
+      "signal_count": 0
+    },
+    {
+      "sector": "Health Care",
+      "total_stocks": 7,
+      "signal_count": 0
+    },
+    {
+      "sector": "Industrials",
+      "total_stocks": 4,
+      "signal_count": 0
+    },
+    {
+      "sector": "Information Technology",
+      "total_stocks": 13,
+      "signal_count": 0
+    },
+    {
+      "sector": "Materials",
+      "total_stocks": 1,
+      "signal_count": 0
     }
   ],
   "updated": "2026-08-10"
