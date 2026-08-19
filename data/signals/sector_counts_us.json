@@ -24,7 +24,7 @@
     {
       "sector": "Financials",
       "total_stocks": 166,
-      "signal_count": 153
+      "signal_count": 152
     },
     {
       "sector": "Health Care",
@@ -62,5 +62,5 @@
       "signal_count": 43
     }
   ],
-  "updated": "2026-08-18"
+  "updated": "2026-08-19"
 }
