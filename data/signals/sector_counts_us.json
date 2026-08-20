@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 53,
-      "signal_count": 48
+      "signal_count": 47
     },
     {
       "sector": "Unknown",
@@ -62,5 +62,5 @@
       "signal_count": 42
     }
   ],
-  "updated": "2026-08-19"
+  "updated": "2026-08-20"
 }
