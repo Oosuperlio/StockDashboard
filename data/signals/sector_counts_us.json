@@ -14,37 +14,37 @@
     {
       "sector": "Consumer Staples",
       "total_stocks": 49,
-      "signal_count": 44
+      "signal_count": 45
     },
     {
       "sector": "Energy",
       "total_stocks": 56,
-      "signal_count": 55
+      "signal_count": 56
     },
     {
       "sector": "Financials",
       "total_stocks": 166,
-      "signal_count": 149
+      "signal_count": 145
     },
     {
       "sector": "Health Care",
       "total_stocks": 112,
-      "signal_count": 105
+      "signal_count": 103
     },
     {
       "sector": "Industrials",
       "total_stocks": 149,
-      "signal_count": 114
+      "signal_count": 112
     },
     {
       "sector": "Information Technology",
       "total_stocks": 170,
-      "signal_count": 141
+      "signal_count": 131
     },
     {
       "sector": "Materials",
       "total_stocks": 49,
-      "signal_count": 45
+      "signal_count": 44
     },
     {
       "sector": "Real Estate",
@@ -59,7 +59,7 @@
     {
       "sector": "Utilities",
       "total_stocks": 46,
-      "signal_count": 35
+      "signal_count": 31
     }
   ],
   "updated": "2026-08-21"
