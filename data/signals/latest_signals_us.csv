@@ -530,6 +530,7 @@ SHG,Financials,Banks - Regional,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.30
 VLYPN,Financials,Banks - Regional,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3091,,0.3091,0,1899,0.0046,25.71,25.83,25.95,25.45,2026-08-20,3,False
 WF,Financials,Banks - Regional,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3091,,0.3091,0,1899,0.0046,68.43,68.74,69.06,67.75,2026-08-21,3,False
 CHRW,Industrials,Integrated Freight & Logistics,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3086,,0.3086,0,337,0.006,141.63,142.48,143.33,140.21,2026-08-21,3,False
+IESC,Industrials,Engineering & Construction,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3086,,0.3086,0,337,0.006,342.52,344.58,346.63,339.09,2026-08-21,3,False
 MAIR,Industrials,Building Products & Equipment,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3086,,0.3086,0,337,0.006,26.25,26.41,26.57,25.99,2026-08-20,3,False
 ULS,Industrials,Specialty Business Services,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3086,,0.3086,0,337,0.006,75.26,75.71,76.16,74.51,2026-08-20,3,False
 GSAT,Communication Services,Telecom Services,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3082,,0.3082,0,5205,0.0026,82.36,82.57,82.79,81.54,2026-08-21,3,False
@@ -617,7 +618,6 @@ BE,Industrials,Electrical Equipment & Parts,BB,BB 中軌向上（上升趨勢）
 DCI,Industrials,Specialty Industrial Machinery,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2929,,0.2929,0,17460,0.0036,93.25,93.59,93.92,92.32,2026-08-21,3,False
 ESLT,Industrials,Aerospace & Defense,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2929,,0.2929,0,17460,0.0036,752.3,755.01,757.72,744.78,2026-08-19,3,False
 FTAI,Industrials,Aerospace & Defense,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2929,,0.2929,0,17460,0.0036,210.91,211.67,212.43,208.8,2026-08-19,3,False
-IESC,Industrials,Engineering & Construction,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2929,,0.2929,0,17460,0.0036,685.04,687.51,689.97,678.19,2026-08-21,3,False
 NVT,Industrials,Electrical Equipment & Parts,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2929,,0.2929,0,17460,0.0036,151.98,152.53,153.07,150.46,2026-08-21,3,False
 EIX,Utilities,Utilities - Regulated Electric,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2925,0.2925,0.246,294,9864,0.003,74.66,74.88,75.11,73.91,2026-08-20,3,False
 DHR,Health Care,Diagnostics & Research,RSI,RSI 加速上升,None,0.0,0.5525,0.2917,0.2917,0.2803,120,8492,0.002,218.85,219.29,219.73,216.66,2026-08-21,3,False
