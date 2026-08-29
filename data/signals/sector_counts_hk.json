@@ -14,7 +14,7 @@
     {
       "sector": "Properties",
       "total_stocks": 16,
-      "signal_count": 15
+      "signal_count": 14
     },
     {
       "sector": "Unknown",
@@ -27,5 +27,5 @@
       "signal_count": 6
     }
   ],
-  "updated": "2026-08-27"
+  "updated": "2026-08-28"
 }
