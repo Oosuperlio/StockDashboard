@@ -9,12 +9,12 @@
     {
       "sector": "Consumer Discretionary",
       "total_stocks": 97,
-      "signal_count": 77
+      "signal_count": 78
     },
     {
       "sector": "Consumer Staples",
       "total_stocks": 49,
-      "signal_count": 44
+      "signal_count": 43
     },
     {
       "sector": "Energy",
@@ -62,5 +62,5 @@
       "signal_count": 30
     }
   ],
-  "updated": "2026-08-29"
+  "updated": "2026-08-31"
 }
