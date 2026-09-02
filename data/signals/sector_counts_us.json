@@ -9,7 +9,7 @@
     {
       "sector": "Consumer Discretionary",
       "total_stocks": 97,
-      "signal_count": 79
+      "signal_count": 80
     },
     {
       "sector": "Consumer Staples",
@@ -24,7 +24,7 @@
     {
       "sector": "Financials",
       "total_stocks": 166,
-      "signal_count": 139
+      "signal_count": 138
     },
     {
       "sector": "Health Care",
@@ -62,5 +62,5 @@
       "signal_count": 31
     }
   ],
-  "updated": "2026-09-01"
+  "updated": "2026-09-02"
 }
