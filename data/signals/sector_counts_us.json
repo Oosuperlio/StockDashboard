@@ -34,12 +34,12 @@
     {
       "sector": "Industrials",
       "total_stocks": 149,
-      "signal_count": 104
+      "signal_count": 105
     },
     {
       "sector": "Information Technology",
       "total_stocks": 170,
-      "signal_count": 147
+      "signal_count": 148
     },
     {
       "sector": "Materials",
@@ -59,7 +59,7 @@
     {
       "sector": "Utilities",
       "total_stocks": 46,
-      "signal_count": 31
+      "signal_count": 32
     }
   ],
   "updated": "2026-09-02"
