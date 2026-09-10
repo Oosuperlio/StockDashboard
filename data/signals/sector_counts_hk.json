@@ -4,12 +4,12 @@
     {
       "sector": "Commerce & Industry",
       "total_stocks": 71,
-      "signal_count": 60
+      "signal_count": 59
     },
     {
       "sector": "Finance",
       "total_stocks": 16,
-      "signal_count": 16
+      "signal_count": 15
     },
     {
       "sector": "Properties",
@@ -27,5 +27,5 @@
       "signal_count": 7
     }
   ],
-  "updated": "2026-09-08"
+  "updated": "2026-09-09"
 }
