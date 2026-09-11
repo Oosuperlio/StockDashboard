@@ -39,7 +39,7 @@
     {
       "sector": "Information Technology",
       "total_stocks": 170,
-      "signal_count": 160
+      "signal_count": 159
     },
     {
       "sector": "Materials",
@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 53,
-      "signal_count": 42
+      "signal_count": 41
     },
     {
       "sector": "Unknown",
