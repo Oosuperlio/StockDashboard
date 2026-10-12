@@ -7,7 +7,6 @@ symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rat
 0883.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.6364,,0.6364,0,11,0.0412,23.9,24.88,25.87,23.66,2026-10-09,2,True
 0005.HK,Finance,Finance,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.6316,,0.6316,0,19,0.0409,142.6,148.43,154.26,141.17,2026-10-08,2,True
 2388.HK,Finance,Finance,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.6316,,0.6316,0,19,0.0409,48.48,50.46,52.45,48.0,2026-10-08,2,True
-0738.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.5652,,0.5652,0,23,0.0112,0.28,0.28,0.29,0.28,2026-10-09,2,True
 1299.HK,Finance,Finance,KDJ,KDJ 金叉,None,0.0,0.5525,0.5556,,0.5556,0,9,0.0294,71.25,73.34,75.44,70.54,2026-10-09,2,True
 1024.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.5,0.5,0.4454,8,238,0.01,30.1,30.4,30.7,29.8,2026-10-09,2,True
 0012.HK,Properties,Properties,BB,價格在 BB 中軌上方,None,0.0,0.425,0.5,0.5,0.3333,8,84,0.0238,26.12,26.74,27.36,25.86,2026-10-08,2,True
@@ -39,6 +38,7 @@ symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rat
 2601.HK,Finance,Finance,KDJ,KDJ 金叉,None,0.0,0.5525,0.403,,0.403,0,67,0.1347,27.74,31.48,35.21,27.46,2026-10-08,3,False
 3328.HK,Finance,Finance,KDJ,KDJ 金叉,None,0.0,0.5525,0.403,,0.403,0,67,0.1347,8.39,9.52,10.65,8.31,2026-10-09,3,False
 0006.HK,Utilities,Utilities,RSI,RSI 上穿 50 中性線,Morning Star,0.8,1.0,0.4,,0.4,0,5,-0.0143,60.4,59.54,58.67,59.8,2026-10-09,3,True
+0738.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持超賣,Bullish Engulfing,0.75,0.885,0.4,,0.4,0,5,0.0246,0.29,0.3,0.3,0.29,2026-10-07,3,False
 1038.HK,Utilities,Utilities,KDJ,KDJ 金叉,None,0.0,0.5525,0.4,0.4,0.3001,10,713,0.0058,66.15,66.53,66.92,65.49,2026-10-09,3,False
 1209.HK,Properties,Properties,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4,0.4,0.4444,5,36,-0.0148,38.6,38.03,37.46,38.21,2026-10-09,3,False
 0992.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3878,0.3878,0.329,147,3918,0.0071,35.16,35.41,35.66,34.81,2026-10-07,3,False
