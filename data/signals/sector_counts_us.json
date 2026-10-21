@@ -4,7 +4,7 @@
     {
       "sector": "Communication Services",
       "total_stocks": 51,
-      "signal_count": 46
+      "signal_count": 47
     },
     {
       "sector": "Consumer Discretionary",
@@ -24,12 +24,12 @@
     {
       "sector": "Financials",
       "total_stocks": 166,
-      "signal_count": 146
+      "signal_count": 145
     },
     {
       "sector": "Health Care",
       "total_stocks": 112,
-      "signal_count": 108
+      "signal_count": 109
     },
     {
       "sector": "Industrials",
@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 53,
-      "signal_count": 49
+      "signal_count": 48
     },
     {
       "sector": "Unknown",
