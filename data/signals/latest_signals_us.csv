@@ -427,7 +427,7 @@ DHI,Consumer Discretionary,Residential Construction,RSI,RSI 加速上升,None,0.
 AOS,Industrials,Specialty Industrial Machinery,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3333,0.3333,0.2929,138,17460,0.0049,59.54,59.83,60.12,58.94,2026-10-20,3,False
 CR,Industrials,Specialty Industrial Machinery,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3333,,0.3333,0,936,0.0044,201.27,202.16,203.04,199.26,2026-10-20,3,True
 DIS,Communication Services,Entertainment,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3333,0.3333,0.3135,27,772,0.0013,111.67,111.82,111.96,110.55,2026-10-20,3,False
-LOW,Consumer Discretionary,Home Improvement Retail,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3333,0.3333,0.3027,27,1665,0.008,198.53,200.12,201.71,196.54,2026-10-20,3,False
+LOW,Consumer Discretionary,Home Improvement Retail,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.3333,0.3333,0.3027,27,1665,0.008,197.28,198.86,200.44,195.31,2026-10-20,3,False
 TFC,Financials,Banks - Regional,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.3333,0.3333,0.3091,33,1899,0.0056,47.33,47.6,47.86,46.86,2026-10-20,3,False
 ANET,Information Technology,Computer Hardware,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.3333,0.3333,0.3447,6,1001,-0.0156,176.98,174.22,171.46,175.21,2026-10-16,3,False
 NVMI,Information Technology,Semiconductor Equipment & Materials,RSI,RSI 超賣區域 (30),None,0.0,0.5249999999999999,0.3319,,0.3319,0,238,0.0012,319.1,319.48,319.87,315.91,2026-10-19,3,False
