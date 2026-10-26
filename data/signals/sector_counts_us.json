@@ -4,7 +4,7 @@
     {
       "sector": "Communication Services",
       "total_stocks": 51,
-      "signal_count": 50
+      "signal_count": 49
     },
     {
       "sector": "Consumer Discretionary",
@@ -19,7 +19,7 @@
     {
       "sector": "Energy",
       "total_stocks": 56,
-      "signal_count": 52
+      "signal_count": 55
     },
     {
       "sector": "Financials",
@@ -29,7 +29,7 @@
     {
       "sector": "Health Care",
       "total_stocks": 112,
-      "signal_count": 112
+      "signal_count": 108
     },
     {
       "sector": "Industrials",
@@ -39,7 +39,7 @@
     {
       "sector": "Information Technology",
       "total_stocks": 170,
-      "signal_count": 142
+      "signal_count": 145
     },
     {
       "sector": "Materials",
@@ -62,5 +62,5 @@
       "signal_count": 44
     }
   ],
-  "updated": "2026-10-24"
+  "updated": "2026-10-25"
 }
