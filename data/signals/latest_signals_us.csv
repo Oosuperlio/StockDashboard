@@ -527,6 +527,7 @@ TTWO,Communication Services,Electronic Gaming & Multimedia,RSI,RSI 加速上升,
 SWK,Industrials,Tools & Accessories,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3182,0.3182,0.295,198,22337,-0.0023,98.97,98.74,98.51,97.98,2026-10-22,3,False
 EXE,Energy,Oil & Gas E&P,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.318,0.318,0.2963,217,4891,0.0004,93.23,93.27,93.3,92.3,2026-10-23,3,False
 ALC,Health Care,Medical Instruments & Supplies,MACD,MACD 突破 0 軸,None,0.0,0.595,0.3171,,0.3171,0,432,0.0028,70.63,70.83,71.03,69.92,2026-10-22,3,False
+BDRX,Health Care,Biotechnology,MACD,MACD 突破 0 軸,None,0.0,0.595,0.3171,,0.3171,0,432,0.0028,3.3864,3.4,3.41,3.35,2026-10-23,3,False
 GSK,Health Care,Drug Manufacturers - General,MACD,MACD 突破 0 軸,None,0.0,0.595,0.3171,,0.3171,0,432,0.0028,51.21,51.35,51.5,50.7,2026-10-22,3,False
 WYNN,Consumer Discretionary,Resorts & Casinos,RSI,RSI 加速上升,None,0.0,0.5525,0.3171,0.3171,0.3117,164,6796,0.0043,75.76,76.09,76.41,75.0,2026-10-21,3,False
 SNPS,Information Technology,Software - Infrastructure,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3163,0.3163,0.3639,215,16781,-0.0041,430.14,428.38,426.61,425.84,2026-10-23,3,False

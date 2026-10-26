@@ -29,7 +29,7 @@
     {
       "sector": "Health Care",
       "total_stocks": 112,
-      "signal_count": 108
+      "signal_count": 109
     },
     {
       "sector": "Industrials",
@@ -62,5 +62,5 @@
       "signal_count": 44
     }
   ],
-  "updated": "2026-10-25"
+  "updated": "2026-10-26"
 }
