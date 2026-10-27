@@ -106,6 +106,12 @@ st.markdown("""
     color: #f6ad55;
     margin-top: 8px;
 }
+.card-tier {
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e0;
+    margin-top: 6px;
+}
 .up { color: #48bb78; }
 .down { color: #fc8181; }
 .neutral { color: #a0aec0; }
@@ -1103,7 +1109,7 @@ def render_signal_homepage():
             f"<div class='card-meta'>📅 信號交易日：{sig_date_txt}</div>"
             f"<div class='card-meta'>🕒 資料更新：{updated_txt}</div>"
             f"<div class='card-value' style='margin-top:10px'>共 {total} 個</div>"
-            f"<div class='card-delta'>🔥 Tier-1: {t1} ｜ ⚡ Tier-2: {t2} ｜ 📊 Tier-3: {t3}</div>"
+            f"<div class='card-tier'>🔥 Tier-1: {t1} ｜ ⚡ Tier-2: {t2} ｜ 📊 Tier-3: {t3}</div>"
             f"{warn_html}</div>",
             unsafe_allow_html=True,
         )
