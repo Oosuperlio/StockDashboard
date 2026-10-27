@@ -1082,7 +1082,9 @@ def render_signal_homepage():
     sig_date_txt, updated_txt, stale_warnings = _signal_freshness_lines()
 
     # ── Summary stats ──
-    col_s, _, _ = st.columns([1, 1, 1])
+    # 2/3 寬度：卡片現在有「信號交易日 + 資料更新 + 總數 + Tier 分布」四行，
+    # 1/3 寬會在窄螢幕把 Tier 那行折成半個字。
+    col_s, _, _ = st.columns([2, 1, 1])
     with col_s:
         total = len(df_us) + len(df_hk)
 
