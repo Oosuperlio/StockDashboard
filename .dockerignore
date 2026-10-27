@@ -28,3 +28,7 @@ node_modules/
 .vscode/
 *.swp
 *.swo
+
+# AppTest 虛擬環境（480MB，勿上傳造成 build context 膨脹）
+.venv-apptest/
+.venv-apptest2/

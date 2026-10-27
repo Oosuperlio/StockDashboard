@@ -94,6 +94,18 @@ st.markdown("""
     font-weight: 500;
     margin-top: 4px;
 }
+.card-meta {
+    font-size: 12px;
+    font-weight: 500;
+    color: #a0aec0;
+    margin-top: 4px;
+}
+.warn-delay {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f6ad55;
+    margin-top: 8px;
+}
 .up { color: #48bb78; }
 .down { color: #fc8181; }
 .neutral { color: #a0aec0; }
@@ -309,7 +321,13 @@ from pattern_detector import detect_all_patterns, get_latest_patterns
 from pattern_annotator import add_pattern_markers, build_pattern_legend
 
 # ── Daily Signals (用於 signal homepage) ────────────────────────────────
-from database.signals import load_daily_signals, get_signal_summary, signal_date
+from database.signals import (
+    load_daily_signals,
+    get_signal_summary,
+    signal_date,
+    signal_freshness,
+    data_update_time_str,
+)
 
 import json
 from pathlib import Path
@@ -1022,6 +1040,36 @@ st.title("📈 Stock Dashboard")
 
 
 # ──────────────── Signal Homepage ────────────────
+def _signal_freshness_lines():
+    """兩個**獨立**的時間，不可混為一談：
+
+    • 📅 信號交易日 — CSV `date` 欄最大值（最後一根 K 線 / 信號觸發日）
+    • 🕒 資料更新   — 資料寫入或容器 build 時間（= 部署時間）
+
+    並回報各市場是否落後於「最近一個已收盤的交易日」。
+    """
+    us = signal_freshness("us")
+    hk = signal_freshness("hk")
+
+    us_d, hk_d = us["signal_date"], hk["signal_date"]
+    if us_d and hk_d and us_d != hk_d:
+        date_txt = f"🇺🇸 {us_d} ｜ 🇭🇰 {hk_d}"
+    else:
+        date_txt = us_d or hk_d or "—"
+
+    updated_txt = data_update_time_str() or "—"
+
+    warnings = []
+    for info in (us, hk):
+        if info["is_stale"]:
+            label = "🇺🇸 美股" if info["market"] == "us" else "🇭🇰 港股"
+            warnings.append(
+                f"⚠️ {label} 資料延遲 {info['lag_days']} 日"
+                f"（信號交易日 {info['signal_date']} ＜ 應有交易日 {info['expected']}）"
+            )
+    return date_txt, updated_txt, warnings
+
+
 def render_signal_homepage():
     """Render the daily signals homepage with clickable signal cards."""
     df_us = load_daily_signals("us")
@@ -1031,7 +1079,7 @@ def render_signal_homepage():
         st.info("📡 今日無信號數據。信號掃描將在交易日自動生成。")
         return
 
-    sig_date = signal_date() or "今日"
+    sig_date_txt, updated_txt, stale_warnings = _signal_freshness_lines()
 
     # ── Summary stats ──
     col_s, _, _ = st.columns([1, 1, 1])
@@ -1046,10 +1094,18 @@ def render_signal_homepage():
         t1 = _tier_count(df_us, 1) + _tier_count(df_hk, 1)
         t2 = _tier_count(df_us, 2) + _tier_count(df_hk, 2)
         t3 = total - t1 - t2
-        st.markdown(f"<div class='card'><div class='card-header'>📡 信號總覽 ({sig_date})</div>"
-                    f"<div class='card-value'>共 {total} 個</div>"
-                    f"<div class='card-delta'>🔥 Tier-1: {t1} ｜ ⚡ Tier-2: {t2} ｜ 📊 Tier-3: {t3}</div></div>",
-                    unsafe_allow_html=True)
+        warn_html = "".join(f"<div class='warn-delay'>{w}</div>" for w in stale_warnings)
+        st.markdown(
+            f"<div class='card'>"
+            f"<div class='card-header'>📡 信號總覽</div>"
+            f"<div class='card-meta'>📅 信號交易日：{sig_date_txt}</div>"
+            f"<div class='card-meta'>🕒 資料更新：{updated_txt}</div>"
+            f"<div class='card-value' style='margin-top:10px'>共 {total} 個</div>"
+            f"<div class='card-delta'>🔥 Tier-1: {t1} ｜ ⚡ Tier-2: {t2} ｜ 📊 Tier-3: {t3}</div>"
+            f"{warn_html}</div>",
+            unsafe_allow_html=True,
+        )
+
 
     # ── Sector breakdown ──
     _render_sector_breakdown("us", "🇺🇸 美股板塊")
