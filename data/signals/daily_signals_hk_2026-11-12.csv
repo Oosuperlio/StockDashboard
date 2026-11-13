@@ -1,1 +1,100 @@
 symbol,sector,subsector,indicator,signal,pattern,pattern_conf,confidence,win_rate,win_rate_stock,win_rate_sector,stock_n,sector_n,avg_return,price,tp1_price,tp2_price,sl_price,date,tier,volume_confirmed
+1000.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.9,,0.9,0,10,0.0418,0.52,0.54,0.56,0.51,2026-11-10,2,True
+2138.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (多頭區),None,0.0,0.68,0.9,,0.9,0,10,0.0418,0.585,0.61,0.63,0.58,2026-11-11,2,True
+3309.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4653,,0.4653,0,331,0.0092,1.015,1.02,1.03,1.0,2026-11-12,2,True
+1876.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.0,0.0,0.4605,5,215,-0.0386,6.65,6.39,6.14,6.58,2026-11-10,2,True
+3968.HK,Finance,Finance,RSI,RSI 加速上升,None,0.0,0.5525,0.8333,0.8333,0.3058,12,497,0.0382,54.5,56.58,58.66,53.95,2026-11-10,3,False
+0288.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 動能加速（強勢區）,None,0.0,0.51,0.6,0.6,0.33,25,609,0.0229,6.815,6.97,7.13,6.75,2026-11-11,3,False
+1093.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.5875,0.5875,0.3356,80,3424,0.0389,8.625,8.96,9.3,8.54,2026-11-10,3,False
+1177.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.5667,0.5667,0.3474,90,3221,0.032,5.57,5.75,5.93,5.51,2026-11-12,3,False
+0868.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,Bullish Engulfing,0.75,1.0,0.5231,,0.5231,0,65,0.0271,8.445,8.67,8.9,8.36,2026-11-11,3,False
+1181.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,Morning Star,0.8,0.924,0.5091,,0.5091,0,55,0.0169,0.091,0.09,0.09,0.09,2026-11-11,3,False
+1929.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.4923,0.4923,0.3474,130,3221,0.0233,12.05,12.33,12.61,11.93,2026-11-12,3,False
+0267.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.4615,0.4615,0.2979,39,2269,0.0155,12.94,13.14,13.34,12.81,2026-11-11,3,False
+0669.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.4545,0.4545,0.2979,66,2269,0.015,144.1,146.26,148.42,142.66,2026-11-11,3,False
+1378.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4503,0.4503,0.329,171,3918,0.0124,19.92,20.17,20.41,19.72,2026-11-12,3,False
+2007.HK,Properties,Properties,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4444,,0.4444,0,36,0.0111,0.142,0.14,0.15,0.14,2026-11-11,3,False
+1088.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4321,0.4321,0.3356,81,3424,0.0079,42.94,43.28,43.62,42.51,2026-11-12,3,False
+2382.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4248,0.4248,0.3356,113,3424,0.0114,64.3,65.03,65.77,63.66,2026-11-12,3,False
+2269.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4177,0.4177,0.3356,79,3424,0.0001,48.88,48.88,48.89,48.39,2026-11-12,3,False
+0688.HK,Properties,Properties,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.4098,0.4098,0.2935,61,1029,0.0069,12.92,13.01,13.1,12.79,2026-11-11,3,False
+2628.HK,Finance,Finance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.4071,0.4071,0.3206,113,1123,0.0146,24.38,24.74,25.09,24.14,2026-11-11,3,False
+1810.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.4052,0.4052,0.3474,116,3221,0.0089,29.98,30.25,30.51,29.68,2026-11-12,3,False
+0992.HK,Commerce & Industry,Commerce & Industry,MACD,MACD 金叉 (空頭區),None,0.0,0.42,0.4,0.4,0.2944,5,180,0.0123,18.81,19.04,19.27,18.62,2026-11-12,3,False
+6618.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3966,0.3966,0.329,58,3918,0.0166,41.12,41.8,42.49,40.71,2026-11-12,3,False
+2388.HK,Finance,Finance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3944,,0.3944,0,71,0.0141,50.4,51.11,51.82,49.9,2026-11-12,3,True
+9633.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3929,0.3929,0.3474,56,3221,0.0097,45.64,46.08,46.53,45.18,2026-11-12,3,False
+0857.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3882,0.3882,0.3474,170,3221,0.0068,10.1,10.17,10.24,10.0,2026-11-11,3,False
+0241.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3824,0.3824,0.3356,34,3424,0.0167,2.995,3.05,3.1,2.97,2026-11-11,3,False
+0005.HK,Finance,Finance,RSI,RSI 上穿 50 中性線,None,0.0,0.4675,0.375,,0.375,0,88,0.0099,143.3,144.72,146.14,141.87,2026-11-10,3,False
+0175.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.3725,0.3725,0.2979,51,2269,0.0106,14.25,14.4,14.55,14.11,2026-11-11,3,False
+0388.HK,Finance,Finance,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3701,0.3701,0.3169,127,1016,0.0062,382.0,384.37,386.74,378.18,2026-11-12,3,False
+2318.HK,Finance,Finance,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3571,0.3571,0.3169,98,1016,0.0046,52.3,52.54,52.78,51.78,2026-11-12,3,False
+0016.HK,Properties,Properties,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3548,0.3548,0.2884,186,1158,0.0109,112.4,113.63,114.85,111.28,2026-11-12,3,False
+1024.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3478,0.3478,0.3356,46,3424,-0.0126,28.98,28.61,28.25,28.69,2026-11-10,3,False
+0151.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,2.855,2.87,2.88,2.83,2026-11-12,3,False
+0293.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,15.3,15.37,15.45,15.15,2026-11-12,3,False
+0467.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,0.42,0.42,0.42,0.42,2026-11-10,3,False
+0738.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,0.295,0.3,0.3,0.29,2026-11-11,3,False
+0912.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,1.19,1.2,1.2,1.18,2026-11-12,3,False
+1766.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,5.415,5.44,5.47,5.36,2026-11-11,3,False
+1797.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,29.12,29.26,29.4,28.83,2026-11-12,3,False
+2018.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,37.58,37.76,37.94,37.2,2026-11-12,3,False
+2038.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,14.39,14.46,14.53,14.25,2026-11-12,3,False
+2698.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3474,,0.3474,0,3221,0.0048,27.42,27.55,27.68,27.15,2026-11-12,3,False
+1038.HK,Utilities,Utilities,RSI,RSI 加速上升,None,0.0,0.5525,0.3429,0.3429,0.2565,70,4905,0.0042,71.95,72.25,72.55,71.23,2026-11-10,3,False
+0823.HK,Properties,Properties,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.339,0.339,0.2935,118,1029,-0.0019,40.82,40.74,40.66,40.41,2026-11-10,3,False
+0040.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3356,,0.3356,0,3424,0.0036,0.67,0.67,0.67,0.66,2026-11-11,3,False
+0318.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3356,,0.3356,0,3424,0.0036,0.89,0.89,0.9,0.88,2026-11-11,3,False
+1787.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3356,,0.3356,0,3424,0.0036,18.88,18.95,19.02,18.69,2026-11-11,3,False
+1800.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3356,,0.3356,0,3424,0.0036,3.36,3.37,3.38,3.33,2026-11-11,3,False
+2096.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3356,,0.3356,0,3424,0.0036,10.89,10.93,10.97,10.78,2026-11-12,3,False
+2111.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3356,,0.3356,0,3424,0.0036,2.42,2.43,2.44,2.4,2026-11-11,3,False
+1209.HK,Properties,Properties,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3333,,0.3333,0,51,0.0097,40.66,41.05,41.45,40.25,2026-11-12,3,True
+0027.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3304,0.3304,0.329,112,3918,0.0038,34.48,34.61,34.74,34.14,2026-11-12,3,False
+0999.HK,Commerce & Industry,Commerce & Industry,KDJ,KDJ 金叉,None,0.0,0.5525,0.3295,,0.3295,0,437,0.0043,7.99,8.02,8.06,7.91,2026-11-10,3,False
+1900.HK,Commerce & Industry,Commerce & Industry,KDJ,KDJ 金叉,None,0.0,0.5525,0.3295,,0.3295,0,437,0.0043,0.135,0.14,0.14,0.13,2026-11-12,3,False
+2314.HK,Commerce & Industry,Commerce & Industry,KDJ,KDJ 金叉,None,0.0,0.5525,0.3295,,0.3295,0,437,0.0043,3.24,3.25,3.27,3.21,2026-11-11,3,False
+2338.HK,Commerce & Industry,Commerce & Industry,KDJ,KDJ 金叉,None,0.0,0.5525,0.3295,,0.3295,0,437,0.0043,23.12,23.22,23.32,22.89,2026-11-11,3,False
+1999.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.329,,0.329,0,3918,0.0031,2.35,2.36,2.36,2.33,2026-11-12,3,False
+2238.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.329,,0.329,0,3918,0.0031,2.055,2.06,2.07,2.03,2026-11-10,3,False
+1109.HK,Properties,Properties,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3288,0.3288,0.2979,73,940,-0.0035,31.02,30.91,30.8,30.71,2026-11-12,3,False
+1299.HK,Finance,Finance,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3256,0.3256,0.3169,86,1016,0.0038,79.25,79.55,79.85,78.46,2026-11-12,3,False
+0012.HK,Properties,Properties,RSI,RSI 加速上升,None,0.0,0.5525,0.3243,0.3243,0.261,74,567,0.0089,29.66,29.92,30.19,29.36,2026-11-10,3,False
+9961.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.3226,0.3226,0.3356,62,3424,-0.0013,342.0,341.56,341.11,338.58,2026-11-12,3,False
+1288.HK,Finance,Finance,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3217,,0.3217,0,976,0.0474,6.79,7.11,7.43,6.72,2026-11-12,3,False
+1658.HK,Finance,Finance,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3217,,0.3217,0,976,0.0474,5.615,5.88,6.15,5.56,2026-11-12,3,False
+1788.HK,Finance,Finance,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3217,,0.3217,0,976,0.0474,2.94,3.08,3.22,2.91,2026-11-12,3,False
+3328.HK,Finance,Finance,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.3217,,0.3217,0,976,0.0474,8.84,9.26,9.68,8.75,2026-11-12,3,False
+2601.HK,Finance,Finance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3206,,0.3206,0,1123,0.0348,26.94,27.88,28.82,26.67,2026-11-12,3,False
+0006.HK,Utilities,Utilities,RSI,RSI 加速上升,None,0.0,0.5525,0.3182,0.3182,0.2565,66,4905,0.0059,65.9,66.29,66.68,65.24,2026-11-11,3,False
+0939.HK,Finance,Finance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3143,0.3143,0.3206,175,1123,0.0054,10.44,10.5,10.55,10.34,2026-11-12,3,False
+0762.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.3077,0.3077,0.329,65,3918,0.0014,5.495,5.5,5.51,5.44,2026-11-12,3,False
+2899.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.2985,0.2985,0.2979,67,2269,-0.0043,29.12,28.99,28.87,28.83,2026-11-10,3,False
+1877.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.2979,,0.2979,0,2269,-0.0004,15.94,15.93,15.93,15.78,2026-11-10,3,False
+2068.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 加速上升,None,0.0,0.5525,0.2979,,0.2979,0,2269,-0.0004,1.575,1.57,1.57,1.56,2026-11-11,3,False
+0083.HK,Properties,Properties,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2979,,0.2979,0,940,-0.0005,10.45,10.44,10.44,10.35,2026-11-11,3,False
+0386.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2976,0.2976,0.3474,84,3221,0.0044,4.67,4.69,4.71,4.62,2026-11-12,3,False
+1113.HK,Properties,Properties,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2955,0.2955,0.2979,88,940,0.0032,49.48,49.64,49.8,48.99,2026-11-12,3,False
+0700.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2881,0.2881,0.3356,59,3424,-0.0126,417.8,412.54,407.27,413.62,2026-11-10,3,False
+1398.HK,Finance,Finance,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2857,0.2857,0.3206,182,1123,0.007,7.835,7.89,7.94,7.76,2026-11-12,3,False
+0066.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2836,0.2836,0.329,134,3918,0.0054,33.66,33.84,34.02,33.32,2026-11-12,3,False
+1211.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.2812,0.2812,0.329,96,3918,-0.0187,71.95,70.6,69.26,71.23,2026-11-10,3,False
+0101.HK,Properties,Properties,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2803,0.2803,0.2935,132,1029,0.0029,6.55,6.57,6.59,6.48,2026-11-12,3,False
+3988.HK,Finance,Finance,RSI,RSI 加速上升,None,0.0,0.5525,0.28,0.28,0.3058,75,497,0.0018,6.24,6.25,6.26,6.18,2026-11-12,3,False
+2020.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2791,0.2791,0.3356,43,3424,-0.0067,79.0,78.47,77.94,78.21,2026-11-12,3,False
+0001.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.272,0.272,0.329,125,3918,0.0076,69.35,69.88,70.4,68.66,2026-11-12,3,False
+2688.HK,Utilities,Utilities,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2697,0.2697,0.2471,89,8831,0.0062,49.08,49.38,49.69,48.59,2026-11-12,3,False
+1044.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.2603,0.2603,0.3356,146,3424,0.0054,21.76,21.88,22.0,21.54,2026-11-12,3,False
+0902.HK,Utilities,Utilities,RSI,RSI 加速上升,None,0.0,0.5525,0.2565,,0.2565,0,4905,0.0041,6.22,6.25,6.27,6.16,2026-11-11,3,False
+2638.HK,Utilities,Utilities,RSI,RSI 加速上升,None,0.0,0.5525,0.2565,,0.2565,0,4905,0.0041,6.245,6.27,6.3,6.18,2026-11-11,3,False
+0322.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,Support,0.9,1.0,0.25,,0.25,0,32,-0.0039,13.41,13.36,13.31,13.28,2026-11-10,3,False
+0960.HK,Properties,Properties,RSI,RSI 加速上升,None,0.0,0.5525,0.24,0.24,0.261,50,567,-0.0195,4.365,4.28,4.19,4.32,2026-11-10,3,False
+1997.HK,Properties,Properties,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.24,0.24,0.2935,75,1029,-0.004,32.1,31.97,31.84,31.78,2026-11-12,3,False
+0003.HK,Utilities,Utilities,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2295,0.2295,0.249,122,7232,0.004,7.395,7.42,7.45,7.32,2026-11-12,3,False
+2313.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2083,0.2083,0.3474,48,3221,-0.0246,42.24,41.2,40.16,41.82,2026-11-12,3,False
+2319.HK,Commerce & Industry,Commerce & Industry,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.2045,0.2045,0.3474,44,3221,-0.009,21.76,21.56,21.37,21.54,2026-11-12,3,False
+0941.HK,Commerce & Industry,Commerce & Industry,RSI,RSI 維持強勢 (50-70),None,0.0,0.51,0.1988,0.1988,0.3356,166,3424,0.0015,80.7,80.82,80.94,79.89,2026-11-12,3,False
+1928.HK,Commerce & Industry,Commerce & Industry,BB,價格在 BB 中軌上方,None,0.0,0.425,0.1928,0.1928,0.329,83,3918,-0.0163,11.18,11.0,10.82,11.07,2026-11-11,3,False
+0002.HK,Utilities,Utilities,BB,BB 中軌向上（上升趨勢）,None,0.0,0.51,0.1321,0.1321,0.249,106,7232,0.0042,80.85,81.19,81.53,80.04,2026-11-12,3,False
+0883.HK,Commerce & Industry,Commerce & Industry,BB,BB 跌破下軌 (超賣),None,0.0,0.45499999999999996,0.0909,0.0909,0.2736,11,212,-0.0294,22.76,22.09,21.42,22.53,2026-11-10,3,False
