@@ -24,7 +24,7 @@
     {
       "sector": "Financials",
       "total_stocks": 166,
-      "signal_count": 160
+      "signal_count": 158
     },
     {
       "sector": "Health Care",
@@ -39,7 +39,7 @@
     {
       "sector": "Information Technology",
       "total_stocks": 170,
-      "signal_count": 165
+      "signal_count": 166
     },
     {
       "sector": "Materials",
@@ -49,7 +49,7 @@
     {
       "sector": "Real Estate",
       "total_stocks": 53,
-      "signal_count": 52
+      "signal_count": 51
     },
     {
       "sector": "Unknown",
